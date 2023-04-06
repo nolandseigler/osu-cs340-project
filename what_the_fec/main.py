@@ -21,8 +21,14 @@ def create_app() -> FastAPI:
         """
         conn.execute(text(sql))
 
-        sql = """
-            CREATE TABLE diagnostic(id INT PRIMARY KEY, text VARCHAR(255) NOT NULL);
+        # this also gross but since we are playing the raw sql game we get to play the
+        # dialect game too. yayyyyy
+        if conn.engine.dialect.name == "sqlite":
+            id_col = "id INTEGER PRIMARY KEY AUTOINCREMENT"
+        else:
+            id_col = "id INT PRIMARY KEY AUTO_INCREMENT"
+        sql = f"""
+            CREATE TABLE diagnostic({id_col}, text VARCHAR(255) NOT NULL);
         """
         conn.execute(text(sql))
 
@@ -38,9 +44,8 @@ def create_app() -> FastAPI:
         sql = """
             SELECT * FROM diagnostic;
         """
-        result = conn.execute(text(sql), *bind_params)
-        print(result.all()[0])
+        output = [{"id": r[0], "text": r[1]} for r in conn.execute(text(sql), *bind_params)]
 
-        return {"Hello": "World"}
+        return f"<h1>MySQL Results {output}<h1/>"
 
     return app
