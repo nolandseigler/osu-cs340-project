@@ -1,0 +1,23 @@
+# Citation for the following code:
+# Date: 04/06/2023
+# Copied from /OR/ Adapted from /OR/ Based on:
+# https://learn.microsoft.com/en-us/visualstudio/docker/tutorials/tutorial-multi-container-app-mysql
+
+version: "3.8"
+
+services:
+  mariadb:
+    image: mariadb:10
+    restart: always
+    ports:
+      - "${MARIA_DB_PORT}:3306"
+    volumes:
+      - what-the-fec-mariadb-data:/var/lib/mariadb
+    environment: 
+      MARIADB_ROOT_PASSWORD: "${MARIA_DB_PASSWORD}"
+      MARIADB_DATABASE: "${MARIA_DB_NAME}"
+      MARIADB_USER: "${MARIA_DB_USER}"
+      MARIADB_PASSWORD: "${MARIA_DB_PASSWORD}"
+
+volumes:
+  what-the-fec-mariadb-data:

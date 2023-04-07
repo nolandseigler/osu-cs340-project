@@ -1,19 +1,33 @@
+import os
 from fastapi import Depends, FastAPI
 from fastapi.responses import HTMLResponse
 from sqlalchemy import Connection
 from sqlalchemy.sql import text
 
 from what_the_fec.storage.db import init as db_init
-from what_the_fec.storage.sqlite.config import SqliteConfig
+from what_the_fec.storage.mysql.config import MySQLConfig
 
 # this doesnt feel great but works for today
-from what_the_fec.storage.sqlite.db import get_db
+from what_the_fec.storage.mysql.db import get_db
 
 
 def create_app() -> FastAPI:
     app = FastAPI()
-    db_init(config=SqliteConfig(pool_connections=2))
+    db_init(config=MySQLConfig(
+            db_user=os.environ["MARIA_DB_USER"],
+            db_password=os.environ["MARIA_DB_PASSWORD"],
+            db_hostname=os.environ["MARIA_DB_HOSTNAME"],
+            db_port=os.environ["MARIA_DB_PORT"],
+            db_name=os.environ["MARIA_DB_NAME"],
+            pool_connections=2
+        )
+    )
     db = get_db()
+
+    # Citation for the following code:
+    # Date: 04/06/2023
+    # Copied from /OR/ Adapted from /OR/ Based on:
+    # FastAPI/SQLAlchemy documentation examples
     @app.get("/assignment_1")
     def assignment_1(conn: Connection = Depends(db.get_conn)):
         
@@ -24,10 +38,7 @@ def create_app() -> FastAPI:
 
         # this also gross but since we are playing the raw sql game we get to play the
         # dialect game too. yayyyyy
-        if conn.engine.dialect.name == "sqlite":
-            id_col = "id INTEGER PRIMARY KEY AUTOINCREMENT"
-        else:
-            id_col = "id INT PRIMARY KEY AUTO_INCREMENT"
+        id_col = "id INT PRIMARY KEY AUTO_INCREMENT"
         sql = f"""
             CREATE TABLE diagnostic({id_col}, text VARCHAR(255) NOT NULL);
         """
