@@ -36,8 +36,6 @@ def create_app() -> FastAPI:
         """
         conn.execute(text(sql))
 
-        # this also gross but since we are playing the raw sql game we get to play the
-        # dialect game too. yayyyyy
         id_col = "id INT PRIMARY KEY AUTO_INCREMENT"
         sql = f"""
             CREATE TABLE diagnostic({id_col}, text VARCHAR(255) NOT NULL);
