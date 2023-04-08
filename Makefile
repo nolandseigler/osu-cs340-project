@@ -6,10 +6,15 @@
 include .env
 export
 
-all: venv
-
-run: 
-	poetry run uvicorn what_the_fec.main:create_app --factory
+# Citation for the following code:
+# Date: 04/06/2023
+# Copied from /OR/ Adapted from /OR/ Based on:
+# https://fastapi.tiangolo.com/deployment/server-workers/#run-gunicorn-with-uvicorn-workers
+# and
+# https://stackoverflow.com/questions/25319690/how-do-i-run-a-flask-app-in-gunicorn-if-i-used-the-application-factory-pattern
+# NOTE: don't run this locally with that 0.0.0.0 bind
+run:
+	poetry run gunicorn "what_the_fec.main:create_app()" --workers 4 --worker-class uvicorn.workers.UvicornWorker --bind 0.0.0.0:8675 -D
 
 docker-up:
 	cd docker && docker-compose up -d
