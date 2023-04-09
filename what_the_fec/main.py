@@ -56,6 +56,13 @@ def create_app() -> FastAPI:
         """
         output = [{"id": r[0], "text": r[1]} for r in conn.execute(text(sql), *bind_params)]
 
-        return HTMLResponse(f"<h1>MySQL Results {output}<h1/>", 200)
+        return HTMLResponse(
+            f"""
+            <h1>
+            MySQL Results:
+            <h1/>
+            {output}
+            """, 200
+        )
 
     return app
