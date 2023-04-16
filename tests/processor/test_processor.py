@@ -5,5 +5,5 @@ from what_the_fec.processor.processor import Config, Processor
 def test_download_data():
     client = BulkClient(config=BulkClientConfig())
     processor = Processor(bulk_client=client, config=Config(min_cycle_year=2020))
-    # print(processor.process())
+    print(processor.process())
     assert True

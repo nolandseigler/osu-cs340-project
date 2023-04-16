@@ -69,19 +69,21 @@ class Client:
                 # https://stackoverflow.com/questions/17285464/whats-the-best-way-to-download-file-using-urllib3
                 # https://stackoverflow.com/questions/1517616/stream-large-binary-files-with-urllib2-to-file
                 # https://stackoverflow.com/questions/39983886/python-writing-and-reading-from-a-temporary-file
-                chunk_size = (1024 * 1024) * 10 #10 MB so this doesnt take ten years
+                chunk_size = (1024 * 1024) * 20 #20 MB so this doesnt take ten years
                 while True:
                     bytes_chunk = resp.read(chunk_size)
                     if not bytes_chunk:
                         break
                     tf.write(bytes_chunk)
-
                 tf.seek(0)
-                with ZipFile(tf.name) as zf:
+                with ZipFile(tf) as zf:
                     for info in zf.infolist():
                         if "by_date" not in info.filename:
                             with zf.open(info.filename) as zfo:
-                                for line in zfo.readline():
+                                while True:
+                                    line = zfo.readline()
+                                    if not line:
+                                        break
                                     total += 1
 
         finally:
