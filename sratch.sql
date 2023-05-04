@@ -406,7 +406,6 @@ INSERT INTO `cs340_umj`.`committees` (
 /*
 source: contributions from committees data 2024 aka pas224
 search conducted on both fec candidate ids above
-I replaced all the goofy | characters with , so I could easily import it as a csv for viz too.
 
 THIS DATA ID C00748582 IS ABOVE with what looks to be one name and below with another.
 
@@ -476,3 +475,263 @@ VALUES
     ('2020'),
     ('2022'),
     ('2024');
+
+
+/*
+This is going to look weird but the reason it looks weird is because we would do all of this
+while processing multiple zipfiles of text files.
+
+There is no table to get clever and do the joins from so we use the data like below
+to lookup data in our db (likely what we just inserted).
+
+source: contributions from committees data 2024 aka pas224
+search conducted on both fec candidate ids above
+
+
+-- begin
+TRUMP ---
+C00748582|N|M2|P2024|202302209578707392|24A|ORG|BLUE WAVE COMMUNICATIONS LLC|CHICAGO|IL|60602|||01092023|7000|P80001571|P80001571|SE.28013|1690370|||4022120231732517006
+C00748582|N|M2|P2024|202302209578707392|24A|ORG|BLUE WAVE COMMUNICATIONS LLC|CHICAGO|IL|60602|||01232023|7000|P80001571|P80001571|SE.28014|1690370|||4022120231732517007
+
+C00489799|A|M3|P2024|202304189581037688|24A|PAC|PLANNED PARENTHOOD ACTION FUND, INC.|NEW YORK|NY|100383804|||02142023|200|P80001571|P80001571|500098872|1700821|||4042020231743494020
+TRUMP ---
+
+*/
+
+INSERT INTO `cs340_umj`.`candidate_office_records_committees`(
+    candidate_office_records_id,
+    committees_id
+) VALUES
+    (
+        (
+            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            WHERE fec_cand_id = 'P80001571'
+        ),
+        (
+            SELECT id FROM `cs340_umj`.`committees` 
+            WHERE cmte_id = 'C00748582'
+        )
+    ),
+    (
+        (
+            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            WHERE fec_cand_id = 'P80001571'
+        ),
+        (
+            SELECT id FROM `cs340_umj`.`committees` 
+            WHERE cmte_id = 'C00489799'
+        )
+    );
+
+
+/*
+This is going to look weird but the reason it looks weird is because we would do all of this
+while processing multiple zipfiles of text files.
+
+There is no table to get clever and do the joins from so we use the data like below
+to lookup data in our db (likely what we just inserted).
+
+source: contributions from committees data 2024 aka pas224
+search conducted on both fec candidate ids above
+
+
+-- begin
+TRUMP ---
+C00748582|N|M2|P2024|202302209578707392|24A|ORG|BLUE WAVE COMMUNICATIONS LLC|CHICAGO|IL|60602|||01092023|7000|P80001571|P80001571|SE.28013|1690370|||4022120231732517006
+C00748582|N|M2|P2024|202302209578707392|24A|ORG|BLUE WAVE COMMUNICATIONS LLC|CHICAGO|IL|60602|||01232023|7000|P80001571|P80001571|SE.28014|1690370|||4022120231732517007
+
+C00489799|A|M3|P2024|202304189581037688|24A|PAC|PLANNED PARENTHOOD ACTION FUND, INC.|NEW YORK|NY|100383804|||02142023|200|P80001571|P80001571|500098872|1700821|||4042020231743494020
+TRUMP ---
+
+*/
+
+-- In the future add more records and turn the last two back on
+INSERT INTO `cs340_umj`.`candidate_office_records_contributions`(
+    candidate_office_records_id,
+    contributions_id
+) VALUES
+    (
+        (
+            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            WHERE fec_cand_id = 'P80001571'
+        ),
+        (
+            SELECT id FROM `cs340_umj`.`contributions` 
+            WHERE sub_id = 4022120231732517006 -- we use sub_id because we know this is a unique fec id for the row in the original data
+        )
+    );
+    -- (
+    --     (
+    --         SELECT id FROM `cs340_umj`.`candidate_office_records` 
+    --         WHERE fec_cand_id = 'P80001571'
+    --     ),
+    --     (
+    --         SELECT id FROM `cs340_umj`.`contributions` 
+    --         WHERE sub_id = 4022120231732517007 -- we use sub_id because we know this is a unique fec id for the row in the original data
+    --     )
+    -- ),
+    -- (
+    --     (
+    --         SELECT id FROM `cs340_umj`.`candidate_office_records` 
+    --         WHERE fec_cand_id = 'P80001571'
+    --     ),
+    --     (
+    --         SELECT id FROM `cs340_umj`.`contributions` 
+    --         WHERE sub_id = 4042020231743494020 -- we use sub_id because we know this is a unique fec id for the row in the original data
+    --     )
+    -- );
+
+
+
+
+/*
+This is going to look weird but the reason it looks weird is because we would do all of this
+while processing multiple zipfiles of text files.
+
+There is no table to get clever and do the joins from so we use the data like below
+to lookup data in our db (likely what we just inserted).
+
+source: contributions from committees data 2024 aka pas224
+search conducted on both fec candidate ids above
+
+
+-- begin
+TRUMP ---
+C00748582|N|M2|P2024|202302209578707392|24A|ORG|BLUE WAVE COMMUNICATIONS LLC|CHICAGO|IL|60602|||01092023|7000|P80001571|P80001571|SE.28013|1690370|||4022120231732517006
+C00748582|N|M2|P2024|202302209578707392|24A|ORG|BLUE WAVE COMMUNICATIONS LLC|CHICAGO|IL|60602|||01232023|7000|P80001571|P80001571|SE.28014|1690370|||4022120231732517007
+
+C00489799|A|M3|P2024|202304189581037688|24A|PAC|PLANNED PARENTHOOD ACTION FUND, INC.|NEW YORK|NY|100383804|||02142023|200|P80001571|P80001571|500098872|1700821|||4042020231743494020
+TRUMP ---
+
+
+NOTICE THE YEAR FOR THE ELECTION IS PARSED OFF OF COL 4: P2024
+*/
+
+
+INSERT INTO `cs340_umj`.`election_years_contributions`(
+    election_years_year,
+    contributions_id
+) VALUES
+    (
+        (
+            SELECT year FROM `cs340_umj`.`election_years` 
+            WHERE year = '2024'
+        ),
+        (
+            SELECT id FROM `cs340_umj`.`contributions` 
+            WHERE sub_id = 4022120231732517006 -- we use sub_id because we know this is a unique fec id for the row in the original data
+        )
+    );
+
+/*
+This is going to look weird but the reason it looks weird is because we would do all of this
+while processing multiple zipfiles of text files.
+
+There is no table to get clever and do the joins from so we use the data like below
+to lookup data in our db (likely what we just inserted).
+
+source: contributions from committees data 2024 aka pas224
+search conducted on both fec candidate ids above
+
+
+-- begin
+TRUMP ---
+C00748582|N|M2|P2024|202302209578707392|24A|ORG|BLUE WAVE COMMUNICATIONS LLC|CHICAGO|IL|60602|||01092023|7000|P80001571|P80001571|SE.28013|1690370|||4022120231732517006
+C00748582|N|M2|P2024|202302209578707392|24A|ORG|BLUE WAVE COMMUNICATIONS LLC|CHICAGO|IL|60602|||01232023|7000|P80001571|P80001571|SE.28014|1690370|||4022120231732517007
+
+C00489799|A|M3|P2024|202304189581037688|24A|PAC|PLANNED PARENTHOOD ACTION FUND, INC.|NEW YORK|NY|100383804|||02142023|200|P80001571|P80001571|500098872|1700821|||4042020231743494020
+TRUMP ---
+
+
+NOTICE THE YEAR FOR THE CYCLE IS PARSE OUT OF 02142023 -> year 2023 -> 2023 % 2 != 0 -> 2023 + 1 = 2024
+Because cycles are even years that cover the two year election cycles in this case the cycle is 2023-2024 and is represented by 2024
+*/
+INSERT INTO `cs340_umj`.`cycles_contributions`(
+    cycles_year,
+    contributions_id
+) VALUES
+    (
+        (
+            SELECT year FROM `cs340_umj`.`cycles` 
+            WHERE year = '2024'
+        ),
+        (
+            SELECT id FROM `cs340_umj`.`contributions` 
+            WHERE sub_id = 4022120231732517006 -- we use sub_id because we know this is a unique fec id for the row in the original data
+        )
+    );
+
+/* 
+For candidate election years and cycles it is a bit tricky.
+We know how to get election years from the master candidate record.
+We know how to get election years from the contributions data (see above comment block for election_years_contributions)
+We know how to get cycles years from the contributions data (see above comment block for cycles_contributions)
+
+We also know that a candidate record can exist for an election year without any contributions.
+Scope doesnt allow us to go dig up and analyze all the FEC data but we will do the best with what we know.
+
+For each data source we will insert on conflict do nothing the appropriate values.
+Just kidding mysql docs and research tell me that is not supported in mysql or mariadb like it is in postgres
+
+# Citation for the following code:
+# Date: 05/04/2023
+# Copied from /OR/ Adapted from /OR/ Based on:
+https://stackoverflow.com/a/4596409
+
+We just always need to be sure not to mix in dupes so one insert per data source.
+*/
+INSERT INTO `cs340_umj`.`election_years_candidate_office_records`(
+    election_years_year,
+    candidate_office_records_id
+) VALUES
+    (
+        '2024',
+        (
+            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            WHERE fec_cand_id = 'P80001571'
+        )
+    )
+ON DUPLICATE KEY UPDATE election_years_year=election_years_year, candidate_office_records_id=candidate_office_records_id;
+
+-- do it again for proof that we are seriousssss. (pretend this is another data source)
+INSERT INTO `cs340_umj`.`election_years_candidate_office_records`(
+    election_years_year,
+    candidate_office_records_id
+) VALUES
+    (
+        '2024',
+        (
+            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            WHERE fec_cand_id = 'P80001571'
+        )
+    )
+ON DUPLICATE KEY UPDATE election_years_year=election_years_year, candidate_office_records_id=candidate_office_records_id;
+
+-- DO cycles now same way
+
+INSERT INTO `cs340_umj`.`cycles_candidate_office_records`(
+    cycles_year,
+    candidate_office_records_id
+) VALUES
+    (
+        '2024',
+        (
+            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            WHERE fec_cand_id = 'P80001571'
+        )
+    )
+ON DUPLICATE KEY UPDATE cycles_year=cycles_year, candidate_office_records_id=candidate_office_records_id;
+
+-- do it again for proof that we are seriousssss. (pretend this is another data source)
+INSERT INTO `cs340_umj`.`cycles_candidate_office_records`(
+    cycles_year,
+    candidate_office_records_id
+) VALUES
+    (
+        '2024',
+        (
+            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            WHERE fec_cand_id = 'P80001571'
+        )
+    )
+ON DUPLICATE KEY UPDATE cycles_year=cycles_year, candidate_office_records_id=candidate_office_records_id;
