@@ -334,6 +334,27 @@ INSERT INTO `cs340_umj`.`candidate_office_records` (
     );
 
 
+INSERT INTO `cs340_umj`.`committee_types` (code, name, explanation)
+VALUES
+    ('C', 'C', 'really long explanation or maybe it is short just depends. cna also be null'),
+    ('D', 'D', 'long explanation'),
+    ('E', 'E', 'long explanation'),
+    ('H', 'H', 'long explanation'),
+    ('I', 'I', 'long explanation'),
+    ('N', 'N', 'long explanation'),
+    ('O', 'O', 'long explanation'),
+    ('P', 'P', 'long explanation'),
+    ('Q', 'Q', 'long explanation'),
+    ('S', 'S', 'long explanation'),
+    ('U', 'U', 'long explanation'),
+    ('V', 'V', 'long explanation'),
+    ('W', 'W', 'long explanation'),
+    ('X', 'X', 'long explanation'),
+    ('Y', 'Y', 'long explanation'),
+    ('Z', 'Z', 'long explanation');
+
+
+
 /*
 NOTE: for the record I did contributions first and then circled back to do
 committees up here.
@@ -360,23 +381,24 @@ INSERT INTO `cs340_umj`.`committees` (
     city,
     state,
     zip_code,
-    employer,
-    occupation,
-    contributor_types_id
+    committee_types_id
 ) VALUES
     (
-        C00748582|
-        REALLY AMERICAN PAC|
-        WASHINGTON|
-        DC|
-        20015, -- zip_code
-        U|
-        O|
-        |
-        M|
-        |
-        NONE|
-    )
+        'C00748582',
+        'REALLY AMERICAN PAC',
+        'WASHINGTON',
+        'DC',
+        '20015', -- zip_code
+        (SELECT id FROM `cs340_umj`.`committee_types` WHERE code = 'O')
+    ),
+    (
+        'C00489799',
+        'PLANNED PARENTHOOD VOTES',
+        'NEW YORK',
+        'NY',
+        '10038', -- zip_code
+        (SELECT id FROM `cs340_umj`.`committee_types` WHERE code = 'O')
+    );
 
 
 
@@ -411,4 +433,46 @@ that does not change the data we parse.
 
 */
 
+INSERT INTO `cs340_umj`.`contributions` (
+    transaction_pgi,
+    image_num,
+    transaction_dt,
+    transaction_amt,
+    trans_id,
+    file_num,
+    memo_cd,
+    memo_text,
+    sub_id,
+    committees_id,
+    report_types_id,
+    transaction_types_id,
+    amendment_indicators_id,
+    contributor_types_id
+) VALUES (
+    'P2024', -- transaction_pgi,
+    '202302209578707392', -- image_num,
+    '2023-01-09', -- transaction_dt,
+    7000, -- transaction_amt,
+    'SE.28013', -- trans_id,
+    1690370, -- file_num,
+    NULL, -- memo_cd,
+    NULL, -- memo_text,
+    4022120231732517006, -- sub_id,
+    (SELECT id FROM `cs340_umj`.`committees` WHERE cmte_id = 'C00748582'),
+    (SELECT id FROM `cs340_umj`.`report_types` WHERE code = 'M2'),
+    (SELECT id FROM `cs340_umj`.`transaction_types` WHERE code = '24A'),
+    (SELECT id FROM `cs340_umj`.`amendment_indicators` WHERE code = 'N'),
+    (SELECT id FROM `cs340_umj`.`contributor_types` WHERE code = 'ORG')
+);
 
+-- TODO: mORE ^^^
+
+
+
+-- EVEN YEARS ONLY FOR CYCLES
+INSERT INTO `cs340_umj`.`cycles` (year)
+VALUES
+    ('2018'),
+    ('2020'),
+    ('2022'),
+    ('2024');
