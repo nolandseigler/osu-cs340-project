@@ -332,3 +332,83 @@ INSERT INTO `cs340_umj`.`candidate_office_records` (
         (SELECT id FROM `cs340_umj`.`party_types` WHERE short_name = 'REP'),
         (SELECT id FROM `cs340_umj`.`incumbent_challenger_statuses` WHERE code = 'C')
     );
+
+
+/*
+NOTE: for the record I did contributions first and then circled back to do
+committees up here.
+It seems like our change to make committees optional was the right one.
+many committee ids exist in the master file and they arent all in pas224 but they might
+be in the other contributions file maybe.
+source: Committe master file. record: cm24
+-- begin
+C00748582|REALLY AMERICAN PAC|SKIP|SKIP||
+WASHINGTON|DC|20015|U|O||M||NONE|
+
+C00489799|PLANNED PARENTHOOD VOTES|LOUIE, MAGGIE|123 WILLIAM ST.||NEW YORK|NY|10038|U|O||M||NONE|
+
+-- end
+
+TODO: Remove employer because it is not in the master file.
+TODO: contributor_types shoudl not have landed in this table this should be committe_type and we also need
+a new table with that.
+TODO: contributor type should only go on contribution
+*/
+INSERT INTO `cs340_umj`.`committees` (
+    cmte_id,
+    name,
+    city,
+    state,
+    zip_code,
+    employer,
+    occupation,
+    contributor_types_id
+) VALUES
+    (
+        C00748582|
+        REALLY AMERICAN PAC|
+        WASHINGTON|
+        DC|
+        20015, -- zip_code
+        U|
+        O|
+        |
+        M|
+        |
+        NONE|
+    )
+
+
+
+
+/*
+source: contributions from committees data 2024 aka pas224
+search conducted on both fec candidate ids above
+I replaced all the goofy | characters with , so I could easily import it as a csv for viz too.
+
+THIS DATA ID C00748582 IS ABOVE with what looks to be one name and below with another.
+
+THIS IS REAL FEC DATA AND THE SOURCE SEEMS LIKE
+IT SAYS IT SHOULD!!!!
+
+THIS IS LIKELY my misunderstand of their confusing data.....?
+
+-- begin
+TRUMP ---
+C00748582|N|M2|P2024|202302209578707392|24A|ORG|BLUE WAVE COMMUNICATIONS LLC|CHICAGO|IL|60602|||01092023|7000|P80001571|P80001571|SE.28013|1690370|||4022120231732517006
+C00748582|N|M2|P2024|202302209578707392|24A|ORG|BLUE WAVE COMMUNICATIONS LLC|CHICAGO|IL|60602|||01232023|7000|P80001571|P80001571|SE.28014|1690370|||4022120231732517007
+
+C00489799|A|M3|P2024|202304189581037688|24A|PAC|PLANNED PARENTHOOD ACTION FUND, INC.|NEW YORK|NY|100383804|||02142023|200|P80001571|P80001571|500098872|1700821|||4042020231743494020
+TRUMP ---
+
+-- end
+
+It is unclear whether paying to take out an ad against a candidate is captured in the above records.
+I think I recall reading something about that being in some data but that is a future interest
+that does not change the data we parse.
+
+
+
+*/
+
+
