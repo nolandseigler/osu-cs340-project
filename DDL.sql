@@ -8,21 +8,21 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema cs340_umj
+-- Schema cs340_seiglern
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema cs340_umj
+-- Schema cs340_seiglern
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `cs340_umj` DEFAULT CHARACTER SET utf8 ;
-USE `cs340_umj` ;
+CREATE SCHEMA IF NOT EXISTS `cs340_seiglern` DEFAULT CHARACTER SET utf8 ;
+USE `cs340_seiglern` ;
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`office_types`
+-- Table `cs340_seiglern`.`office_types`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`office_types` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`office_types` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`office_types` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`office_types` (
   `id` TINYINT(3) NOT NULL AUTO_INCREMENT,
   `code` ENUM("P", "H", "S") NULL,
   `name` VARCHAR(50) NULL,
@@ -33,11 +33,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`contributor_types`
+-- Table `cs340_seiglern`.`contributor_types`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`contributor_types` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`contributor_types` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`contributor_types` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`contributor_types` (
   `id` TINYINT(3) NOT NULL AUTO_INCREMENT,
   `code` ENUM("CAN", "CCM", "COM", "IND", "ORG", "PAC", "PTY") NOT NULL,
   `name` VARCHAR(50) NOT NULL,
@@ -49,11 +49,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`report_types`
+-- Table `cs340_seiglern`.`report_types`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`report_types` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`report_types` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`report_types` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`report_types` (
   `id` TINYINT(3) NOT NULL AUTO_INCREMENT,
   `code` ENUM("12C", "12G", "12P", "12R", "12S", "30D", "30G", "30P", "30R", "30S", "60D", "ADJ", "CA", "M10", "M11", "M12", "M2", "M3", "M4", "M5", "M6", "M7", "M8", "M9", "MY", "Q1", "Q2", "Q3", "TER", "YE", "90S", "90D", "48H", "24H") NULL,
   `name` VARCHAR(50) NOT NULL,
@@ -65,11 +65,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`party_types`
+-- Table `cs340_seiglern`.`party_types`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`party_types` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`party_types` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`party_types` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`party_types` (
   `id` TINYINT(3) NOT NULL AUTO_INCREMENT,
   `code` VARCHAR(1) NOT NULL,
   `short_name` VARCHAR(3) NOT NULL,
@@ -81,11 +81,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`incumbent_challenger_statuses`
+-- Table `cs340_seiglern`.`incumbent_challenger_statuses`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`incumbent_challenger_statuses` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`incumbent_challenger_statuses` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`incumbent_challenger_statuses` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`incumbent_challenger_statuses` (
   `id` TINYINT(3) NOT NULL AUTO_INCREMENT,
   `code` ENUM("I", "C", "O") NOT NULL,
   `name` VARCHAR(25) NOT NULL,
@@ -97,11 +97,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`amendment_indicators`
+-- Table `cs340_seiglern`.`amendment_indicators`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`amendment_indicators` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`amendment_indicators` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`amendment_indicators` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`amendment_indicators` (
   `id` TINYINT(3) NOT NULL AUTO_INCREMENT,
   `code` ENUM("N", "A", "T") NOT NULL,
   `name` VARCHAR(50) NULL,
@@ -112,11 +112,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`election_years`
+-- Table `cs340_seiglern`.`election_years`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`election_years` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`election_years` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`election_years` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`election_years` (
   `year` YEAR(4) NOT NULL,
   PRIMARY KEY (`year`),
   UNIQUE INDEX `year_UNIQUE` (`year` ASC) VISIBLE)
@@ -124,11 +124,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`transaction_types`
+-- Table `cs340_seiglern`.`transaction_types`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`transaction_types` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`transaction_types` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`transaction_types` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`transaction_types` (
   `id` TINYINT(3) NOT NULL AUTO_INCREMENT,
   `code` ENUM("10", "10J", "11", "11J", "12", "13", "15", "15C", "15E", "15F", "15I", "15J", "15T", "15Z", "16C", "16F", "16G", "16H", "16J", "16K", "16L", "16R", "16U", "17R", "17U", "17Y", "17Z", "18G", "18H", "18J", "18K", "18L", "18U", "19", "19J", "20", "20A", "20B", "20C", "20D", "20F", "20G", "20R", "20V", "20Y", "", "21Y", "22G", "22H", "22J", "22K", "22L", "22R", "22U", "22X", "22Y", "22Z", "23Y", "24A", "24C", "24E", "24F", "24G", "24H", "24I", "24K", "24N", "24P", "24R", "24T", "24U", "24Z", "28L", "29", "30", "30T", "30K", "30G", "30J", "30F", "31", "31T", "31K", "31G", "31J", "31F", "32", "32T", "32K", "32G", "32J", "32F", "40", "40Y", "40T", "40Z", "41", "41Y", "41T", "41Z", "42", "42Y", "42T", "42Z") NOT NULL,
   `name` VARCHAR(50) NOT NULL,
@@ -140,11 +140,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`candidates`
+-- Table `cs340_seiglern`.`candidates`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`candidates` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`candidates` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`candidates` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`candidates` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `first_name` VARCHAR(255) NULL,
   `last_name` VARCHAR(255) NULL,
@@ -157,11 +157,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`candidate_office_records`
+-- Table `cs340_seiglern`.`candidate_office_records`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`candidate_office_records` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`candidate_office_records` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`candidate_office_records` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`candidate_office_records` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `fec_cand_id` VARCHAR(9) NOT NULL,
   `name` VARCHAR(200) NOT NULL,
@@ -195,33 +195,33 @@ CREATE TABLE IF NOT EXISTS `cs340_umj`.`candidate_office_records` (
   INDEX `fk_candidate_office_records_incumbent_challenger_statuses1_idx` (`incumbent_challenger_statuses_id` ASC) VISIBLE,
   CONSTRAINT `fk_candidate_office_records_office_types`
     FOREIGN KEY (`office_types_id`)
-    REFERENCES `cs340_umj`.`office_types` (`id`)
+    REFERENCES `cs340_seiglern`.`office_types` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_candidate_office_records_candidates1`
     FOREIGN KEY (`candidates_id`)
-    REFERENCES `cs340_umj`.`candidates` (`id`)
+    REFERENCES `cs340_seiglern`.`candidates` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_candidate_office_records_party_types1`
     FOREIGN KEY (`party_types_id`)
-    REFERENCES `cs340_umj`.`party_types` (`id`)
+    REFERENCES `cs340_seiglern`.`party_types` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_candidate_office_records_incumbent_challenger_statuses1`
     FOREIGN KEY (`incumbent_challenger_statuses_id`)
-    REFERENCES `cs340_umj`.`incumbent_challenger_statuses` (`id`)
+    REFERENCES `cs340_seiglern`.`incumbent_challenger_statuses` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`committee_types`
+-- Table `cs340_seiglern`.`committee_types`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`committee_types` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`committee_types` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`committee_types` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`committee_types` (
   `id` TINYINT(3) NOT NULL AUTO_INCREMENT,
   `code` ENUM("C", "D", "E", "H", "I", "N", "O", "P", "Q", "S", "U", "V", "W", "X", "Y", "Z") NOT NULL,
   `name` VARCHAR(255) NOT NULL,
@@ -234,11 +234,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`committees`
+-- Table `cs340_seiglern`.`committees`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`committees` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`committees` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`committees` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`committees` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `cmte_id` VARCHAR(9) NOT NULL,
   `name` VARCHAR(200) NOT NULL,
@@ -252,18 +252,18 @@ CREATE TABLE IF NOT EXISTS `cs340_umj`.`committees` (
   INDEX `fk_committees_committee_types1_idx` (`committee_types_id` ASC) VISIBLE,
   CONSTRAINT `fk_committees_committee_types1`
     FOREIGN KEY (`committee_types_id`)
-    REFERENCES `cs340_umj`.`committee_types` (`id`)
+    REFERENCES `cs340_seiglern`.`committee_types` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`contributions`
+-- Table `cs340_seiglern`.`contributions`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`contributions` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`contributions` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`contributions` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`contributions` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `transaction_pgi` VARCHAR(5) NULL,
   `image_num` VARCHAR(18) NULL,
@@ -288,38 +288,38 @@ CREATE TABLE IF NOT EXISTS `cs340_umj`.`contributions` (
   INDEX `fk_contributions_contributor_types1_idx` (`contributor_types_id` ASC) VISIBLE,
   CONSTRAINT `fk_contributions_committees1`
     FOREIGN KEY (`committees_id`)
-    REFERENCES `cs340_umj`.`committees` (`id`)
+    REFERENCES `cs340_seiglern`.`committees` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_contributions_report_types1`
     FOREIGN KEY (`report_types_id`)
-    REFERENCES `cs340_umj`.`report_types` (`id`)
+    REFERENCES `cs340_seiglern`.`report_types` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_contributions_transaction_types1`
     FOREIGN KEY (`transaction_types_id`)
-    REFERENCES `cs340_umj`.`transaction_types` (`id`)
+    REFERENCES `cs340_seiglern`.`transaction_types` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_contributions_amendment_indicators1`
     FOREIGN KEY (`amendment_indicators_id`)
-    REFERENCES `cs340_umj`.`amendment_indicators` (`id`)
+    REFERENCES `cs340_seiglern`.`amendment_indicators` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_contributions_contributor_types1`
     FOREIGN KEY (`contributor_types_id`)
-    REFERENCES `cs340_umj`.`contributor_types` (`id`)
+    REFERENCES `cs340_seiglern`.`contributor_types` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`cycles`
+-- Table `cs340_seiglern`.`cycles`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`cycles` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`cycles` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`cycles` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`cycles` (
   `year` YEAR(4) NOT NULL,
   PRIMARY KEY (`year`),
   UNIQUE INDEX `year_UNIQUE` (`year` ASC) VISIBLE)
@@ -327,11 +327,11 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`candidate_office_records_committees`
+-- Table `cs340_seiglern`.`candidate_office_records_committees`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`candidate_office_records_committees` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`candidate_office_records_committees` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`candidate_office_records_committees` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`candidate_office_records_committees` (
   `candidate_office_records_id` INT NOT NULL,
   `committees_id` INT NOT NULL,
   PRIMARY KEY (`candidate_office_records_id`, `committees_id`),
@@ -339,23 +339,23 @@ CREATE TABLE IF NOT EXISTS `cs340_umj`.`candidate_office_records_committees` (
   INDEX `fk_candidate_office_records_has_committees_candidate_office_idx` (`candidate_office_records_id` ASC) VISIBLE,
   CONSTRAINT `fk_candidate_office_records_has_committees_candidate_office_r1`
     FOREIGN KEY (`candidate_office_records_id`)
-    REFERENCES `cs340_umj`.`candidate_office_records` (`id`)
+    REFERENCES `cs340_seiglern`.`candidate_office_records` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_candidate_office_records_has_committees_committees1`
     FOREIGN KEY (`committees_id`)
-    REFERENCES `cs340_umj`.`committees` (`id`)
+    REFERENCES `cs340_seiglern`.`committees` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`candidate_office_records_contributions`
+-- Table `cs340_seiglern`.`candidate_office_records_contributions`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`candidate_office_records_contributions` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`candidate_office_records_contributions` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`candidate_office_records_contributions` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`candidate_office_records_contributions` (
   `candidate_office_records_id` INT NOT NULL,
   `contributions_id` INT NOT NULL,
   PRIMARY KEY (`candidate_office_records_id`, `contributions_id`),
@@ -363,23 +363,23 @@ CREATE TABLE IF NOT EXISTS `cs340_umj`.`candidate_office_records_contributions` 
   INDEX `fk_candidate_office_records_has_contributions_candidate_off_idx` (`candidate_office_records_id` ASC) VISIBLE,
   CONSTRAINT `fk_candidate_office_records_has_contributions_candidate_offic1`
     FOREIGN KEY (`candidate_office_records_id`)
-    REFERENCES `cs340_umj`.`candidate_office_records` (`id`)
+    REFERENCES `cs340_seiglern`.`candidate_office_records` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_candidate_office_records_has_contributions_contributions1`
     FOREIGN KEY (`contributions_id`)
-    REFERENCES `cs340_umj`.`contributions` (`id`)
+    REFERENCES `cs340_seiglern`.`contributions` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`election_years_contributions`
+-- Table `cs340_seiglern`.`election_years_contributions`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`election_years_contributions` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`election_years_contributions` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`election_years_contributions` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`election_years_contributions` (
   `election_years_year` YEAR(4) NOT NULL,
   `contributions_id` INT NOT NULL,
   PRIMARY KEY (`election_years_year`, `contributions_id`),
@@ -387,23 +387,23 @@ CREATE TABLE IF NOT EXISTS `cs340_umj`.`election_years_contributions` (
   INDEX `fk_election_years_has_contributions_election_years1_idx` (`election_years_year` ASC) VISIBLE,
   CONSTRAINT `fk_election_years_has_contributions_election_years1`
     FOREIGN KEY (`election_years_year`)
-    REFERENCES `cs340_umj`.`election_years` (`year`)
+    REFERENCES `cs340_seiglern`.`election_years` (`year`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_election_years_has_contributions_contributions1`
     FOREIGN KEY (`contributions_id`)
-    REFERENCES `cs340_umj`.`contributions` (`id`)
+    REFERENCES `cs340_seiglern`.`contributions` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`cycles_contributions`
+-- Table `cs340_seiglern`.`cycles_contributions`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`cycles_contributions` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`cycles_contributions` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`cycles_contributions` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`cycles_contributions` (
   `cycles_year` YEAR(4) NOT NULL,
   `contributions_id` INT NOT NULL,
   PRIMARY KEY (`cycles_year`, `contributions_id`),
@@ -411,23 +411,23 @@ CREATE TABLE IF NOT EXISTS `cs340_umj`.`cycles_contributions` (
   INDEX `fk_cycles_has_contributions_cycles1_idx` (`cycles_year` ASC) VISIBLE,
   CONSTRAINT `fk_cycles_has_contributions_cycles1`
     FOREIGN KEY (`cycles_year`)
-    REFERENCES `cs340_umj`.`cycles` (`year`)
+    REFERENCES `cs340_seiglern`.`cycles` (`year`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_cycles_has_contributions_contributions1`
     FOREIGN KEY (`contributions_id`)
-    REFERENCES `cs340_umj`.`contributions` (`id`)
+    REFERENCES `cs340_seiglern`.`contributions` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`election_years_candidate_office_records`
+-- Table `cs340_seiglern`.`election_years_candidate_office_records`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`election_years_candidate_office_records` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`election_years_candidate_office_records` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`election_years_candidate_office_records` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`election_years_candidate_office_records` (
   `election_years_year` YEAR(4) NOT NULL,
   `candidate_office_records_id` INT NOT NULL,
   PRIMARY KEY (`election_years_year`, `candidate_office_records_id`),
@@ -435,23 +435,23 @@ CREATE TABLE IF NOT EXISTS `cs340_umj`.`election_years_candidate_office_records`
   INDEX `fk_election_years_has_candidate_office_records_election_yea_idx` (`election_years_year` ASC) VISIBLE,
   CONSTRAINT `fk_election_years_has_candidate_office_records_election_years1`
     FOREIGN KEY (`election_years_year`)
-    REFERENCES `cs340_umj`.`election_years` (`year`)
+    REFERENCES `cs340_seiglern`.`election_years` (`year`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_election_years_has_candidate_office_records_candidate_offi1`
     FOREIGN KEY (`candidate_office_records_id`)
-    REFERENCES `cs340_umj`.`candidate_office_records` (`id`)
+    REFERENCES `cs340_seiglern`.`candidate_office_records` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `cs340_umj`.`cycles_candidate_office_records`
+-- Table `cs340_seiglern`.`cycles_candidate_office_records`
 -- -----------------------------------------------------
-DROP TABLE IF EXISTS `cs340_umj`.`cycles_candidate_office_records` ;
+DROP TABLE IF EXISTS `cs340_seiglern`.`cycles_candidate_office_records` ;
 
-CREATE TABLE IF NOT EXISTS `cs340_umj`.`cycles_candidate_office_records` (
+CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`cycles_candidate_office_records` (
   `cycles_year` YEAR(4) NOT NULL,
   `candidate_office_records_id` INT NOT NULL,
   PRIMARY KEY (`cycles_year`, `candidate_office_records_id`),
@@ -459,12 +459,12 @@ CREATE TABLE IF NOT EXISTS `cs340_umj`.`cycles_candidate_office_records` (
   INDEX `fk_cycles_has_candidate_office_records_cycles1_idx` (`cycles_year` ASC) VISIBLE,
   CONSTRAINT `fk_cycles_has_candidate_office_records_cycles1`
     FOREIGN KEY (`cycles_year`)
-    REFERENCES `cs340_umj`.`cycles` (`year`)
+    REFERENCES `cs340_seiglern`.`cycles` (`year`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `fk_cycles_has_candidate_office_records_candidate_office_recor1`
     FOREIGN KEY (`candidate_office_records_id`)
-    REFERENCES `cs340_umj`.`candidate_office_records` (`id`)
+    REFERENCES `cs340_seiglern`.`candidate_office_records` (`id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
@@ -481,14 +481,14 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 --- BEGIN INSERTS
 
 
-INSERT INTO `cs340_umj`.`office_types` (code, name)
+INSERT INTO `cs340_seiglern`.`office_types` (code, name)
 VALUES
-	('P', 'President'),
+	  ('P', 'President'),
     ('H', 'House of Representatives'),
     ('S', 'Senate');
     
 
-INSERT INTO `cs340_umj`.`contributor_types` (code, name)
+INSERT INTO `cs340_seiglern`.`contributor_types` (code, name)
 VALUES
     ('CAN', 'DummyData1'),
     ('CCM', 'DummyData2'),
@@ -498,7 +498,7 @@ VALUES
     ('PAC', 'DummyData6'),
     ('PTY', 'DummyData7');
 
-INSERT INTO `cs340_umj`.`report_types` (code, name)
+INSERT INTO `cs340_seiglern`.`report_types` (code, name)
 VALUES
     ('12C', 'a1'),
     ('12G', 'a2'),
@@ -535,27 +535,27 @@ VALUES
     ('48H', 'a32'),
     ('24H', 'a33');
     
-INSERT INTO `cs340_umj`.`party_types` (code, short_name)
+INSERT INTO `cs340_seiglern`.`party_types` (code, short_name)
 VALUES
     ('1', 'DEM'),
     ('2', 'REP'),
     ('3', 'IND');
     
 
-INSERT INTO `cs340_umj`.`incumbent_challenger_statuses` (code, name)
+INSERT INTO `cs340_seiglern`.`incumbent_challenger_statuses` (code, name)
 VALUES
     ('I', 'Incumbent'),
     ('C', 'Challenger'),
     ('O', 'Open Seat');
 
-INSERT INTO `cs340_umj`.`amendment_indicators` (code, name)
+INSERT INTO `cs340_seiglern`.`amendment_indicators` (code, name)
 VALUES
     ('N', 'New report'),
     ('A', 'Amendment to previous report'),
     ('T', 'Termination report');
 
 
-INSERT INTO `cs340_umj`.`election_years` (year)
+INSERT INTO `cs340_seiglern`.`election_years` (year)
 VALUES
     ('2018'),
     ('2019'),
@@ -569,7 +569,7 @@ VALUES
 
 
 
-INSERT INTO `cs340_umj`.`transaction_types` (code, name)
+INSERT INTO `cs340_seiglern`.`transaction_types` (code, name)
 VALUES
     ('10', 'a1'),
     ('10J', 'a2'),
@@ -676,11 +676,12 @@ VALUES
     ('42T', 'a103'),
     ('42Z', 'a104');
 
-INSERT INTO `cs340_umj`.`candidates` (first_name, last_name, middle_name, email)
+INSERT INTO `cs340_seiglern`.`candidates` (first_name, last_name, middle_name, email)
 VALUES 
     ('barack', 'obama', 'hussein', 'barack.h.obama@example.com'),
     ('donald', 'john', 'trump', 'donald.j.trump@example.com'),
-    ('joseph', 'robinette', 'biden', 'joseph.r.biden@example.com');
+    ('joseph', 'robinette', 'biden', 'joseph.r.biden@example.com'),
+    ('alice', 'bob', 'charlie', 'a.b.c@example.com');
 
 -- Above line is successful
 
@@ -714,6 +715,11 @@ P40005985|HAUSKINS, DANIEL OBAMA MR JR|GWP|2024|US|P|00|C|N||1234 21ST ST.||ROCK
 
 S2AK00176|STEPHENS, JOE TRUMP AKA NOT MURKOWSKI|AKI|2022|AK|S|00|C|N|C00787093|3609 TONGASS AVENUE|5416|KETCHIKAN|AK|99901
 P80001571|TRUMP, DONALD J.|REP|2024|US|P|00|C|C|C00828541|P.O. BOX 13570||ARLINGTON|VA|22219
+
+H2AK00226|PALIN, SARAH|REP|2022|AK|H|00|O|P|C00811323|P.O. BOX 871235||WASILLA|AK|99687
+H8NY15148|OCASIO-CORTEZ, ALEXANDRIA|DEM|2024|NY|H|14|I|C|C00639591|PO BOX 680080||CORONA|NY|11368
+
+
 end ---
 
 
@@ -729,6 +735,9 @@ no result for "obama"
 
 P80001571|TRUMP, DONALD J.|C|2|REP|14449602.19|14053900.4|3538555.97|0|3020902.11|13931948.33|0|0|0|0|0|255109.66|10840.8|00|00||||||0|0|03/31/2023|0|0
 
+H2AK00226|PALIN, SARAH|O|2|REP|3866.49|0|SKIP|SKIP|46379.58|0|0|0|0|0|0|0|0|AK|00||||||0|0|03/31/2023|-9152.5|0
+H8NY15148|OCASIO-CORTEZ, ALEXANDRIA|I|1|DEM|1268221.44|4000|SKIP|SKIP|5188366.31|5208741.29|20|0|0|0|0|0|1253315.24|NY|14||||||0|0|
+
 end---
 
 
@@ -740,7 +749,7 @@ NOTE: We probably should add category tables for cand_office_st and cand_office_
 but maybe that is overly normalized... hmmmm
 */
 
-INSERT INTO `cs340_umj`.`candidate_office_records` (
+INSERT INTO `cs340_seiglern`.`candidate_office_records` (
     fec_cand_id,
     name,
     ttl_receipts,
@@ -785,10 +794,10 @@ INSERT INTO `cs340_umj`.`candidate_office_records` (
         '2023-03-31', -- cvg_end_dt
         0, -- indiv_refund
         0, -- cmte_refund
-        (SELECT id FROM `cs340_umj`.`office_types` WHERE code = 'P'),
+        (SELECT id FROM `cs340_seiglern`.`office_types` WHERE code = 'P'),
         NULL,
-        (SELECT id FROM `cs340_umj`.`party_types` WHERE short_name = 'DEM'),
-        (SELECT id FROM `cs340_umj`.`incumbent_challenger_statuses` WHERE code = 'I')
+        (SELECT id FROM `cs340_seiglern`.`party_types` WHERE short_name = 'DEM'),
+        (SELECT id FROM `cs340_seiglern`.`incumbent_challenger_statuses` WHERE code = 'I')
     ),
     (
         'P80001571', -- fec_cand_id
@@ -810,14 +819,64 @@ INSERT INTO `cs340_umj`.`candidate_office_records` (
         '2023-03-31', -- cvg_end_dt
         0, -- indiv_refund
         0, -- cmte_refund
-        (SELECT id FROM `cs340_umj`.`office_types` WHERE code = 'P'),
+        (SELECT id FROM `cs340_seiglern`.`office_types` WHERE code = 'P'),
         NULL,
-        (SELECT id FROM `cs340_umj`.`party_types` WHERE short_name = 'REP'),
-        (SELECT id FROM `cs340_umj`.`incumbent_challenger_statuses` WHERE code = 'C')
+        (SELECT id FROM `cs340_seiglern`.`party_types` WHERE short_name = 'REP'),
+        (SELECT id FROM `cs340_seiglern`.`incumbent_challenger_statuses` WHERE code = 'C')
+    ),
+    (
+        'H2AK00226', -- fec_cand_id
+        'PALIN, SARAH', -- name
+        3866.49, -- ttl_receipts 
+        0, -- trans_from_auth
+        46379.58, -- coh_bop
+        0, -- coh_cop
+        0, -- cand_contrib
+        0, -- cand_loans
+        0, -- other_loans
+        0, -- cand_loan_repay
+        0, -- other_loan_repay
+        255109.66, -- debts_owed_by
+        10840.8, -- ttl_indiv_contrib
+        'AK', -- cand_office_st,
+        '00', -- cand_office_district,
+        0, -- pol_pty_contrib
+        '2023-03-31', -- cvg_end_dt
+        -9152.5, -- indiv_refund
+        0, -- cmte_refund
+        (SELECT id FROM `cs340_seiglern`.`office_types` WHERE code = 'H'),
+        NULL,
+        (SELECT id FROM `cs340_seiglern`.`party_types` WHERE short_name = 'REP'),
+        (SELECT id FROM `cs340_seiglern`.`incumbent_challenger_statuses` WHERE code = 'O')
+    ),
+    (
+        'H8NY15148', -- fec_cand_id
+        'OCASIO-CORTEZ, ALEXANDRIA', -- name
+        1268221.44, -- ttl_receipts 
+        4000, -- trans_from_auth
+        5188366.31, -- coh_bop
+        5208741.29, -- coh_cop
+        20, -- cand_contrib
+        0, -- cand_loans
+        0, -- other_loans
+        0, -- cand_loan_repay
+        0, -- other_loan_repay
+        0, -- debts_owed_by
+        1253315.24, -- ttl_indiv_contrib
+        'NY', -- cand_office_st,
+        '14', -- cand_office_district,
+        0, -- pol_pty_contrib
+        '1970-01-01', -- cvg_end_dt
+        0, -- indiv_refund
+        0, -- cmte_refund
+        (SELECT id FROM `cs340_seiglern`.`office_types` WHERE code = 'H'),
+        NULL,
+        (SELECT id FROM `cs340_seiglern`.`party_types` WHERE short_name = 'DEM'),
+        (SELECT id FROM `cs340_seiglern`.`incumbent_challenger_statuses` WHERE code = 'O')
     );
 
 
-INSERT INTO `cs340_umj`.`committee_types` (code, name, explanation)
+INSERT INTO `cs340_seiglern`.`committee_types` (code, name, explanation)
 VALUES
     ('C', 'C', 'really long explanation or maybe it is short just depends. cna also be null'),
     ('D', 'D', 'long explanation'),
@@ -851,6 +910,13 @@ WASHINGTON|DC|20015|U|O||M||NONE|
 
 C00489799|PLANNED PARENTHOOD VOTES|LOUIE, MAGGIE|123 WILLIAM ST.||NEW YORK|NY|10038|U|O||M||NONE|
 
+
+
+C00681825|LAW ENFORCEMENT FOR A SAFER AMERICA PAC|NELSON, MARK|1032 15TH ST NW||WASHINGTON|DC|20005|U|O|OTH|M||NONE|
+
+C00004036|SEIU COPE (SERVICE EMPLOYEES INTERNATIONAL UNION COMMITTEE ON POLITICAL EDUCATION)
+|VERRETT, APRIL|1800 MASSACHUSETTS AVE., NW||WASHINGTON|DC|20036|B|Q||M|L|SERVICE EMPLOYEES INTERNATIONAL UNION|
+
 -- end
 
 TODO: Remove employer because it is not in the master file.
@@ -858,7 +924,7 @@ TODO: contributor_types shoudl not have landed in this table this should be comm
 a new table with that.
 TODO: contributor type should only go on contribution
 */
-INSERT INTO `cs340_umj`.`committees` (
+INSERT INTO `cs340_seiglern`.`committees` (
     cmte_id,
     name,
     city,
@@ -872,7 +938,7 @@ INSERT INTO `cs340_umj`.`committees` (
         'WASHINGTON',
         'DC',
         '20015', -- zip_code
-        (SELECT id FROM `cs340_umj`.`committee_types` WHERE code = 'O')
+        (SELECT id FROM `cs340_seiglern`.`committee_types` WHERE code = 'O')
     ),
     (
         'C00489799',
@@ -880,8 +946,25 @@ INSERT INTO `cs340_umj`.`committees` (
         'NEW YORK',
         'NY',
         '10038', -- zip_code
-        (SELECT id FROM `cs340_umj`.`committee_types` WHERE code = 'O')
+        (SELECT id FROM `cs340_seiglern`.`committee_types` WHERE code = 'O')
+    ),
+    (
+        'C00681825',
+        'LAW ENFORCEMENT FOR A SAFER AMERICA PAC',
+        'WASHINGTON',
+        'DC',
+        '20005', -- zip_code
+        (SELECT id FROM `cs340_seiglern`.`committee_types` WHERE code = 'O')
+    ),
+    (
+        'C00004036',
+        'SEIU COPE (SERVICE EMPLOYEES INTERNATIONAL UNION COMMITTEE ON POLITICAL EDUCATION)',
+        'WASHINGTON',
+        'DC',
+        '20036', -- zip_code
+        (SELECT id FROM `cs340_seiglern`.`committee_types` WHERE code = 'Q')
     );
+
 
 
 
@@ -905,7 +988,14 @@ C00748582|N|M2|P2024|202302209578707392|24A|ORG|BLUE WAVE COMMUNICATIONS LLC|CHI
 C00489799|A|M3|P2024|202304189581037688|24A|PAC|PLANNED PARENTHOOD ACTION FUND, INC.|NEW YORK|NY|100383804|||02142023|200|P80001571|P80001571|500098872|1700821|||4042020231743494020
 TRUMP ---
 
+
+AOC from 2022 file:
+C00681825|N|MY|P2022|202107309456960962|24A|ORG|THE BOWLINE GROUP LLC|HIGHLANDS|NJ|07732|||06092021|63750|H8NY15148|H8NY15148|SE-S223831|1532916|||4081320211326551161
+C00004036|A|M5|P2022|202207209522512161|24K|CCM|ALEXANDRIA OCASIO-CORTEZ FOR CONGRESS|CORONA|NY|113680080|||04282021|2500|C00639591|H8NY15148|500016705|1618528|||4073020221553612171
 -- end
+
+
+
 
 It is unclear whether paying to take out an ad against a candidate is captured in the above records.
 I think I recall reading something about that being in some data but that is a future interest
@@ -915,7 +1005,7 @@ that does not change the data we parse.
 
 */
 
-INSERT INTO `cs340_umj`.`contributions` (
+INSERT INTO `cs340_seiglern`.`contributions` (
     transaction_pgi,
     image_num,
     transaction_dt,
@@ -930,7 +1020,8 @@ INSERT INTO `cs340_umj`.`contributions` (
     transaction_types_id,
     amendment_indicators_id,
     contributor_types_id
-) VALUES (
+) VALUES 
+  (
     'P2024', -- transaction_pgi,
     '202302209578707392', -- image_num,
     '2023-01-09', -- transaction_dt,
@@ -940,19 +1031,50 @@ INSERT INTO `cs340_umj`.`contributions` (
     NULL, -- memo_cd,
     NULL, -- memo_text,
     4022120231732517006, -- sub_id,
-    (SELECT id FROM `cs340_umj`.`committees` WHERE cmte_id = 'C00748582'),
-    (SELECT id FROM `cs340_umj`.`report_types` WHERE code = 'M2'),
-    (SELECT id FROM `cs340_umj`.`transaction_types` WHERE code = '24A'),
-    (SELECT id FROM `cs340_umj`.`amendment_indicators` WHERE code = 'N'),
-    (SELECT id FROM `cs340_umj`.`contributor_types` WHERE code = 'ORG')
-);
+    (SELECT id FROM `cs340_seiglern`.`committees` WHERE cmte_id = 'C00748582'),
+    (SELECT id FROM `cs340_seiglern`.`report_types` WHERE code = 'M2'),
+    (SELECT id FROM `cs340_seiglern`.`transaction_types` WHERE code = '24A'),
+    (SELECT id FROM `cs340_seiglern`.`amendment_indicators` WHERE code = 'N'),
+    (SELECT id FROM `cs340_seiglern`.`contributor_types` WHERE code = 'ORG')
+  ),
+  (
+    'P2022', -- transaction_pgi,
+    '202107309456960962', -- image_num,
+    '2021-06-09', -- transaction_dt,
+    63750, -- transaction_amt,
+    'SE-S223831', -- trans_id,
+    1532916, -- file_num,
+    NULL, -- memo_cd,
+    NULL, -- memo_text,
+    4081320211326551161, -- sub_id,
+    (SELECT id FROM `cs340_seiglern`.`committees` WHERE cmte_id = 'C00681825'),
+    (SELECT id FROM `cs340_seiglern`.`report_types` WHERE code = 'MY'),
+    (SELECT id FROM `cs340_seiglern`.`transaction_types` WHERE code = '24A'),
+    (SELECT id FROM `cs340_seiglern`.`amendment_indicators` WHERE code = 'N'),
+    (SELECT id FROM `cs340_seiglern`.`contributor_types` WHERE code = 'ORG')
+  ),
+  (
+    'P2022', -- transaction_pgi,
+    '202207209522512161', -- image_num,
+    '2021-04-08', -- transaction_dt,
+    2500, -- transaction_amt,
+    '500016705', -- trans_id,
+    1618528, -- file_num,
+    NULL, -- memo_cd,
+    NULL, -- memo_text,
+    4073020221553612171, -- sub_id,
+    (SELECT id FROM `cs340_seiglern`.`committees` WHERE cmte_id = 'C00004036'),
+    (SELECT id FROM `cs340_seiglern`.`report_types` WHERE code = 'M5'),
+    (SELECT id FROM `cs340_seiglern`.`transaction_types` WHERE code = '24K'),
+    (SELECT id FROM `cs340_seiglern`.`amendment_indicators` WHERE code = 'A'),
+    (SELECT id FROM `cs340_seiglern`.`contributor_types` WHERE code = 'CCM')
+  );
 
--- TODO: mORE ^^^
 
 
 
 -- EVEN YEARS ONLY FOR CYCLES
-INSERT INTO `cs340_umj`.`cycles` (year)
+INSERT INTO `cs340_seiglern`.`cycles` (year)
 VALUES
     ('2018'),
     ('2020'),
@@ -981,28 +1103,38 @@ TRUMP ---
 
 */
 
-INSERT INTO `cs340_umj`.`candidate_office_records_committees`(
+INSERT INTO `cs340_seiglern`.`candidate_office_records_committees`(
     candidate_office_records_id,
     committees_id
 ) VALUES
     (
         (
-            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
             WHERE fec_cand_id = 'P80001571'
         ),
         (
-            SELECT id FROM `cs340_umj`.`committees` 
+            SELECT id FROM `cs340_seiglern`.`committees` 
             WHERE cmte_id = 'C00748582'
         )
     ),
     (
         (
-            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
             WHERE fec_cand_id = 'P80001571'
         ),
         (
-            SELECT id FROM `cs340_umj`.`committees` 
+            SELECT id FROM `cs340_seiglern`.`committees` 
             WHERE cmte_id = 'C00489799'
+        )
+    ),
+    (
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'H8NY15148'
+        ),
+        (
+            SELECT id FROM `cs340_seiglern`.`committees` 
+            WHERE cmte_id = 'C00681825'
         )
     );
 
@@ -1029,37 +1161,57 @@ TRUMP ---
 */
 
 -- In the future add more records and turn the last two back on
-INSERT INTO `cs340_umj`.`candidate_office_records_contributions`(
+INSERT INTO `cs340_seiglern`.`candidate_office_records_contributions`(
     candidate_office_records_id,
     contributions_id
 ) VALUES
     (
         (
-            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
             WHERE fec_cand_id = 'P80001571'
         ),
         (
-            SELECT id FROM `cs340_umj`.`contributions` 
+            SELECT id FROM `cs340_seiglern`.`contributions` 
             WHERE sub_id = 4022120231732517006 -- we use sub_id because we know this is a unique fec id for the row in the original data
+        )
+    ),
+    (
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'H8NY15148'
+        ),
+        (
+            SELECT id FROM `cs340_seiglern`.`contributions` 
+            WHERE sub_id = 4081320211326551161 -- we use sub_id because we know this is a unique fec id for the row in the original data
+        )
+    ),
+    (
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'H8NY15148'
+        ),
+        (
+            SELECT id FROM `cs340_seiglern`.`contributions` 
+            WHERE sub_id = 4073020221553612171 -- we use sub_id because we know this is a unique fec id for the row in the original data
         )
     );
     -- (
     --     (
-    --         SELECT id FROM `cs340_umj`.`candidate_office_records` 
+    --         SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
     --         WHERE fec_cand_id = 'P80001571'
     --     ),
     --     (
-    --         SELECT id FROM `cs340_umj`.`contributions` 
+    --         SELECT id FROM `cs340_seiglern`.`contributions` 
     --         WHERE sub_id = 4022120231732517007 -- we use sub_id because we know this is a unique fec id for the row in the original data
     --     )
     -- ),
     -- (
     --     (
-    --         SELECT id FROM `cs340_umj`.`candidate_office_records` 
+    --         SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
     --         WHERE fec_cand_id = 'P80001571'
     --     ),
     --     (
-    --         SELECT id FROM `cs340_umj`.`contributions` 
+    --         SELECT id FROM `cs340_seiglern`.`contributions` 
     --         WHERE sub_id = 4042020231743494020 -- we use sub_id because we know this is a unique fec id for the row in the original data
     --     )
     -- );
@@ -1091,18 +1243,38 @@ NOTICE THE YEAR FOR THE ELECTION IS PARSED OFF OF COL 4: P2024
 */
 
 
-INSERT INTO `cs340_umj`.`election_years_contributions`(
+INSERT INTO `cs340_seiglern`.`election_years_contributions`(
     election_years_year,
     contributions_id
 ) VALUES
     (
         (
-            SELECT year FROM `cs340_umj`.`election_years` 
+            SELECT year FROM `cs340_seiglern`.`election_years` 
             WHERE year = '2024'
         ),
         (
-            SELECT id FROM `cs340_umj`.`contributions` 
+            SELECT id FROM `cs340_seiglern`.`contributions` 
             WHERE sub_id = 4022120231732517006 -- we use sub_id because we know this is a unique fec id for the row in the original data
+        )
+    ),
+    (
+        (
+            SELECT year FROM `cs340_seiglern`.`election_years` 
+            WHERE year = '2022'
+        ),
+        (
+            SELECT id FROM `cs340_seiglern`.`contributions` 
+            WHERE sub_id = 4081320211326551161 -- we use sub_id because we know this is a unique fec id for the row in the original data
+        )
+    ),
+    (
+        (
+            SELECT year FROM `cs340_seiglern`.`election_years` 
+            WHERE year = '2022'
+        ),
+        (
+            SELECT id FROM `cs340_seiglern`.`contributions` 
+            WHERE sub_id = 4073020221553612171 -- we use sub_id because we know this is a unique fec id for the row in the original data
         )
     );
 
@@ -1129,18 +1301,38 @@ TRUMP ---
 NOTICE THE YEAR FOR THE CYCLE IS PARSE OUT OF 02142023 -> year 2023 -> 2023 % 2 != 0 -> 2023 + 1 = 2024
 Because cycles are even years that cover the two year election cycles in this case the cycle is 2023-2024 and is represented by 2024
 */
-INSERT INTO `cs340_umj`.`cycles_contributions`(
+INSERT INTO `cs340_seiglern`.`cycles_contributions`(
     cycles_year,
     contributions_id
 ) VALUES
     (
         (
-            SELECT year FROM `cs340_umj`.`cycles` 
+            SELECT year FROM `cs340_seiglern`.`cycles` 
             WHERE year = '2024'
         ),
         (
-            SELECT id FROM `cs340_umj`.`contributions` 
+            SELECT id FROM `cs340_seiglern`.`contributions` 
             WHERE sub_id = 4022120231732517006 -- we use sub_id because we know this is a unique fec id for the row in the original data
+        )
+    ),
+    (
+        (
+            SELECT year FROM `cs340_seiglern`.`cycles` 
+            WHERE year = '2024'
+        ),
+        (
+            SELECT id FROM `cs340_seiglern`.`contributions` 
+            WHERE sub_id = 4081320211326551161 -- we use sub_id because we know this is a unique fec id for the row in the original data
+        )
+    ),
+    (
+        (
+            SELECT year FROM `cs340_seiglern`.`cycles` 
+            WHERE year = '2024'
+        ),
+        (
+            SELECT id FROM `cs340_seiglern`.`contributions` 
+            WHERE sub_id = 4073020221553612171 -- we use sub_id because we know this is a unique fec id for the row in the original data
         )
     );
 
@@ -1163,58 +1355,142 @@ https://stackoverflow.com/a/4596409
 
 We just always need to be sure not to mix in dupes so one insert per data source.
 */
-INSERT INTO `cs340_umj`.`election_years_candidate_office_records`(
+INSERT INTO `cs340_seiglern`.`election_years_candidate_office_records`(
     election_years_year,
     candidate_office_records_id
 ) VALUES
     (
         '2024',
         (
-            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
             WHERE fec_cand_id = 'P80001571'
+        )
+    ),
+    (
+        '2024',
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'P80000722'
+        )
+    ),
+    (
+        '2022',
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'H2AK00226'
+        )
+    ),
+    (
+        '2022',
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'H8NY15148'
         )
     )
 ON DUPLICATE KEY UPDATE election_years_year=election_years_year, candidate_office_records_id=candidate_office_records_id;
 
 -- do it again for proof that we are seriousssss. (pretend this is another data source)
-INSERT INTO `cs340_umj`.`election_years_candidate_office_records`(
+INSERT INTO `cs340_seiglern`.`election_years_candidate_office_records`(
     election_years_year,
     candidate_office_records_id
 ) VALUES
     (
         '2024',
         (
-            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
             WHERE fec_cand_id = 'P80001571'
+        )
+    ),
+    (
+        '2024',
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'P80000722'
+        )
+    ),
+    (
+        '2022',
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'H2AK00226'
+        )
+    ),
+    (
+        '2022',
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'H8NY15148'
         )
     )
 ON DUPLICATE KEY UPDATE election_years_year=election_years_year, candidate_office_records_id=candidate_office_records_id;
 
 -- DO cycles now same way
 
-INSERT INTO `cs340_umj`.`cycles_candidate_office_records`(
+INSERT INTO `cs340_seiglern`.`cycles_candidate_office_records`(
     cycles_year,
     candidate_office_records_id
 ) VALUES
     (
         '2024',
         (
-            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
             WHERE fec_cand_id = 'P80001571'
+        )
+    ),
+    (
+        '2024',
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'P80000722'
+        )
+    ),
+    (
+        '2022',
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'H2AK00226'
+        )
+    ),
+    (
+        '2022',
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'H8NY15148'
         )
     )
 ON DUPLICATE KEY UPDATE cycles_year=cycles_year, candidate_office_records_id=candidate_office_records_id;
 
 -- do it again for proof that we are seriousssss. (pretend this is another data source)
-INSERT INTO `cs340_umj`.`cycles_candidate_office_records`(
+INSERT INTO `cs340_seiglern`.`cycles_candidate_office_records`(
     cycles_year,
     candidate_office_records_id
 ) VALUES
     (
         '2024',
         (
-            SELECT id FROM `cs340_umj`.`candidate_office_records` 
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
             WHERE fec_cand_id = 'P80001571'
+        )
+    ),
+    (
+        '2024',
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'P80000722'
+        )
+    ),
+    (
+        '2022',
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'H2AK00226'
+        )
+    ),
+    (
+        '2022',
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = 'H8NY15148'
         )
     )
 ON DUPLICATE KEY UPDATE cycles_year=cycles_year, candidate_office_records_id=candidate_office_records_id;
