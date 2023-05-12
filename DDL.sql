@@ -11,7 +11,7 @@ SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,N
 Group Name: Team FEC (Group 35)
 Group Members: Noland Seigler & Jennifer Um
 Project Title: Federal Election Committee’s Candidate Funding Sources Database
-Assignment: Project Step 2 Draft
+Assignment: Project Step 3 Draft
 
 */
 
@@ -496,7 +496,7 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 
 INSERT INTO `cs340_seiglern`.`office_types` (code, name)
 VALUES
-	  ('P', 'President'),
+	('P', 'President'),
     ('H', 'House of Representatives'),
     ('S', 'Senate');
     
