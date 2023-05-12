@@ -140,15 +140,50 @@ UPDATE(Set Null)
     Entity: candidate_office_record.candidate_id
 
 */
+-- Queries use a colon : character to 
+-- denote the variables that will have data from the backend programming language
+
+INSERT INTO `cs340_seiglern`.`office_types` (code, name)
+VALUES
+	(:code_input, :name_input);
+    
+
+INSERT INTO `cs340_seiglern`.`contributor_types` (code, name)
+VALUES
+    (:code_input, :name_input);
+
+INSERT INTO `cs340_seiglern`.`report_types` (code, name)
+VALUES
+    (:code_input, :name_input);
+    
+INSERT INTO `cs340_seiglern`.`party_types` (code, short_name)
+VALUES
+    (:code_input, :short_name_input);
+    
+INSERT INTO `cs340_seiglern`.`incumbent_challenger_statuses` (code, name)
+VALUES
+    (:code_input, :name_input);
+
+INSERT INTO `cs340_seiglern`.`amendment_indicators` (code, name)
+VALUES
+    (:code_input, :name_input);
 
 
+INSERT INTO `cs340_seiglern`.`election_years` (year)
+VALUES
+    (:year_input)
 
 
-INSERT INTO `cs340_umj`.`candidates` (first_name, last_name, middle_name, email)
-VALUES (:first_name_input, :last_name_input, :middle_name_input, :email_input);
+INSERT INTO `cs340_seiglern`.`transaction_types` (code, name)
+VALUES
+    (:code_input, :name_input);
+
+INSERT INTO `cs340_seiglern`.`candidates` (first_name, last_name, middle_name, email)
+VALUES 
+    (:first_name_input, :last_name_input, :middle_name_input, :email_input)
 
 
-INSERT INTO `candidate_office_records` (
+INSERT INTO `cs340_seiglern`.`candidate_office_records` (
     fec_cand_id,
     name,
     ttl_receipts,
@@ -174,7 +209,7 @@ INSERT INTO `candidate_office_records` (
     incumbent_challenger_statuses_id
 ) VALUES (
     :fec_cand_id_input,
-    :candidate_office_records_name_input,
+    :name_input,
     :ttl_receipts_input,
     :trans_from_auth_input,
     :coh_bop_input,
@@ -192,21 +227,38 @@ INSERT INTO `candidate_office_records` (
     :cvg_end_dt_input,
     :indiv_refund_input,
     :cmte_refund_input,
-    :office_types_id_derived_from_dropdown_input,
-    :candidates_id_derived_from_dropdown_input,
-    :party_types_id_derived_from_dropdown_input,
-    :incumbent_challenger_statuses_id_derived_from_dropdown_input
-)
+    (SELECT id FROM `cs340_seiglern`.`office_types` WHERE code = :office_types_code_input),
+    :optional if present -> (SELECT id FROM `cs340_seiglern`.`candidates` WHERE email = :candidates_email_input_from_drop_down),
+    (SELECT id FROM `cs340_seiglern`.`party_types` WHERE short_name = :short_name_input),
+    (SELECT id FROM `cs340_seiglern`.`incumbent_challenger_statuses` WHERE code = :incumbent_challenger_statuses_code_input)
+);
+
+
+INSERT INTO `cs340_seiglern`.`committee_types` (code, name, explanation)
+VALUES
+    (:code_input, :name_input, :explanation_input)
 
 
 
-INSERT INTO `committees` (cmte_id, name, city, state, zip_code, committee_types_id) VALUES
-(:cmte_id_input, :name_input, :city_input, :state_input, :zip_code_input, :committee_types_id_from_dropdown_input);
+INSERT INTO `cs340_seiglern`.`committees` (
+    cmte_id,
+    name,
+    city,
+    state,
+    zip_code,
+    committee_types_id
+) VALUES
+(
+    :cmte_id_input,
+    :name_input,
+    :city_input,
+    :state_input,
+    :zip_code_input,
+    (SELECT id FROM `cs340_seiglern`.`committee_types` WHERE code = :committee_types_code_input)
+);
 
 
-
-
-INSERT INTO `cs340_umj`.`contributions` (
+INSERT INTO `cs340_seiglern`.`contributions` (
     transaction_pgi,
     image_num,
     transaction_dt,
@@ -221,7 +273,8 @@ INSERT INTO `cs340_umj`.`contributions` (
     transaction_types_id,
     amendment_indicators_id,
     contributor_types_id
-) VALUES (
+) VALUES 
+(
     :transaction_pgi_input,
     :image_num_input,
     :transaction_dt_input,
@@ -231,128 +284,119 @@ INSERT INTO `cs340_umj`.`contributions` (
     :memo_cd_input,
     :memo_text_input,
     :sub_id_input,
-    :commitees_id_derived_from_dropdown_input,
-    :report_types_id_derived_from_dropdown_input,
-    :transaction_types_id_derived_from_dropdown_input,
-    :amendment_indicators_id_derived_from_dropdown_input,
-    :contributor_types_id_derived_from_dropdown_input,
- );
+    (SELECT id FROM `cs340_seiglern`.`committees` WHERE cmte_id = :committees_cmte_id_input_from_dropdown),
+    (SELECT id FROM `cs340_seiglern`.`report_types` WHERE code = :report_types_code_input_from_dropdown),
+    (SELECT id FROM `cs340_seiglern`.`transaction_types` WHERE code = :transaction_types_code_input_from_dropdown),
+    (SELECT id FROM `cs340_seiglern`.`amendment_indicators` WHERE code = :amendment_indicators_code_input_from_dropdown),
+    (SELECT id FROM `cs340_seiglern`.`contributor_types` WHERE code = :contributor_types_code_input_from_dropdown);
+)
 
 
-INSERT INTO `cs340_umj`.`cycles` (year)
-VALUES (:year_input);
-
-INSERT INTO `cs340_umj`.`election_years` (year)
-VALUES (:year_input);
 
 
-INSERT INTO `cs340_umj`.`office_types` (code, name)
-VALUES (:code_input, :name_input);
+-- EVEN YEARS ONLY FOR CYCLES
+INSERT INTO `cs340_seiglern`.`cycles` (year)
+VALUES
+    (:year_input);
 
 
-INSERT INTO `cs340_umj`.`contributor_types` (code, name)
-VALUES (:code_input, :name_input);
-
-
-INSERT INTO `cs340_umj`.`committee_types` (code, name, explanation)
-VALUES (:code_input, :name_input, :explanation_input);
-
-
-INSERT INTO `cs340_umj`.`transaction_types` (code, name)
-VALUES (:code_input, :name_input);
-
-
-INSERT INTO `cs340_umj`.`report_types` (code, name)
-VALUES (:code_input, :name_input);
-
-
-INSERT INTO `cs340_umj`.`party_types` (code, short_name)
-VALUES (:code_input, :short_name_input);
-
-
-INSERT INTO `cs340_umj`.`incumbent_challenger_statuses` (code, name)
-VALUES (:code_input, :name_input);
-
-
-INSERT INTO `cs340_umj`.`amendment_indicators` (code, name)
-VALUES (:code_input, :name_input);
-
-
-INSERT INTO `cs340_umj`.`candidate_office_records_committees`(
+INSERT INTO `cs340_seiglern`.`candidate_office_records_committees`(
     candidate_office_records_id,
     committees_id
 ) VALUES
     (
         (
             SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
-            WHERE fec_cand_id = :candidate_office_records_id_input
+            WHERE fec_cand_id = :candidate_office_records_fec_cand_id_input_from_dropdown
         ),
         (
             SELECT id FROM `cs340_seiglern`.`committees` 
-            WHERE cmte_id = :committees_id_input
+            WHERE cmte_id = :committees_cmte_id_input_from_dropdown
         )
     );
-INSERT INTO `cs340_umj`.`candidate_office_records_contributions`(
+
+INSERT INTO `cs340_seiglern`.`candidate_office_records_contributions`(
     candidate_office_records_id,
     contributions_id
 ) VALUES
     (
         (
-            SELECT id FROM `cs340_umj`.`candidate_office_records` 
-            WHERE fec_cand_id = :candidate_office_records_id_input
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = :candidate_office_records_fec_cand_id_input_from_dropdown
         ),
         (
-            SELECT id FROM `cs340_umj`.`contributions` 
-            WHERE sub_id = :committees_id_input_matching_sub_id
+            SELECT id FROM `cs340_seiglern`.`contributions` 
+            WHERE sub_id = :contributions_sub_id_input_from_dropdown
         )
     );
-INSERT INTO `cs340_umj`.`election_years_contributions`(
+
+
+INSERT INTO `cs340_seiglern`.`election_years_contributions`(
     election_years_year,
     contributions_id
 ) VALUES
     (
         (
-            SELECT id FROM `cs340_umj`.`election_years` 
-            WHERE fec_cand_id = :election_years_year_input
+            SELECT year FROM `cs340_seiglern`.`election_years` 
+            WHERE year = :election_years_year_input_from_drop_down
         ),
         (
-            SELECT id FROM `cs340_umj`.`contributions` 
-            WHERE sub_id = :committees_id_input_matching_sub_id
+            SELECT id FROM `cs340_seiglern`.`contributions` 
+            WHERE sub_id = :contributions_sub_id_input_from_dropdown
         )
     );
-INSERT INTO `cs340_umj`.`election_years_candidate_office_records`(
-    election_years_year,
-    candidate_office_records_id
-) VALUES
-    (
-        :election_years_years_input,
-        (
-            SELECT id FROM `cs340_umj`.`candidate_office_records` 
-            WHERE fec_cand_id = :candidate_office_records_id_input
-        )
-    );
-INSERT INTO `cs340_umj`.`cycles_contributions`(
+
+
+INSERT INTO `cs340_seiglern`.`cycles_contributions`(
     cycles_year,
     contributions_id
 ) VALUES
     (
         (
-            SELECT year FROM `cs340_umj`.`cycles` 
-            WHERE year = :cycles_year_input
+            SELECT year FROM `cs340_seiglern`.`cycles` 
+            WHERE year = :cycles_year_input_from_drop_down
         ),
         (
-            SELECT id FROM `cs340_umj`.`contributions` 
-            WHERE sub_id = :committees_id_input_matching_sub_id
+            SELECT id FROM `cs340_seiglern`.`contributions` 
+            WHERE sub_id = :contributions_sub_id_input_from_dropdown
         )
     );
-INSERT INTO `cs340_umj`.`cycles_candidate_office_records`(
+
+INSERT INTO `cs340_seiglern`.`election_years_candidate_office_records`(
+    election_years_year,
+    candidate_office_records_id
+) VALUES
+    (
+        :election_years_year_input_from_drop_down
+        (
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = :candidate_office_records_fec_cand_id_input_from_dropdown
+        )
+    );
+
+
+INSERT INTO `cs340_seiglern`.`cycles_candidate_office_records`(
     cycles_year,
     candidate_office_records_id
 ) VALUES
     (
-        :cycles_year_input,
+        :cycles_year_input_from_drop_down
         (
-            SELECT id FROM `cs340_umj`.`candidate_office_records` 
-            WHERE fec_cand_id = :candidate_office_records_id_input
+            SELECT id FROM `cs340_seiglern`.`candidate_office_records` 
+            WHERE fec_cand_id = :candidate_office_records_fec_cand_id_input_from_dropdown
         )
-    )
+    );
+
+
+-- UPDATE
+
+UPDATE `cs340_seiglern`.`candidate_office_records`
+SET candidates_id = NULL | (
+    SELECT id FROM `cs340_seiglern`.`candidates` 
+    WHERE email = :candidates_email_input_from_dropdown
+)
+WHERE name = :name_input_from_drop_down;
+
+-- DELETE: This cascades all the M:M mappings but does not cascade the other "Mapped Table"
+DELETE FROM `cs340_seiglern`.`candidate_office_records`
+WHERE name = :name_input_from_drop_down;
