@@ -13,6 +13,7 @@ services:
       - "${MARIA_DB_PORT}:3306"
     volumes:
       - what-the-fec-mariadb-data:/var/lib/mariadb
+      - ${PWD}/init_sql/:/docker-entrypoint-initdb.d/
     environment: 
       MARIADB_ROOT_PASSWORD: "${MARIA_DB_PASSWORD}"
       MARIADB_DATABASE: "${MARIA_DB_NAME}"

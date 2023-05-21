@@ -6,6 +6,7 @@
 include .env
 export
 
+.PHONY: all run fmt test clean docker-up docker-down
 # Citation for the following code:
 # Date: 04/06/2023
 # Copied from /OR/ Adapted from /OR/ Based on:
@@ -36,4 +37,3 @@ clean:
 	find . -type f -name '*.pyc' -delete
 	find . -type d -name '__pycache__' -delete
 
-.PHONY: all run fmt test clean docker-up

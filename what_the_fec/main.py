@@ -1,8 +1,11 @@
 import os
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Request
 from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection
 from sqlalchemy.sql import text
+from what_the_fec.api.candidate_office_records import get_all_candidate_office_records_func
 
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
@@ -13,6 +16,9 @@ from what_the_fec.storage.mysql.db import get_db
 
 def create_app() -> FastAPI:
     app = FastAPI()
+    app.mount("/static", StaticFiles(directory=os.environ["STATIC_DIR_PATH"]), name="static")
+    templates = Jinja2Templates(directory=os.environ["TEMPLATES_DIR_PATH"])
+
     db_init(config=MySQLConfig(
             db_user=os.environ["MARIA_DB_USER"],
             db_password=os.environ["MARIA_DB_PASSWORD"],
@@ -23,6 +29,11 @@ def create_app() -> FastAPI:
         )
     )
     db = get_db()
+
+
+    @app.get("/candidate_office_records", response_class=HTMLResponse)
+    def get_all_candidate_office_records(request: Request,  conn: Connection = Depends(db.get_conn)):
+        return get_all_candidate_office_records_func(conn=conn, request=request, templates=templates)
 
     # Citation for the following code:
     # Date: 04/06/2023
