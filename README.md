@@ -10,13 +10,13 @@
 
 2. Setup poetry virtual environment
 
-From project root run:
+    From project root run:
 
-```
-poetry env use python3.9
+    ```
+    poetry env use python3.9
 
-poetry install
-```
+    poetry install
+    ```
 
 
 3. Copy `.env-example` to a file named `.env` and populate `.env` with values
@@ -24,8 +24,8 @@ poetry install
 
 4. Run application in developer mode
 
-From project root run:
+    From project root run:
 
-```
-make dev
-```
+    ```
+    make dev
+    ```
