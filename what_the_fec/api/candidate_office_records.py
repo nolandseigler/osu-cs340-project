@@ -364,7 +364,6 @@ def update_single_candidate_office_records_func(
     record_id,
     candidate_email: str,
 ):
-    print(candidate_email)
     if candidate_email.lower() == "null":
         candidates_id = None
     else:
@@ -397,5 +396,28 @@ def update_single_candidate_office_records_func(
 
     return RedirectResponse(
         f"/edit_candidate_office_records/{record_id}",
+        status_code=status.HTTP_302_FOUND,
+    )
+
+
+def delete_single_candidate_office_records_func(
+    conn: Connection,
+    record_id,
+):
+    delete_sql = """
+        DELETE FROM `candidate_office_records`
+        WHERE id = :candidate_office_records_id
+    """
+
+    bind_params = [
+        {"candidate_office_records_id": record_id},
+    ]
+
+    conn.execute(text(delete_sql), *bind_params)
+    # we are in a transaction already due to pep idk one of them
+    conn.commit()
+
+    return RedirectResponse(
+        "/candidate_office_records",
         status_code=status.HTTP_302_FOUND,
     )

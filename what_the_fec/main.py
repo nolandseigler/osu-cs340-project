@@ -10,6 +10,7 @@ from sqlalchemy import Connection
 from sqlalchemy.sql import text
 
 from what_the_fec.api.candidate_office_records import (
+    delete_single_candidate_office_records_func,
     delete_single_candidate_office_records_page_func,
     edit_single_candidate_office_records_page_func,
     get_all_candidate_office_records_func,
@@ -151,12 +152,14 @@ def create_app() -> FastAPI:
     # This is gross.
     # We are using forms everywhere so we get to choose between GET and POST.
     # No other method options are available.
-    @app.post("/candidate_office_records/update/{record_id}")
+    @app.post("/candidate_office_records/delete/{record_id}")
     def delete_single_candidate_office_records(
         record_id,
-        incumbent_challenger_status: Annotated[str, Form()],
         conn: Connection = Depends(db.get_conn),
     ):
-        return {"key": record_id}
+        return delete_single_candidate_office_records_func(
+            conn=conn,
+            record_id=record_id,
+        )
 
     return app
