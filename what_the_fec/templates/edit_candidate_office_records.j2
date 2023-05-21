@@ -1,0 +1,66 @@
+{% extends 'base.j2' %}
+
+
+{% block head %}
+    <h1>Edit entry in {{table_name}}</h1>
+{% endblock %}
+
+{% block body %}
+
+<div id="browse" style="display: block">
+    <div class="scrollit">
+        <table>
+        <thead>
+        <tr>
+            {% for key in items[0].keys() %}
+                <th>{{ key }}</th>
+            {% endfor %}
+        </tr>
+        <tbody>
+
+        {% for item in items %}
+        <tr>
+            {% for key in item.keys() %}
+                <td>{{item[key]}}</td>
+            {% endfor %}
+
+        </tr>
+        {% endfor %}
+        </table>
+    </div>
+</div> <!-- browse -->
+
+
+<p>&nbsp;</p>
+<div id="update" style="display: block">
+    <form id="update_{{table_name}}" action="/edit_{{table_name}}/{{items[0].id}}" method="post">
+      <legend><strong>Update item in {{table_name}}</strong></legend>
+          <fieldset class="fields">
+            {% for key in items[0].keys() %}
+                {% if key == 'candidate_email' %}
+                    <label> {{key}} </label>
+
+                    {# TODO: update this dropdown #}
+                   {% if key in dropdown_keys%}
+                        <select name="{{key}}" id="{{key}}">
+                            <option value="opt1">NULL</option>
+                            <option value="opt2">opt2</option>
+                            <option value="opt3">opt3</option>
+                        </select>
+                        <br>
+                    {% else %}
+                        <input type="text" name="{{key}}"><br>
+                    {% endif %}
+
+                    
+                {% endif %}
+            {% endfor %}
+    </fieldset>
+    <input class="btn" type="submit" id="click_update_{{table_name}}" value="Update">
+          <input class="btn" type="button" value="Cancel" >
+  </form> 
+</div><!-- update -->
+
+{% endblock %}
+
+

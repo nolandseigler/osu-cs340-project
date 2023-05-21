@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/main.css') }}">
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    {% block body %}{% endblock %}
+
+    <p>
+    Entities [ <a href="/candidate_office_records">candidate_office_records</a> ]
+    </p>
+
+{# TODO: uncomment below after project step 4 #}
+    {# <p>
+    Entities [ <a href="/candidates">candidates</a> | <a href="/candidate_office_records">candidate_office_records</a> | <a href="/committees">committees</a> | <a href="/contributions">contributions</a> ] 
+    <br>
+    Categories [ <a href="/cycles">cycles</a> | <a href="/election_years">election_years</a> | <a href="/office_types">office_types</a> | <a href="/contributor_types">contributor_types</a> | <a href="committee_types">committee_types</a>
+    | <a href="transaction_types">transaction_types</a> | <a href="report_types">report_types</a> | <a href="party_types">party_types</a> | <a href="incumbent_challenger_statuses">incumbent_challenger_statuses</a> | <a href="amendment_indicators">amendment_indicators</a> ]
+    <br>
+    Intersection Tables [ <a href="candidate_office_records_committees">candidate_office_records_committees</a> | <a href="candidate_office_records_contributions">candidate_office_records_contributions</a> | <a href="election_years_contributions">election_years_contributions</a> | <a href="election_years_candidate_office_records">election_years_candidate_office_records</a> | <a href="cycles_contributions">cycles_contributions</a> | <a href="cycles_candidate_office_records">cycles_candidate_office_records</a> ]
+    </p> #}
+</body>
+
+
+
+
+</html>

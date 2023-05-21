@@ -1,0 +1,52 @@
+{% extends 'base.j2' %}
+
+
+{% block head %}
+    <h1>Delete item in {{table_name}}</h1>
+{% endblock %}
+
+{% block body %}
+{# <p>Are you sure you want to delete the following item?</p>
+<div id="browse" style="display: block">
+    <div class="scrollit">
+        <table>
+        <thead>
+        <tr>
+            {% for key in items[0].keys() %}
+                <th>{{ key }}</th>
+            {% endfor %}
+        </tr>
+        <tbody>
+
+        {% for item in items %}
+        <tr>
+            {% for key in item.keys() %}
+                <td>{{item[key]}}</td>
+            {% endfor %}
+
+        </tr>
+        {% endfor %}
+        </table>
+    </div>
+</div> <!-- browse --> #}
+
+<p>&nbsp;</p>
+<div id="delete" style="display: block">
+  <form id="delete_{{table_name}}">
+      <legend><strong>Delete item in {{table_name}}</strong></legend>
+          <fieldset class="fields">
+          <p>Are you sure you want to delete the following item?</p>
+
+          
+        {% for key in items[0].keys() %}
+            <label> {{key}}: </label> "{{items[0][key]}}"
+        {% endfor %}
+
+            
+    </fieldset>
+    <input class="btn" type="submit" id="Delete_{{table_name}}" value="Delete">
+          <input class="btn" type="button" value="Cancel" >
+  </form> 
+</div><!-- delete -->
+
+{% endblock %}

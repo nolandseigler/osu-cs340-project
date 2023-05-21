@@ -36,6 +36,7 @@ def init(config: MySQLConfig) -> None:
     global _SQLITE_DB
     _SQLITE_DB = MySQLDB(config)
 
+
 def get_db() -> MySQLDB:
     global _SQLITE_DB
     if _SQLITE_DB is None:

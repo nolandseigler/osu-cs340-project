@@ -1,0 +1,67 @@
+{% extends 'base.j2' %}
+
+
+{% block head %}
+    <h1>{{table_name}}</h1>
+{% endblock %}
+
+
+{% block body %}
+<div id="browse" style="display: block">
+    <div class="scrollit">
+        <table>
+        <thead>
+        <tr>
+            {% for key in items[0].keys() %}
+                <th>{{ key }}</th>
+            {% endfor %}
+        </tr>
+        <tbody>
+
+        {% for item in items %}
+        <tr>
+            {% for key in item.keys() %}
+                <td>{{item[key]}}</td>
+            {% endfor %}
+
+        </tr>
+        {% endfor %}
+        </table>
+    </div>
+</div> <!-- browse -->
+
+<p>&nbsp;</p>
+
+<div id="insert" style="display: block">
+    <form id="add_{{table_name}}">
+        
+        <legend><strong>Add item to {{table_name}}</strong></legend>
+          <fieldset class="fields">
+            {% for key in items[0].keys() %}
+                {% if key != 'id' %}
+                    <label> {{key}} </label>
+
+                    {# TODO: update this dropdown #}
+                    {% if key in dropdown_keys%}
+
+                        <select name="{{key}}" id="{{key}}">
+                            <option value="opt1">opt1</option>
+                            <option value="opt2">opt2</option>
+                            <option value="opt3">opt3</option>
+                        </select>
+                        <br>
+                    {% else %}
+                        <input type="text" name="{{key}}"><br>
+                    {% endif %}
+                    
+                {% endif %}
+            {% endfor %}
+            
+          </fieldset>
+          <input class="btn" type="submit" id="add_{{table_name}}" value="Add">
+          <input class="btn" type="button" value="Cancel">
+	</form> <!--add new item to items-->
+</div><!-- insert -->
+
+
+{% endblock %}
