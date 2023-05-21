@@ -1,7 +1,16 @@
-from fastapi import Request
+from fastapi import Request, status
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
 
+
+def home_page_func(request: Request, templates: Jinja2Templates):
+    return templates.TemplateResponse(
+        "home.j2",
+        {
+            "request": request,
+        }
+    )
 
 def get_all_candidate_office_records_func(conn: Connection, request: Request, templates: Jinja2Templates):
     candidate_office_records_query = """
@@ -90,3 +99,102 @@ def get_all_candidate_office_records_func(conn: Connection, request: Request, te
             "dropdown_items_for_add": dropdown_items_for_add,
         }
     )
+
+
+def post_single_candidate_office_records_func(
+    conn: Connection,
+    fec_cand_id,
+    name,
+    ttl_receipts,
+    trans_from_auth,
+    coh_bop,
+    coh_cop,
+    cand_contrib,
+    cand_loans,
+    other_loans,
+    cand_loan_repay,
+    other_loan_repay,
+    debts_owed_by,
+    ttl_indiv_contrib,
+    cand_office_st,
+    cand_office_district,
+    pol_pty_contrib,
+    cvg_end_dt,
+    indiv_refund,
+    cmte_refund,
+    office_type,
+    candidate_email,
+    party_type,
+    incumbent_challenger_status,
+):
+
+    if candidate_email == "null":
+        candidates_email_populator = "NULL"
+    else:
+        candidates_email_populator = f"(SELECT id FROM `candidates` WHERE email = '{candidate_email}')"
+
+    insert_query = f"""
+        INSERT INTO `candidate_office_records` (
+            fec_cand_id,
+            name,
+            ttl_receipts,
+            trans_from_auth,
+            coh_bop,
+            coh_cop,
+            cand_contrib,
+            cand_loans,
+            other_loans,
+            cand_loan_repay,
+            other_loan_repay,
+            debts_owed_by,
+            ttl_indiv_contrib,
+            cand_office_st,
+            cand_office_district,
+            pol_pty_contrib,
+            cvg_end_dt,
+            indiv_refund,
+            cmte_refund,
+            office_types_id,
+            candidates_id,
+            party_types_id,
+            incumbent_challenger_statuses_id
+        ) VALUES (
+            '{fec_cand_id}',
+            '{name}',
+            {ttl_receipts},
+            {trans_from_auth},
+            {coh_bop},
+            {coh_cop},
+            {cand_contrib},
+            {cand_loans},
+            {other_loans},
+            {cand_loan_repay},
+            {other_loan_repay},
+            {debts_owed_by},
+            {ttl_indiv_contrib},
+            '{cand_office_st}',
+            '{cand_office_district}',
+            {pol_pty_contrib},
+            '{cvg_end_dt}',
+            {indiv_refund},
+            {cmte_refund},
+            (SELECT id FROM `office_types` WHERE name = '{office_type}'),
+            {candidates_email_populator},
+            (SELECT id FROM `party_types` WHERE short_name = '{party_type}'),
+            (SELECT id FROM `incumbent_challenger_statuses` WHERE name = '{incumbent_challenger_status}')
+        );
+    """                
+    with conn.begin():
+        # TODO: Use bind params
+        conn.execute(text(insert_query))
+
+    # NOTE: Redirect Path
+    # Citation for the following code:
+    # Date: 05/21/2023
+    # Copied from /OR/ Adapted from /OR/ Based on:
+    # https://stackoverflow.com/a/73088816
+    return RedirectResponse(
+        "/candidate_office_records", 
+        status_code=status.HTTP_302_FOUND,
+    )
+
