@@ -10,11 +10,13 @@ from sqlalchemy import Connection
 from sqlalchemy.sql import text
 
 from what_the_fec.api.candidate_office_records import (
+    delete_single_candidate_office_records_func,
     delete_single_candidate_office_records_page_func,
     edit_single_candidate_office_records_page_func,
     get_all_candidate_office_records_func,
     home_page_func,
     post_single_candidate_office_records_func,
+    update_single_candidate_office_records_func,
 )
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
@@ -130,6 +132,34 @@ def create_app() -> FastAPI:
             candidate_email=candidate_email,
             party_type=party_type,
             incumbent_challenger_status=incumbent_challenger_status,
+        )
+
+    # This is gross.
+    # We are using forms everywhere so we get to choose between GET and POST.
+    # No other method options are available.
+    @app.post("/candidate_office_records/update/{record_id}")
+    def update_single_candidate_office_records(
+        record_id,
+        candidate_email: Annotated[str, Form()],
+        conn: Connection = Depends(db.get_conn),
+    ):
+        return update_single_candidate_office_records_func(
+            conn=conn,
+            record_id=record_id,
+            candidate_email=candidate_email,
+        )
+
+    # This is gross.
+    # We are using forms everywhere so we get to choose between GET and POST.
+    # No other method options are available.
+    @app.post("/candidate_office_records/delete/{record_id}")
+    def delete_single_candidate_office_records(
+        record_id,
+        conn: Connection = Depends(db.get_conn),
+    ):
+        return delete_single_candidate_office_records_func(
+            conn=conn,
+            record_id=record_id,
         )
 
     return app

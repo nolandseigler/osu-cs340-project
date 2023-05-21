@@ -33,7 +33,7 @@
 
 <p>&nbsp;</p>
 <div id="update" style="display: block">
-    <form id="update_{{table_name}}" action="/edit_{{table_name}}/{{items[0].id}}" method="post">
+    <form id="update_{{table_name}}" action="/{{table_name}}/update/{{items[0].id}}" method="post">
       <legend><strong>Update item in {{table_name}}</strong></legend>
           <fieldset class="fields">
             {% for key in items[0].keys() %}
@@ -43,7 +43,7 @@
                     {# TODO: update this dropdown #}
                    {% if key in dropdown_keys%}
                         <select name="{{key}}" id="{{key}}">
-                            <option value="opt1">NULL</option>
+                            <option value="NULL">NULL</option>
                             <option value="opt2">opt2</option>
                             <option value="opt3">opt3</option>
                         </select>
