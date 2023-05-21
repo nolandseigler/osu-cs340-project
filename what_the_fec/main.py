@@ -1,14 +1,21 @@
-from datetime import date
 import os
+from datetime import date
 from typing import Annotated
+
 from fastapi import Depends, FastAPI, Form, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection
 from sqlalchemy.sql import text
-from what_the_fec.api.candidate_office_records import delete_single_candidate_office_records_page_func, get_all_candidate_office_records_func, edit_single_candidate_office_records_page_func, home_page_func, post_single_candidate_office_records_func
 
+from what_the_fec.api.candidate_office_records import (
+    delete_single_candidate_office_records_page_func,
+    edit_single_candidate_office_records_page_func,
+    get_all_candidate_office_records_func,
+    home_page_func,
+    post_single_candidate_office_records_func,
+)
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
 
@@ -18,16 +25,19 @@ from what_the_fec.storage.mysql.db import get_db
 
 def create_app() -> FastAPI:
     app = FastAPI()
-    app.mount("/static", StaticFiles(directory=os.environ["STATIC_DIR_PATH"]), name="static")
+    app.mount(
+        "/static", StaticFiles(directory=os.environ["STATIC_DIR_PATH"]), name="static"
+    )
     templates = Jinja2Templates(directory=os.environ["TEMPLATES_DIR_PATH"])
 
-    db_init(config=MySQLConfig(
+    db_init(
+        config=MySQLConfig(
             db_user=os.environ["MARIA_DB_USER"],
             db_password=os.environ["MARIA_DB_PASSWORD"],
             db_hostname=os.environ["MARIA_DB_HOSTNAME"],
             db_port=os.environ["MARIA_DB_PORT"],
             db_name=os.environ["MARIA_DB_NAME"],
-            pool_connections=2
+            pool_connections=2,
         )
     )
     db = get_db()
@@ -41,19 +51,30 @@ def create_app() -> FastAPI:
     # Copied from /OR/ Adapted from /OR/ Based on:
     # FastAPI/SQLAlchemy documentation examples
     @app.get("/candidate_office_records/", response_class=HTMLResponse)
-    def get_all_candidate_office_records(request: Request,  conn: Connection = Depends(db.get_conn)):
-        return get_all_candidate_office_records_func(conn=conn, request=request, templates=templates)
-    
+    def get_all_candidate_office_records(
+        request: Request, conn: Connection = Depends(db.get_conn)
+    ):
+        return get_all_candidate_office_records_func(
+            conn=conn, request=request, templates=templates
+        )
 
     @app.get("/edit_candidate_office_records/{record_id}", response_class=HTMLResponse)
-    def edit_single_candidate_office_records_page(request: Request,  record_id, conn: Connection = Depends(db.get_conn)):
-        return edit_single_candidate_office_records_page_func(conn=conn, request=request, templates=templates, record_id=record_id)
-    
+    def edit_single_candidate_office_records_page(
+        request: Request, record_id, conn: Connection = Depends(db.get_conn)
+    ):
+        return edit_single_candidate_office_records_page_func(
+            conn=conn, request=request, templates=templates, record_id=record_id
+        )
 
-    @app.get("/delete_candidate_office_records/{record_id}", response_class=HTMLResponse)
-    def delete_single_candidate_office_records_page(request: Request,  record_id, conn: Connection = Depends(db.get_conn)):
-        return delete_single_candidate_office_records_page_func(conn=conn, request=request, templates=templates, record_id=record_id)
-
+    @app.get(
+        "/delete_candidate_office_records/{record_id}", response_class=HTMLResponse
+    )
+    def delete_single_candidate_office_records_page(
+        request: Request, record_id, conn: Connection = Depends(db.get_conn)
+    ):
+        return delete_single_candidate_office_records_page_func(
+            conn=conn, request=request, templates=templates, record_id=record_id
+        )
 
     @app.post("/candidate_office_records/")
     def post_single_candidate_office_records(
@@ -73,7 +94,9 @@ def create_app() -> FastAPI:
         cand_office_st: Annotated[str, Form()],
         cand_office_district: Annotated[str, Form()],
         pol_pty_contrib: Annotated[float, Form()],
-        cvg_end_dt: Annotated[date, Form()], # TODO: make input of this a date; add validation
+        cvg_end_dt: Annotated[
+            date, Form()
+        ],  # TODO: make input of this a date; add validation
         indiv_refund: Annotated[float, Form()],
         cmte_refund: Annotated[float, Form()],
         office_type: Annotated[str, Form()],
@@ -108,6 +131,5 @@ def create_app() -> FastAPI:
             party_type=party_type,
             incumbent_challenger_status=incumbent_challenger_status,
         )
-
 
     return app

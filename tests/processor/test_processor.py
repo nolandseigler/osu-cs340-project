@@ -1,5 +1,7 @@
-from what_the_fec.client.bulk_client import Client as BulkClient, Config as BulkClientConfig
+from what_the_fec.client.bulk_client import Client as BulkClient
+from what_the_fec.client.bulk_client import Config as BulkClientConfig
 from what_the_fec.processor.processor import Config, Processor
+
 
 # NOTE: test just used to run code not even close to any decent tests in here.
 def test_download_data():
