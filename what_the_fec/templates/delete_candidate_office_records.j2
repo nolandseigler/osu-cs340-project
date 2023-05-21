@@ -32,7 +32,7 @@
 
 <p>&nbsp;</p>
 <div id="delete" style="display: block">
-  <form id="delete_{{table_name}}">
+  <form id="delete_{{table_name}}" action="/{{table_name}}/delete/{{items[0].id}}" method="post">
       <legend><strong>Delete item in {{table_name}}</strong></legend>
           <fieldset class="fields">
           <p>Are you sure you want to delete the following item?</p>

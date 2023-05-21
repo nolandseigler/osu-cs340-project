@@ -342,9 +342,11 @@ def post_single_candidate_office_records_func(
             (SELECT id FROM `incumbent_challenger_statuses` WHERE name = '{incumbent_challenger_status}')
         )
     """
-    with conn.begin():
-        # TODO: Use bind params
-        conn.execute(text(insert_query))
+
+    # TODO: Use bind params
+    conn.execute(text(insert_query))
+    # we are in a transaction already due to pep idk one of them
+    conn.commit()
 
     # NOTE: Redirect Path
     # Citation for the following code:
@@ -353,5 +355,47 @@ def post_single_candidate_office_records_func(
     # https://stackoverflow.com/a/73088816
     return RedirectResponse(
         "/candidate_office_records",
+        status_code=status.HTTP_302_FOUND,
+    )
+
+
+def update_single_candidate_office_records_func(
+    conn: Connection,
+    record_id,
+    candidate_email: str,
+):
+    print(candidate_email)
+    if candidate_email.lower() == "null":
+        candidates_id = None
+    else:
+        candidates_id_query = """
+            SELECT id
+            FROM `candidates`
+            WHERE email = :candidate_email
+        """
+        candidates_id = (
+            conn.execute(
+                text(candidates_id_query), *[{"candidate_email": candidate_email}]
+            )
+            .mappings()
+            .one_or_none()
+        )
+
+    update_sql = """
+        UPDATE `candidate_office_records`
+            SET candidates_id = :candidates_id
+        WHERE id = :candidate_office_records_id
+    """
+
+    bind_params = [
+        {"candidates_id": candidates_id, "candidate_office_records_id": record_id},
+    ]
+
+    conn.execute(text(update_sql), *bind_params)
+    # we are in a transaction already due to pep idk one of them
+    conn.commit()
+
+    return RedirectResponse(
+        f"/edit_candidate_office_records/{record_id}",
         status_code=status.HTTP_302_FOUND,
     )
