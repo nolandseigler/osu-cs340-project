@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection
 from sqlalchemy.sql import text
-from what_the_fec.api.candidate_office_records import get_all_candidate_office_records_func, home_page_func, post_single_candidate_office_records_func
+from what_the_fec.api.candidate_office_records import get_all_candidate_office_records_func, edit_single_candidate_office_records_func, home_page_func, post_single_candidate_office_records_func
 
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
@@ -43,6 +43,11 @@ def create_app() -> FastAPI:
     @app.get("/candidate_office_records/", response_class=HTMLResponse)
     def get_all_candidate_office_records(request: Request,  conn: Connection = Depends(db.get_conn)):
         return get_all_candidate_office_records_func(conn=conn, request=request, templates=templates)
+    
+
+    @app.get("/edit_candidate_office_records/{record_id}", response_class=HTMLResponse)
+    def edit_single_candidate_office_records(request: Request,  record_id, conn: Connection = Depends(db.get_conn)):
+        return edit_single_candidate_office_records_func(conn=conn, request=request, templates=templates, record_id=record_id)
     
 
     @app.post("/candidate_office_records/")
