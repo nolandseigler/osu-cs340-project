@@ -47,16 +47,16 @@ def get_all_candidate_office_records_func(conn: Connection, request: Request, te
             INNER JOIN `party_types` 
                 ON `candidate_office_records`.party_types_id = `party_types`.id
             INNER JOIN `incumbent_challenger_statuses` 
-                ON `candidate_office_records`.incumbent_challenger_statuses_id = `incumbent_challenger_statuses`.id;
+                ON `candidate_office_records`.incumbent_challenger_statuses_id = `incumbent_challenger_statuses`.id
     """
 
-    office_types_query = "SELECT id, name FROM office_types;"
+    office_types_query = "SELECT id, name FROM office_types"
 
-    candidates_query = "SELECT id, email FROM candidates;"
+    candidates_query = "SELECT id, email FROM candidates"
 
-    party_types_query = "SELECT id, short_name FROM party_types;"
+    party_types_query = "SELECT id, short_name FROM party_types"
 
-    incumbent_challenger_statuses_query = "SELECT id, name FROM incumbent_challenger_statuses;"
+    incumbent_challenger_statuses_query = "SELECT id, name FROM incumbent_challenger_statuses"
 
     # had to dig this one up. its been a bit and this is never intuitive.
     # Citation for the following code:
@@ -101,7 +101,7 @@ def get_all_candidate_office_records_func(conn: Connection, request: Request, te
     )
 
 
-def edit_single_candidate_office_records_func(conn: Connection, request: Request, templates: Jinja2Templates, record_id):
+def edit_single_candidate_office_records_page_func(conn: Connection, request: Request, templates: Jinja2Templates, record_id):
     candidate_office_records_query = """
         SELECT
             `candidate_office_records`.id,
@@ -137,7 +137,7 @@ def edit_single_candidate_office_records_func(conn: Connection, request: Request
                 ON `candidate_office_records`.party_types_id = `party_types`.id
             INNER JOIN `incumbent_challenger_statuses` 
                 ON `candidate_office_records`.incumbent_challenger_statuses_id = `incumbent_challenger_statuses`.id
-        WHERE `candidate_office_records`.id = :candidate_office_records_id;
+        WHERE `candidate_office_records`.id = :candidate_office_records_id
     """
 
     bind_params = [dict(candidate_office_records_id=record_id)]
@@ -153,6 +153,66 @@ def edit_single_candidate_office_records_func(conn: Connection, request: Request
 
     return templates.TemplateResponse(
         "edit_candidate_office_records.j2",
+        {
+            "request": request,
+            "items": candidate_office_records,
+            "table_name": "candidate_office_records",
+            "dropdown_keys": ["office_type", "candidate_email", "party_type", "incumbent_challenger_status"],
+        }
+    )
+
+def delete_single_candidate_office_records_page_func(conn: Connection, request: Request, templates: Jinja2Templates, record_id):
+    candidate_office_records_query = """
+        SELECT
+            `candidate_office_records`.id,
+            fec_cand_id,
+            `candidate_office_records`.name,
+            ttl_receipts,
+            trans_from_auth,
+            coh_bop,
+            coh_cop,
+            cand_contrib,
+            cand_loans,
+            other_loans,
+            cand_loan_repay,
+            other_loan_repay,
+            debts_owed_by,
+            ttl_indiv_contrib,
+            cand_office_st,
+            cand_office_district,
+            pol_pty_contrib,
+            cvg_end_dt,
+            indiv_refund,
+            cmte_refund,
+            `office_types`.name as office_type,
+            `candidates`.email as candidate_email,
+            `party_types`.short_name as party_type,
+            `incumbent_challenger_statuses`.name as incumbent_challenger_status
+        FROM `candidate_office_records`
+            INNER JOIN `office_types` 
+                ON `candidate_office_records`.office_types_id = `office_types`.id
+            LEFT OUTER JOIN `candidates` 
+                ON `candidate_office_records`.candidates_id = `candidates`.id
+            INNER JOIN `party_types` 
+                ON `candidate_office_records`.party_types_id = `party_types`.id
+            INNER JOIN `incumbent_challenger_statuses` 
+                ON `candidate_office_records`.incumbent_challenger_statuses_id = `incumbent_challenger_statuses`.id
+        WHERE `candidate_office_records`.id = :candidate_office_records_id
+    """
+
+    bind_params = [dict(candidate_office_records_id=record_id)]
+    # had to dig this one up. its been a bit and this is never intuitive.
+    # Citation for the following code:
+    # Date: 05/20/2023
+    # Copied from /OR/ Adapted from /OR/ Based on:
+    # https://stackoverflow.com/a/58660606
+    candidate_office_records = conn.execute(
+        text(candidate_office_records_query),
+        *bind_params,
+    ).mappings().all()
+
+    return templates.TemplateResponse(
+        "delete_candidate_office_records.j2",
         {
             "request": request,
             "items": candidate_office_records,
@@ -243,7 +303,7 @@ def post_single_candidate_office_records_func(
             {candidates_email_populator},
             (SELECT id FROM `party_types` WHERE short_name = '{party_type}'),
             (SELECT id FROM `incumbent_challenger_statuses` WHERE name = '{incumbent_challenger_status}')
-        );
+        )
     """                
     with conn.begin():
         # TODO: Use bind params
