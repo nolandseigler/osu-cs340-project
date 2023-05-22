@@ -76,6 +76,24 @@ def create_app() -> FastAPI:
         return delete_single_candidate_office_records_page_func(
             conn=conn, request=request, templates=templates, record_id=record_id
         )
+    
+    # TODO: implement post for delete_candidate_office_records
+    @app.post("/delete_candidate_office_records/{record_id}")
+    def delete_single_candidate_office_records(
+        record_id,
+        conn: Connection = Depends(db.get_conn)
+    ):
+        print(f"(TODO: delete me): in @app.post(/delete_candidate_office_records/{record_id}")
+        pass
+
+    # TODO: implement post for edit_candidate_office_records
+    @app.post("/edit_candidate_office_records/{record_id}")
+    def edit_single_candidate_office_records(
+        record_id,
+        conn: Connection = Depends(db.get_conn)
+    ):
+        print(f"(TODO: delete me) in @app.post(/edit_candidate_office_records/{record_id}")
+        pass
 
     @app.post("/candidate_office_records/")
     def post_single_candidate_office_records(
@@ -97,7 +115,7 @@ def create_app() -> FastAPI:
         pol_pty_contrib: Annotated[float, Form()],
         cvg_end_dt: Annotated[
             date, Form()
-        ],  # TODO: make input of this a date; add validation
+        ],
         indiv_refund: Annotated[float, Form()],
         cmte_refund: Annotated[float, Form()],
         office_type: Annotated[str, Form()],
