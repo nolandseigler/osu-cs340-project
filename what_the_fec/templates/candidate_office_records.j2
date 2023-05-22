@@ -7,37 +7,14 @@
 
 
 {% block body %}
-<div id="browse" style="display: block">
-    <div class="scrollit">
-        <table>
-        <thead>
-        <tr>
-            <th>{{ key }}</th>
-            <th>{{ key }}</th>
-            {% for key in items[0].keys() %}
-                <th>{{ key }}</th>
-            {% endfor %}
-        </tr>
-        <tbody>
-
-        {% for item in items %}
-        <tr>
-            <td><a href="/edit_{{table_name}}/{{item.id}}"><input class="btn" type="button" value="Edit"></a></td>
-            <td><a href="/delete_{{table_name}}/{{item.id}}"><input class="btn" type="button" value="Delete"></a></td> 
-            {% for key in item.keys() %}
-                <td>{{item[key]}}</td>
-            {% endfor %}
-
-        </tr>
-        {% endfor %}
-        </table>
-    </div>
-</div> <!-- browse -->
+    {% with items=items %}
+        {% include 'includes/read_table_with_edit_and_delete_option.html' %}
+    {% endwith %}
 
 <p>&nbsp;</p>
 
 <div id="insert" style="display: block">
-    <form id="insert{{table_name}}" action="/{{table_name}}" method="post">
+    <form id="insert_{{table_name}}" action="/{{table_name}}" method="post">
         
             <fieldset>
                 <legend><strong>Add item to {{table_name}}</strong></legend>  
