@@ -22,6 +22,7 @@ from what_the_fec.storage.mysql.config import MySQLConfig
 # this doesnt feel great but works for today
 from what_the_fec.storage.mysql.db import get_db
 
+from what_the_fec.static.table_information import tables_information
 
 def create_app() -> FastAPI:
     app = FastAPI()
@@ -44,7 +45,7 @@ def create_app() -> FastAPI:
 
     @app.get("/", response_class=HTMLResponse)
     def home_page(request: Request):
-        return home_page_func(request=request, templates=templates)
+        return home_page_func(request=request, templates=templates, tables_information=tables_information)
 
     # Citation for the following code:
     # Date: 04/06/2023

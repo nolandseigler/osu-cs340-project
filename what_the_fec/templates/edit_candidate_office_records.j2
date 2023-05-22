@@ -34,30 +34,20 @@
 <p>&nbsp;</p>
 <div id="update" style="display: block">
     <form id="update_{{table_name}}" action="/edit_{{table_name}}/{{items[0].id}}" method="post">
-      <legend><strong>Update item in {{table_name}}</strong></legend>
-          <fieldset class="fields">
-            {% for key in items[0].keys() %}
-                {% if key == 'candidate_email' %}
-                    <label> {{key}} </label>
-
-                    {# TODO: update this dropdown #}
-                   {% if key in dropdown_keys%}
-                        <select name="{{key}}" id="{{key}}">
-                            <option value="opt1">NULL</option>
-                            <option value="opt2">opt2</option>
-                            <option value="opt3">opt3</option>
-                        </select>
-                        <br>
-                    {% else %}
-                        <input type="text" name="{{key}}"><br>
-                    {% endif %}
-
-                    
-                {% endif %}
-            {% endfor %}
-    </fieldset>
-    <input class="btn" type="submit" id="click_update_{{table_name}}" value="Update">
-          <input class="btn" type="button" value="Cancel" >
+        <fieldset class="fields">
+            <legend><strong>Edit item in {{table_name}}</strong></legend>
+            <label> candidate_email </label>
+            <select name="candidate_email" id="candidate_email">
+                {% for entries in dropdown_items_for_add["candidate_email"]["data"] %}
+                    <option value="{{entries[dropdown_items_for_add['candidate_email']['relevant_column_name']]}}">
+                        {{entries[dropdown_items_for_add['candidate_email']['relevant_column_name']]}}
+                    </option>
+                {% endfor %}
+                <option value="none">none</option>
+            </select>
+        </fieldset>
+    <input class="btn" type="submit" id="click_update_{{table_name}}" value="Edit">
+    <a href="/{{table_name}}"><input class="btn" type="button" value="Cancel"></a> 
   </form> 
 </div><!-- update -->
 

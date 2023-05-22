@@ -6,46 +6,21 @@
 {% endblock %}
 
 {% block body %}
-{# <p>Are you sure you want to delete the following item?</p>
-<div id="browse" style="display: block">
-    <div class="scrollit">
-        <table>
-        <thead>
-        <tr>
-            {% for key in items[0].keys() %}
-                <th>{{ key }}</th>
-            {% endfor %}
-        </tr>
-        <tbody>
-
-        {% for item in items %}
-        <tr>
-            {% for key in item.keys() %}
-                <td>{{item[key]}}</td>
-            {% endfor %}
-
-        </tr>
-        {% endfor %}
-        </table>
-    </div>
-</div> <!-- browse --> #}
 
 <p>&nbsp;</p>
 <div id="delete" style="display: block">
   <form id="delete_{{table_name}}">
-      <legend><strong>Delete item in {{table_name}}</strong></legend>
-          <fieldset class="fields">
-          <p>Are you sure you want to delete the following item?</p>
-
-          
+      
+    <fieldset class="fields">
+        <legend><strong>Are you sure you want to delete the following item in {{table_name}}?</strong></legend>
         {% for key in items[0].keys() %}
-            <label> {{key}}: </label> "{{items[0][key]}}"
+            <label> {{key}}: </label> "{{items[0][key]}}"<br>
         {% endfor %}
 
             
     </fieldset>
     <input class="btn" type="submit" id="Delete_{{table_name}}" value="Delete">
-          <input class="btn" type="button" value="Cancel" >
+    <a href="/{{table_name}}"><input class="btn" type="button" value="Cancel"></a> 
   </form> 
 </div><!-- delete -->
 
