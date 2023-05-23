@@ -373,13 +373,17 @@ def update_single_candidate_office_records_func(
             FROM `candidates`
             WHERE email = :candidate_email
         """
-        candidates_id = (
+        candidates_id_result = (
             conn.execute(
                 text(candidates_id_query), *[{"candidate_email": candidate_email}]
             )
             .mappings()
             .one_or_none()
         )
+        if candidates_id_result is not None:
+            candidates_id = candidates_id_result["id"]
+        else:
+            candidates_id = None
 
     update_sql = """
         UPDATE `candidate_office_records`
