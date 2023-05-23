@@ -2,11 +2,79 @@
 
 
 {% block head %}
-    <h1>Home</h1>
+    <h1>Federal Election Committee's Candidate Funding Sources Database</h1>
 {% endblock %}
 
 
 {% block body %}
 
+    <fieldset class="fields">
+        <legend><h2>About</h2></legend>
+            <p>The primary purpose of the application is to allow users to see the relationships between candidates and funding sources over a period of cycles and election years. The application is used to visualize data from the United States Federal Election Commission about political candidates and the committees that fund the candidates. Candidates and committees are the focal points of the application. Committees can be of various contributor types such as individual, political action committees, etc. Each candidate has at least one FEC Candidate Office Record and these records may be associated with contributions from committees.</p>
+
+            <p>The Candidate Office Record contains attributes such as office type, party type, incumbent challenger status. Contributions contain attributes such as transaction types, amendment indicators, and transaction types.</p>
+
+            <p>The seed data used in this application is real and comes from the Federal Election Commission via <a href="https://www.fec.gov/data/advanced/?tab=bulk-data">bulk data download.</a></p>
+
+            <p>The bulk data downloads are used as the sole data source. Our application takes select data, transforms that data into our desired structure, and loads that data into our database with relationships. The FEC public datasets have an enormous amount of data. For example, the FEC has recorded over 22,000 candidate records between the years of 2012 - 2024 and in 2020 alone there were over 50 million individual contributions. The application's utility comes from taking an overwhelming amount of data and domain specific jargon and synthesizing that into clear information that can be used by people like us.</p>
+
+    </fieldset>
+
+    <fieldset>
+        <legend><h2>Tables</h2></legend>
+
+        <fieldset>
+            <legend><h3>Entities</h3></legend>
+                <ul>
+                {% for entry in tables_information %}
+                    {% if tables_information[entry]["type"] == "entity" %}
+                        <li>
+                            <a href="/{{entry}}">{{entry}}</a>
+                            <ul>
+                                <li>{{tables_information[entry]["description"]}}</li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+        </fieldset>
+
+        <fieldset>
+            <legend><h3>Intersections</h3></legend>
+                <ul>
+                {% for entry in tables_information %}
+                    {% if tables_information[entry]["type"] == "intersection" %}
+                        <li>
+                            <a href="/{{entry}}">{{entry}}</a>
+                            <ul>
+                                <li>{{tables_information[entry]["description"]}}</li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+        </fieldset>
+
+        <fieldset>
+            <legend><h3>Categories</h3></legend>
+                <ul>
+                {% for entry in tables_information %}
+                    {% if tables_information[entry]["type"] == "category" %}
+                        <li>
+                            <a href="/{{entry}}">{{entry}}</a>
+                            <ul>
+                                <li>{{tables_information[entry]["description"]}}</li>
+                            </ul>
+                        </li>
+                    {% endif %}
+                {% endfor %}
+                </ul>
+        </fieldset>
+
+    </fieldset>
+
+
+
 
 {% endblock %}
+
