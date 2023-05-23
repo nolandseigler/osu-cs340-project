@@ -79,24 +79,6 @@ def create_app() -> FastAPI:
             conn=conn, request=request, templates=templates, record_id=record_id
         )
     
-    # TODO: implement post for delete_candidate_office_records
-    @app.post("/delete_candidate_office_records/{record_id}")
-    def delete_single_candidate_office_records(
-        record_id,
-        conn: Connection = Depends(db.get_conn)
-    ):
-        print(f"(TODO: delete me): in @app.post(/delete_candidate_office_records/{record_id}")
-        pass
-
-    # TODO: implement post for edit_candidate_office_records
-    @app.post("/edit_candidate_office_records/{record_id}")
-    def edit_single_candidate_office_records(
-        record_id,
-        conn: Connection = Depends(db.get_conn)
-    ):
-        print(f"(TODO: delete me) in @app.post(/edit_candidate_office_records/{record_id}")
-        pass
-
     @app.post("/candidate_office_records/")
     def post_single_candidate_office_records(
         fec_cand_id: Annotated[str, Form()],
