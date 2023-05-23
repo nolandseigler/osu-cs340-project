@@ -18,13 +18,13 @@ from what_the_fec.api.candidate_office_records import (
     post_single_candidate_office_records_func,
     update_single_candidate_office_records_func,
 )
+from what_the_fec.static.table_information import tables_information
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
 
 # this doesnt feel great but works for today
 from what_the_fec.storage.mysql.db import get_db
 
-from what_the_fec.static.table_information import tables_information
 
 def create_app() -> FastAPI:
     app = FastAPI()
@@ -47,7 +47,9 @@ def create_app() -> FastAPI:
 
     @app.get("/", response_class=HTMLResponse)
     def home_page(request: Request):
-        return home_page_func(request=request, templates=templates, tables_information=tables_information)
+        return home_page_func(
+            request=request, templates=templates, tables_information=tables_information
+        )
 
     # Citation for the following code:
     # Date: 04/06/2023
@@ -78,7 +80,7 @@ def create_app() -> FastAPI:
         return delete_single_candidate_office_records_page_func(
             conn=conn, request=request, templates=templates, record_id=record_id
         )
-    
+
     @app.post("/candidate_office_records/")
     def post_single_candidate_office_records(
         fec_cand_id: Annotated[str, Form()],
@@ -97,9 +99,7 @@ def create_app() -> FastAPI:
         cand_office_st: Annotated[str, Form()],
         cand_office_district: Annotated[str, Form()],
         pol_pty_contrib: Annotated[float, Form()],
-        cvg_end_dt: Annotated[
-            date, Form()
-        ],
+        cvg_end_dt: Annotated[date, Form()],
         indiv_refund: Annotated[float, Form()],
         cmte_refund: Annotated[float, Form()],
         office_type: Annotated[str, Form()],
