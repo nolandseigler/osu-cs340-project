@@ -4,16 +4,6 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
 
 
-def home_page_func(request: Request, templates: Jinja2Templates, tables_information):
-    return templates.TemplateResponse(
-        "home.j2",
-        {
-            "request": request,
-            "tables_information": tables_information,
-        },
-    )
-
-
 def get_all_candidate_office_records_func(
     conn: Connection, request: Request, templates: Jinja2Templates
 ):

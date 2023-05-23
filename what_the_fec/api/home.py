@@ -1,4 +1,7 @@
-tables_information = {
+from fastapi import Request
+from fastapi.templating import Jinja2Templates
+
+TABLES_INFORMATION = {
     "office_types": {
         "type": "category",
         "description": "represents the office type the candidate ran for in the election or occupies during the cycle",
@@ -80,3 +83,13 @@ tables_information = {
         "description": "intersection of cycles and candidate office records",
     },
 }
+
+
+def home_page_func(request: Request, templates: Jinja2Templates):
+    return templates.TemplateResponse(
+        "home.j2",
+        {
+            "request": request,
+            "tables_information": TABLES_INFORMATION,
+        },
+    )

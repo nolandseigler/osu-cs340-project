@@ -14,11 +14,10 @@ from what_the_fec.api.candidate_office_records import (
     delete_single_candidate_office_records_page_func,
     edit_single_candidate_office_records_page_func,
     get_all_candidate_office_records_func,
-    home_page_func,
     post_single_candidate_office_records_func,
     update_single_candidate_office_records_func,
 )
-from what_the_fec.static.table_information import tables_information
+from what_the_fec.api.home import home_page_func
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
 
@@ -48,7 +47,8 @@ def create_app() -> FastAPI:
     @app.get("/", response_class=HTMLResponse)
     def home_page(request: Request):
         return home_page_func(
-            request=request, templates=templates, tables_information=tables_information
+            request=request,
+            templates=templates,
         )
 
     # Citation for the following code:
