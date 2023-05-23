@@ -4,11 +4,12 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
 
 
-def home_page_func(request: Request, templates: Jinja2Templates):
+def home_page_func(request: Request, templates: Jinja2Templates, tables_information):
     return templates.TemplateResponse(
         "home.j2",
         {
             "request": request,
+            "tables_information": tables_information,
         },
     )
 
@@ -170,6 +171,15 @@ def edit_single_candidate_office_records_page_func(
         .all()
     )
 
+    candidates_query = "SELECT id, email FROM candidates"
+    candidates = conn.execute(text(candidates_query)).mappings().all()
+    dropdown_items_for_add = {
+        "candidate_email": {
+            "data": candidates,
+            "relevant_column_name": "email",
+        },
+    }
+
     return templates.TemplateResponse(
         "edit_candidate_office_records.j2",
         {
@@ -182,6 +192,7 @@ def edit_single_candidate_office_records_page_func(
                 "party_type",
                 "incumbent_challenger_status",
             ],
+            "dropdown_items_for_add": dropdown_items_for_add,
         },
     )
 
@@ -284,7 +295,7 @@ def post_single_candidate_office_records_func(
     party_type,
     incumbent_challenger_status,
 ):
-    if candidate_email == "null":
+    if candidate_email == "none":
         candidates_email_populator = "NULL"
     else:
         candidates_email_populator = (

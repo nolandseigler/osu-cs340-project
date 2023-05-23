@@ -2,50 +2,25 @@
 
 
 {% block head %}
-    <h1>Delete item in {{table_name}}</h1>
+    <h1>Delete entry in {{table_name}}</h1>
 {% endblock %}
 
 {% block body %}
-{# <p>Are you sure you want to delete the following item?</p>
-<div id="browse" style="display: block">
-    <div class="scrollit">
-        <table>
-        <thead>
-        <tr>
-            {% for key in items[0].keys() %}
-                <th>{{ key }}</th>
-            {% endfor %}
-        </tr>
-        <tbody>
-
-        {% for item in items %}
-        <tr>
-            {% for key in item.keys() %}
-                <td>{{item[key]}}</td>
-            {% endfor %}
-
-        </tr>
-        {% endfor %}
-        </table>
-    </div>
-</div> <!-- browse --> #}
 
 <p>&nbsp;</p>
 <div id="delete" style="display: block">
-  <form id="delete_{{table_name}}" action="/{{table_name}}/delete/{{items[0].id}}" method="post">
-      <legend><strong>Delete item in {{table_name}}</strong></legend>
-          <fieldset class="fields">
-          <p>Are you sure you want to delete the following item?</p>
-
-          
+  <form id="delete{{table_name}}" action="/{{table_name}}/delete/{{items[0].id}}" method="post"></form>
+      
+    <fieldset class="fields">
+        <legend><strong>Are you sure you want to delete the following item in {{table_name}}?</strong></legend>
         {% for key in items[0].keys() %}
-            <label> {{key}}: </label> "{{items[0][key]}}"
+            <label> {{key}}: </label> "{{items[0][key]}}"<br>
         {% endfor %}
-
-            
     </fieldset>
-    <input class="btn" type="submit" id="Delete_{{table_name}}" value="Delete">
-          <input class="btn" type="button" value="Cancel" >
+
+    <input type="submit" form="delete{{table_name}}" value="Delete" name="delete_{{table_name}}" class="btn btn-primary" style="margin:.5rem;">
+    <a href="/{{table_name}}"><input class="btn" type="button" value="Cancel"></a> 
+
   </form> 
 </div><!-- delete -->
 
