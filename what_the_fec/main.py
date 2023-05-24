@@ -19,6 +19,7 @@ from what_the_fec.api.candidate_office_records import (
 )
 from what_the_fec.api.election_years import (
     get_all_election_years_func,
+    update_single_candidate_office_records_func,
 )
 from what_the_fec.api.home import home_page_func
 from what_the_fec.storage.db import init as db_init
