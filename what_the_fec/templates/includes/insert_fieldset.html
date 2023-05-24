@@ -1,0 +1,81 @@
+<div id="insert" style="display: block">
+    <form id="insert_{{table_name}}" action="/{{table_name}}" method="post">
+            <fieldset>
+                <legend><strong>Add item to {{table_name}}</strong></legend>
+
+                {% for col_name in items[0].keys() %}
+                    {% if col_name != 'id' and col_name not in dropdown_keys %}
+                        <label>{{col_name}}</label>
+                        {% if columns_information[col_name]["COLUMN_DEFAULT"] is not none %}
+                            {% set input_default = columns_information[col_name]["COLUMN_DEFAULT"] %}
+                        {% else %}
+                            {% set input_default = "" %}
+                        {% endif %}
+
+                        {% if columns_information[col_name]["DATA_TYPE"] == "varchar" %}
+                            {% set input_max_length = columns_information[col_name]["CHARACTER_MAXIMUM_LENGTH"] %}
+                            {% if columns_information[col_name]["IS_NULLABLE"] == "YES" %}
+                                <input type="text" name="{{col_name}}" maxlength="{{input_max_length}}" value="{{input_default}}"><br>
+                            {% else %}
+                                <input type="text" name="{{col_name}}" maxlength="{{input_max_length}}" value="{{input_default}}" required><br>
+                            {% endif %}
+                            
+                        {% elif columns_information[col_name]["DATA_TYPE"] == "decimal" %}
+                            {% if columns_information[col_name]["IS_NULLABLE"] == "YES" %}
+                                <input type="number" name="{{col_name}}" step=".01" value="{{input_default}}"><br>
+                            {% else %}
+                                <input type="number" name="{{col_name}}" step=".01" value="{{input_default}}" required><br>
+                            {% endif %}
+
+                        {% elif columns_information[col_name]["DATA_TYPE"] == "date" %}
+                            {% if columns_information[col_name]["IS_NULLABLE"] == "YES" %}
+                                <input type="date" name="{{col_name}}"><br>
+                            {% else %}
+                                <input type="date" name="{{col_name}}" required><br>
+                            {% endif %}
+
+                        <!-- https://dev.mysql.com/doc/refman/8.0/en/year.html -->
+                        {% elif columns_information[col_name]["DATA_TYPE"] == "year" %}
+                            {% if columns_information[col_name]["IS_NULLABLE"] == "YES" %}
+                                <input type="number" name="{{col_name}}" min="1901" max="2155"><br>
+                            {% else %}
+                                <input type="number" name="{{col_name}}" min="1901" max="2155" required><br>
+                            {% endif %}
+
+                        <!-- https://dev.mysql.com/doc/refman/8.0/en/integer-types.html -->
+                        {% elif columns_information[col_name]["DATA_TYPE"] == "int" %}
+                            {% if columns_information[col_name]["IS_NULLABLE"] == "YES" %}
+                                <input type="number" name="{{col_name}}" min="-2147483648" max="2147483647"><br>
+                            {% else %}
+                                <input type="number" name="{{col_name}}" min="-2147483648" max="2147483647" required><br>
+                            {% endif %}
+
+                        {% elif columns_information[col_name]["DATA_TYPE"] == "tinyint" %}
+                            {% if columns_information[col_name]["IS_NULLABLE"] == "YES" %}
+                                <input type="number" name="{{col_name}}" min="-128" max="127"><br>
+                            {% else %}
+                                <input type="number" name="{{col_name}}" min="-128" max="127" required><br>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+                {% for key in dropdown_keys %}
+                    <label> {{key}} </label>
+                    <select name="{{key}}" id="{{key}}">
+                        {% for entries in dropdown_items_for_add[key]["data"] %}
+                            <option value="{{entries[dropdown_items_for_add[key]['relevant_column_name']]}}">
+                                {{entries[dropdown_items_for_add[key]['relevant_column_name']]}}
+                            </option>
+                        {% endfor %}
+                            {% if key == "candidate_email"%}
+                                <option value="none">none</option>
+                            {% endif %}
+                    </select>
+                    <br>
+                {% endfor %}
+            </fieldset>
+            <input type="submit" form="insert_{{table_name}}" value="Add" name="add_{{table_name}}" class="btn btn-primary" style="margin:.5rem;">
+            <a href="/{{table_name}}"><input class="btn" type="button" value="Cancel"></a> 
+	</form> <!--add new item to items
+</div>insert -->

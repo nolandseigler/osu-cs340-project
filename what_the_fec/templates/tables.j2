@@ -12,37 +12,10 @@
 
 <p>&nbsp;</p>
 
-<div id="insert" style="display: block">
-     <form id="insert{{table_name}}" action="/{{table_name}}" method="post">
-        
-        <fieldset class="fields">
-            <legend><strong>Add item to {{table_name}}</strong></legend>
-          
-            {% for key in items[0].keys() %}
-                {% if key != 'id' %}
-                    <label> {{key}} </label>
+{% with table_name=table_name, items=items, columns_information=columns_information, dropdown_keys=dropdown_keys, dropdown_items_for_add=dropdown_items_for_add %}
+    {% include 'includes/insert_fieldset.html' %}
+{% endwith %}
 
-                    {# TODO: update this dropdown #}
-                    {% if key in dropdown_keys%}
-
-                        <select name="{{key}}" id="{{key}}">
-                            <option value="opt1">opt1</option>
-                            <option value="opt2">opt2</option>
-                            <option value="opt3">opt3</option>
-                        </select>
-                        <br>
-                    {% else %}
-                        <input type="text" name="{{key}}"><br>
-                    {% endif %}
-                    
-                {% endif %}
-            {% endfor %}
-            
-        </fieldset>
-        <input type="submit" value="Add" name="add_{{table_name}}" class="btn btn-primary" style="margin:.5rem;">
-        <a href="/{{table_name}}"><input class="btn" type="button" value="Cancel"></a> 
-	</form> <!--add new item to items-->
-</div><!-- insert -->
 
 
 {% endblock %}

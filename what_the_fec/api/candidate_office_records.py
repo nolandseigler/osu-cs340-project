@@ -3,6 +3,11 @@ from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
 
+from what_the_fec.api.columns_information import (
+    get_columns_information_query,
+    get_columns_information_dict
+)
+
 
 def get_all_candidate_office_records_func(
     conn: Connection, request: Request, templates: Jinja2Templates
@@ -68,6 +73,8 @@ def get_all_candidate_office_records_func(
     incumbent_challenger_statuses = (
         conn.execute(text(incumbent_challenger_statuses_query)).mappings().all()
     )
+    columns_information_result = conn.execute(text(get_columns_information_query("candidate_office_records"))).mappings().all()
+    columns_information=get_columns_information_dict(columns_information_result)
 
     dropdown_items_for_add = {
         "office_type": {
@@ -101,6 +108,7 @@ def get_all_candidate_office_records_func(
                 "incumbent_challenger_status",
             ],
             "dropdown_items_for_add": dropdown_items_for_add,
+            "columns_information": columns_information,
         },
     )
 

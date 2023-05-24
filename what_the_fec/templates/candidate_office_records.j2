@@ -13,54 +13,11 @@
 
 <p>&nbsp;</p>
 
-<div id="insert" style="display: block">
-    <form id="insert_{{table_name}}" action="/{{table_name}}" method="post">
-        
-            <fieldset>
-                <legend><strong>Add item to {{table_name}}</strong></legend>  
-
-                <label>fec_cand_id</label> <input type="text" name="fec_cand_id" maxlength="9" required><br>
-                <label>name</label> <input type="text" name="name" maxlength="200" required><br>
-                <label>ttl_receipts</label> <input type="number" name="ttl_receipts" step=".01" value="0.00" required><br>
-                <label>trans_from_auth</label> <input type="number" name="trans_from_auth" step=".01" value="0.00" required><br>
-                <label>coh_bop</label> <input type="number" name="coh_bop" step=".01" value="0.00" required><br>
-                <label>coh_cop</label> <input type="number" name="coh_cop" step=".01" value="0.00" required><br>
-                <label>cand_contrib</label> <input type="number" name="cand_contrib" step=".01" value="0.00" required><br>
-                <label>cand_loans</label> <input type="number" name="cand_loans" step=".01" value="0.00" required><br>
-                <label>other_loans</label> <input type="number" name="other_loans" step=".01" value="0.00" required><br>
-                <label>cand_loan_repay</label> <input type="number" name="cand_loan_repay" step=".01" value="0.00" required><br>
-                <label>other_loan_repay</label> <input type="number" name="other_loan_repay" step=".01" value="0.00" required><br>
-                <label>debts_owed_by</label> <input type="number" name="debts_owed_by" step=".01" value="0.00" required><br>
-                <label>ttl_indiv_contrib</label> <input type="number" name="ttl_indiv_contrib" step=".01" value="0.00" required><br>
-                <label>cand_office_st</label> <input type="text" name="cand_office_st" maxlength="2" required><br>
-                <label>cand_office_district</label> <input type="text" name="cand_office_district" maxlength="2" required><br>
-                <label>pol_pty_contrib</label> <input type="number" name="pol_pty_contrib" step=".01" value="0.00" required><br>
-                <label>cvg_end_dt</label> <input type="date" name="cvg_end_dt" required><br>
-                <label>indiv_refund</label> <input type="number" name="indiv_refund" step=".01" value="0.00" required><br>
-                <label>cmte_refund</label> <input type="number" name="cmte_refund" step=".01" value="0.00" required><br>
-                {% for key in dropdown_keys %}
-                    <label> {{key}} </label>
-                    <select name="{{key}}" id="{{key}}">
-                        {% for entries in dropdown_items_for_add[key]["data"] %}
-                            <option value="{{entries[dropdown_items_for_add[key]['relevant_column_name']]}}">
-                                {{entries[dropdown_items_for_add[key]['relevant_column_name']]}}
-                            </option>
-                        {% endfor %}
-                            {% if key == "candidate_email"%}
-                                <option value="none">none</option>
-                            {% endif %}
-                    </select>
-                    <br>
-                {% endfor %}
-            </fieldset>
-            <input type="submit" form="insert_{{table_name}}" value="Add" name="add_{{table_name}}" class="btn btn-primary" style="margin:.5rem;">
-            <a href="/{{table_name}}"><input class="btn" type="button" value="Cancel"></a> 
-	</form> <!--add new item to items-->
-</div><!-- insert -->
 
 
-
-
+{% with table_name=table_name, items=items, columns_information=columns_information, dropdown_keys=dropdown_keys, dropdown_items_for_add=dropdown_items_for_add %}
+    {% include 'includes/insert_fieldset.html' %}
+{% endwith %}
 
 
 
