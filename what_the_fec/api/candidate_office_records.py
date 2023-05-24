@@ -4,16 +4,6 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
 
 
-def home_page_func(request: Request, templates: Jinja2Templates, tables_information):
-    return templates.TemplateResponse(
-        "home.j2",
-        {
-            "request": request,
-            "tables_information": tables_information,
-        },
-    )
-
-
 def get_all_candidate_office_records_func(
     conn: Connection, request: Request, templates: Jinja2Templates
 ):
@@ -353,15 +343,85 @@ def post_single_candidate_office_records_func(
             (SELECT id FROM `incumbent_challenger_statuses` WHERE name = '{incumbent_challenger_status}')
         )
     """
-    with conn.begin():
-        # TODO: Use bind params
-        conn.execute(text(insert_query))
+
+    # TODO: Use bind params
+    conn.execute(text(insert_query))
+    # we are in a transaction already due to pep idk one of them
+    conn.commit()
 
     # NOTE: Redirect Path
     # Citation for the following code:
     # Date: 05/21/2023
     # Copied from /OR/ Adapted from /OR/ Based on:
     # https://stackoverflow.com/a/73088816
+    return RedirectResponse(
+        "/candidate_office_records",
+        status_code=status.HTTP_302_FOUND,
+    )
+
+
+def update_single_candidate_office_records_func(
+    conn: Connection,
+    record_id,
+    candidate_email: str,
+):
+    if candidate_email.lower() == "null":
+        candidates_id = None
+    else:
+        candidates_id_query = """
+            SELECT id
+            FROM `candidates`
+            WHERE email = :candidate_email
+        """
+        candidates_id_result = (
+            conn.execute(
+                text(candidates_id_query), *[{"candidate_email": candidate_email}]
+            )
+            .mappings()
+            .one_or_none()
+        )
+        if candidates_id_result is not None:
+            candidates_id = candidates_id_result["id"]
+        else:
+            candidates_id = None
+
+    update_sql = """
+        UPDATE `candidate_office_records`
+            SET candidates_id = :candidates_id
+        WHERE id = :candidate_office_records_id
+    """
+
+    bind_params = [
+        {"candidates_id": candidates_id, "candidate_office_records_id": record_id},
+    ]
+
+    conn.execute(text(update_sql), *bind_params)
+    # we are in a transaction already due to pep idk one of them
+    conn.commit()
+
+    return RedirectResponse(
+        f"/edit_candidate_office_records/{record_id}",
+        status_code=status.HTTP_302_FOUND,
+    )
+
+
+def delete_single_candidate_office_records_func(
+    conn: Connection,
+    record_id,
+):
+    delete_sql = """
+        DELETE FROM `candidate_office_records`
+        WHERE id = :candidate_office_records_id
+    """
+
+    bind_params = [
+        {"candidate_office_records_id": record_id},
+    ]
+
+    conn.execute(text(delete_sql), *bind_params)
+    # we are in a transaction already due to pep idk one of them
+    conn.commit()
+
     return RedirectResponse(
         "/candidate_office_records",
         status_code=status.HTTP_302_FOUND,

@@ -10,19 +10,20 @@ from sqlalchemy import Connection
 from sqlalchemy.sql import text
 
 from what_the_fec.api.candidate_office_records import (
+    delete_single_candidate_office_records_func,
     delete_single_candidate_office_records_page_func,
     edit_single_candidate_office_records_page_func,
     get_all_candidate_office_records_func,
-    home_page_func,
     post_single_candidate_office_records_func,
+    update_single_candidate_office_records_func,
 )
+from what_the_fec.api.home import home_page_func
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
 
 # this doesnt feel great but works for today
 from what_the_fec.storage.mysql.db import get_db
 
-from what_the_fec.static.table_information import tables_information
 
 def create_app() -> FastAPI:
     app = FastAPI()
@@ -45,7 +46,10 @@ def create_app() -> FastAPI:
 
     @app.get("/", response_class=HTMLResponse)
     def home_page(request: Request):
-        return home_page_func(request=request, templates=templates, tables_information=tables_information)
+        return home_page_func(
+            request=request,
+            templates=templates,
+        )
 
     # Citation for the following code:
     # Date: 04/06/2023
@@ -76,24 +80,6 @@ def create_app() -> FastAPI:
         return delete_single_candidate_office_records_page_func(
             conn=conn, request=request, templates=templates, record_id=record_id
         )
-    
-    # TODO: implement post for delete_candidate_office_records
-    @app.post("/delete_candidate_office_records/{record_id}")
-    def delete_single_candidate_office_records(
-        record_id,
-        conn: Connection = Depends(db.get_conn)
-    ):
-        print(f"(TODO: delete me): in @app.post(/delete_candidate_office_records/{record_id}")
-        pass
-
-    # TODO: implement post for edit_candidate_office_records
-    @app.post("/edit_candidate_office_records/{record_id}")
-    def edit_single_candidate_office_records(
-        record_id,
-        conn: Connection = Depends(db.get_conn)
-    ):
-        print(f"(TODO: delete me) in @app.post(/edit_candidate_office_records/{record_id}")
-        pass
 
     @app.post("/candidate_office_records/")
     def post_single_candidate_office_records(
@@ -113,9 +99,7 @@ def create_app() -> FastAPI:
         cand_office_st: Annotated[str, Form()],
         cand_office_district: Annotated[str, Form()],
         pol_pty_contrib: Annotated[float, Form()],
-        cvg_end_dt: Annotated[
-            date, Form()
-        ],
+        cvg_end_dt: Annotated[date, Form()],
         indiv_refund: Annotated[float, Form()],
         cmte_refund: Annotated[float, Form()],
         office_type: Annotated[str, Form()],
@@ -149,6 +133,34 @@ def create_app() -> FastAPI:
             candidate_email=candidate_email,
             party_type=party_type,
             incumbent_challenger_status=incumbent_challenger_status,
+        )
+
+    # This is gross.
+    # We are using forms everywhere so we get to choose between GET and POST.
+    # No other method options are available.
+    @app.post("/candidate_office_records/update/{record_id}")
+    def update_single_candidate_office_records(
+        record_id,
+        candidate_email: Annotated[str, Form()],
+        conn: Connection = Depends(db.get_conn),
+    ):
+        return update_single_candidate_office_records_func(
+            conn=conn,
+            record_id=record_id,
+            candidate_email=candidate_email,
+        )
+
+    # This is gross.
+    # We are using forms everywhere so we get to choose between GET and POST.
+    # No other method options are available.
+    @app.post("/candidate_office_records/delete/{record_id}")
+    def delete_single_candidate_office_records(
+        record_id,
+        conn: Connection = Depends(db.get_conn),
+    ):
+        return delete_single_candidate_office_records_func(
+            conn=conn,
+            record_id=record_id,
         )
 
     return app
