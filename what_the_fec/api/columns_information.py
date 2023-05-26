@@ -1,3 +1,4 @@
+# TODO: https://github.com/nolandseigler/osu-cs340-project/pull/7#discussion_r1206133030
 def get_columns_information_query(table_name):
     return f"""
         SELECT 
