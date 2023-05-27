@@ -8,9 +8,6 @@ from what_the_fec.routes.helpers import (
     get_columns_information_query,
 )
 
-# this doesnt feel great but works for today
-from what_the_fec.storage.mysql.db import get_db_conn
-
 
 def get_all(conn: Connection, request: Request, templates: Jinja2Templates):
     candidate_office_records_query = """

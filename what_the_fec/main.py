@@ -10,6 +10,7 @@ from what_the_fec.routes.candidate_office_records.routes import (
 )
 from what_the_fec.routes.candidates.routes import router as candidates_router
 from what_the_fec.routes.committees.routes import router as committees_router
+from what_the_fec.routes.contributions.routes import router as contributions_router
 from what_the_fec.routes.election_years.routes import router as election_years_router
 from what_the_fec.routes.home.routes import router as home_router
 from what_the_fec.storage.db import init as db_init
@@ -44,6 +45,7 @@ def create_app() -> FastAPI:
     app.include_router(candidates_router)
     app.include_router(candidate_office_records_router)
     app.include_router(committees_router)
+    app.include_router(contributions_router)
     app.include_router(election_years_router)
 
     return app
