@@ -1,7 +1,10 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 
-from what_the_fec.routes.cycles_candidate_office_records.endpoint_funcs import TABLE_NAME, get_all_func
+from what_the_fec.routes.cycles_candidate_office_records.endpoint_funcs import (
+    TABLE_NAME,
+    get_all_func,
+)
 
 router = APIRouter(
     prefix=f"/{TABLE_NAME}",

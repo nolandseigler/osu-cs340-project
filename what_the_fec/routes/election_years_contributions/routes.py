@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 
-from what_the_fec.routes.candidate_office_records_committees.endpoint_funcs import (
+from what_the_fec.routes.election_years_contributions.endpoint_funcs import (
     TABLE_NAME,
     get_all_func,
 )

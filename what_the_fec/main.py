@@ -17,7 +17,6 @@ from what_the_fec.routes.candidate_office_records_committees.routes import (
 from what_the_fec.routes.candidate_office_records_contributions.routes import (
     router as candidate_office_records_contributions_router,
 )
-
 from what_the_fec.routes.candidates.routes import router as candidates_router
 from what_the_fec.routes.committees.routes import router as committee_types_router
 from what_the_fec.routes.committees.routes import router as committees_router
@@ -26,11 +25,19 @@ from what_the_fec.routes.contributor_types.routes import (
     router as contributor_types_router,
 )
 from what_the_fec.routes.cycles.routes import router as cycles_router
-from what_the_fec.routes.cycles_candidate_office_records.routes import router as cycles_candidate_office_records_router
-from what_the_fec.routes.cycles_contributions.routes import router as cycles_contributions_router
-
-
+from what_the_fec.routes.cycles_candidate_office_records.routes import (
+    router as cycles_candidate_office_records_router,
+)
+from what_the_fec.routes.cycles_contributions.routes import (
+    router as cycles_contributions_router,
+)
 from what_the_fec.routes.election_years.routes import router as election_years_router
+from what_the_fec.routes.election_years_candidate_office_records.routes import (
+    router as election_years_candidate_office_records_router,
+)
+from what_the_fec.routes.election_years_contributions.routes import (
+    router as election_years_contributions_router,
+)
 from what_the_fec.routes.home.routes import router as home_router
 from what_the_fec.routes.incumbent_challenger_statuses.routes import (
     router as incumbent_challenger_statuses_router,
@@ -83,6 +90,8 @@ def create_app() -> FastAPI:
     app.include_router(cycles_candidate_office_records_router)
     app.include_router(cycles_contributions_router)
     app.include_router(election_years_router)
+    app.include_router(election_years_candidate_office_records_router)
+    app.include_router(election_years_contributions_router)
     app.include_router(incumbent_challenger_statuses_router)
     app.include_router(office_types_router)
     app.include_router(party_types_router)
