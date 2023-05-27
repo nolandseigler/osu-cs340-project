@@ -3,7 +3,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
 
-from what_the_fec.routes.columns_information import (
+from what_the_fec.routes.helpers import (
     get_columns_information_dict,
     get_columns_information_query,
 )

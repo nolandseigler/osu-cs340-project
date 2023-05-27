@@ -2,19 +2,16 @@ import os
 from datetime import date
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, Form, Request
-from fastapi.responses import HTMLResponse
+from fastapi import Depends, FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import Connection
-from sqlalchemy.sql import text
 
 from what_the_fec.dependencies import get_db_conn, get_templates, templates_init
 from what_the_fec.routes.candidate_office_records.routes import (
     router as candidate_office_records_router,
 )
-from what_the_fec.routes.election_years import get_all_election_years_func
-from what_the_fec.routes.home import home_page_func
+
+from what_the_fec.routes.home.routes import router as home_router
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
 
@@ -42,13 +39,8 @@ def create_app() -> FastAPI:
         "/static", StaticFiles(directory=os.environ["STATIC_DIR_PATH"]), name="static"
     )
 
-    @app.get("/", response_class=HTMLResponse)
-    def home_page(request: Request):
-        return home_page_func(
-            request=request,
-            templates=request.templates,
-        )
-
+    
+    app.include_router(home_router)
     app.include_router(candidate_office_records_router)
 
     # @app.get("/election_years/", response_class=HTMLResponse)

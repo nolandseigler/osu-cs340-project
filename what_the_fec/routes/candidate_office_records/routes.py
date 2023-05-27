@@ -1,14 +1,9 @@
 from datetime import date
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, FastAPI, Form, HTTPException, Request
+from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
-from sqlalchemy import Connection
-from sqlalchemy.sql import text
 
-from what_the_fec.dependencies import get_db_conn
 from what_the_fec.routes.candidate_office_records.candidate_office_records import (
     delete_single_candidate_office_records_func,
     delete_single_candidate_office_records_page_func,
