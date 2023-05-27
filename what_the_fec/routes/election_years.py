@@ -4,8 +4,8 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
 
 from what_the_fec.routes.columns_information import (
+    get_columns_information_dict,
     get_columns_information_query,
-    get_columns_information_dict
 )
 
 
@@ -22,8 +22,12 @@ def get_all_election_years_func(
     # Copied from /OR/ Adapted from /OR/ Based on:
     # https://stackoverflow.com/a/58660606
     election_years = conn.execute(text(election_years_query)).mappings().all()
-    columns_information_result = conn.execute(text(get_columns_information_query("election_years"))).mappings().all()
-    columns_information=get_columns_information_dict(columns_information_result)
+    columns_information_result = (
+        conn.execute(text(get_columns_information_query("election_years")))
+        .mappings()
+        .all()
+    )
+    columns_information = get_columns_information_dict(columns_information_result)
 
     return templates.TemplateResponse(
         "tables.j2",
@@ -34,6 +38,3 @@ def get_all_election_years_func(
             "columns_information": columns_information,
         },
     )
-
-
-

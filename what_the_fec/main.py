@@ -9,16 +9,14 @@ from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection
 from sqlalchemy.sql import text
 
-from what_the_fec.dependencies import templates_init, get_templates, get_db_conn
-from what_the_fec.routes.election_years import (
-    get_all_election_years_func,
+from what_the_fec.dependencies import get_db_conn, get_templates, templates_init
+from what_the_fec.routes.candidate_office_records.routes import (
+    router as candidate_office_records_router,
 )
+from what_the_fec.routes.election_years import get_all_election_years_func
 from what_the_fec.routes.home import home_page_func
-from what_the_fec.routes.candidate_office_records.routes import router as candidate_office_records_router
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
-
-
 
 
 def create_app() -> FastAPI:
@@ -43,7 +41,6 @@ def create_app() -> FastAPI:
     app.mount(
         "/static", StaticFiles(directory=os.environ["STATIC_DIR_PATH"]), name="static"
     )
-    
 
     @app.get("/", response_class=HTMLResponse)
     def home_page(request: Request):
@@ -51,9 +48,9 @@ def create_app() -> FastAPI:
             request=request,
             templates=request.templates,
         )
-    
+
     app.include_router(candidate_office_records_router)
-    
+
     # @app.get("/election_years/", response_class=HTMLResponse)
     # def get_all_election_years(
     #     request: Request, conn: Connection = Depends(db.get_conn)
@@ -61,6 +58,5 @@ def create_app() -> FastAPI:
     #     return get_all_election_years_func(
     #         conn=conn, request=request, templates=templates
     #     )
-
 
     return app
