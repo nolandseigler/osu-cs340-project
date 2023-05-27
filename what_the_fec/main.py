@@ -17,6 +17,9 @@ from what_the_fec.api.candidate_office_records import (
     post_single_candidate_office_records_func,
     update_single_candidate_office_records_func,
 )
+from what_the_fec.api.election_years import (
+    get_all_election_years_func,
+)
 from what_the_fec.api.home import home_page_func
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
@@ -161,6 +164,14 @@ def create_app() -> FastAPI:
         return delete_single_candidate_office_records_func(
             conn=conn,
             record_id=record_id,
+        )
+    
+    @app.get("/election_years/", response_class=HTMLResponse)
+    def get_all_election_years(
+        request: Request, conn: Connection = Depends(db.get_conn)
+    ):
+        return get_all_election_years_func(
+            conn=conn, request=request, templates=templates
         )
 
     return app
