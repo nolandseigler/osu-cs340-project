@@ -13,7 +13,7 @@ from what_the_fec.dependencies import get_db_conn
 from what_the_fec.routes.candidate_office_records.candidate_office_records import (
     delete_single_candidate_office_records_func,
     delete_single_candidate_office_records_page_func,
-    edit_single_candidate_office_records_page_func,
+    update_single_candidate_office_records_page_func,
     get_all_candidate_office_records_func,
     post_single_candidate_office_records_func,
     update_single_candidate_office_records_func,
@@ -36,17 +36,35 @@ def get_all_candidate_office_records(
     request: Request
 ):
     return get_all_candidate_office_records_func(
-        conn=next(request.db_conn), request=request, templates=request.templates
+        conn=next(request.db_conn),
+        request=request,
+        templates=request.templates,
     )
 
 
-# @router.get("/edit_candidate_office_records/{record_id}", response_class=HTMLResponse)
-# def edit_single_candidate_office_records_page(
-#     request: Request, record_id, conn: Connection = Depends(db.get_conn)
-# ):
-#     return edit_single_candidate_office_records_page_func(
-#         conn=conn, request=request, templates=templates, record_id=record_id
-#     )
+@router.get("/update/{record_id}", response_class=HTMLResponse)
+def update_single_candidate_office_records_page(
+    request: Request, record_id,
+):
+    return update_single_candidate_office_records_page_func(
+        conn=next(request.db_conn),
+        request=request,
+        templates=request.templates,
+        record_id=record_id,
+    )
+
+
+@router.post("/update/{record_id}")
+def update_single_candidate_office_records(
+    request: Request,
+    record_id,
+    candidate_email: Annotated[str, Form()],
+):
+    return update_single_candidate_office_records_func(
+        conn=next(request.db_conn),
+        record_id=record_id,
+        candidate_email=candidate_email,
+    )
 
 # @router.get(
 #     "/delete_candidate_office_records/{record_id}", response_class=HTMLResponse
@@ -112,20 +130,7 @@ def get_all_candidate_office_records(
 #         incumbent_challenger_status=incumbent_challenger_status,
 #     )
 
-# # This is gross.
-# # We are using forms everywhere so we get to choose between GET and POST.
-# # No other method options are available.
-# @router.post("/candidate_office_records/update/{record_id}")
-# def update_single_candidate_office_records(
-#     record_id,
-#     candidate_email: Annotated[str, Form()],
-#     conn: Connection = Depends(db.get_conn),
-# ):
-#     return update_single_candidate_office_records_func(
-#         conn=conn,
-#         record_id=record_id,
-#         candidate_email=candidate_email,
-#     )
+
 
 # # This is gross.
 # # We are using forms everywhere so we get to choose between GET and POST.

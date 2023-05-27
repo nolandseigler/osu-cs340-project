@@ -114,7 +114,7 @@ def get_all_candidate_office_records_func(
     )
 
 
-def edit_single_candidate_office_records_page_func(
+def update_single_candidate_office_records_page_func(
     conn: Connection, request: Request, templates: Jinja2Templates, record_id
 ):
     candidate_office_records_query = """
@@ -180,7 +180,7 @@ def edit_single_candidate_office_records_page_func(
     }
 
     return templates.TemplateResponse(
-        "edit_candidate_office_records.j2",
+        "candidate_office_records/update.j2",
         {
             "request": request,
             "items": candidate_office_records,
@@ -409,7 +409,7 @@ def update_single_candidate_office_records_func(
     conn.commit()
 
     return RedirectResponse(
-        f"/edit_candidate_office_records/{record_id}",
+        f"/candidate_office_records/update/{record_id}",
         status_code=status.HTTP_302_FOUND,
     )
 
