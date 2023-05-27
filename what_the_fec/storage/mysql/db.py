@@ -25,7 +25,7 @@ class MySQLDB:
             yield conn
 
 
-_SQLITE_DB: MySQLDB
+_MYSQL_DB: MySQLDB
 
 
 def init(config: MySQLConfig) -> None:
@@ -33,12 +33,16 @@ def init(config: MySQLConfig) -> None:
         raise TypeError(
             f"all configurations be an instance of MySQLConfig; type(config): {config};"
         )
-    global _SQLITE_DB
-    _SQLITE_DB = MySQLDB(config)
+    global _MYSQL_DB
+    _MYSQL_DB = MySQLDB(config)
 
 
 def get_db() -> MySQLDB:
-    global _SQLITE_DB
-    if _SQLITE_DB is None:
+    global _MYSQL_DB
+    if _MYSQL_DB is None:
         raise RuntimeError("you must init a MySQLDB before calling this function")
-    return _SQLITE_DB
+    return _MYSQL_DB
+
+
+def get_db_conn() -> Connection:
+    return get_db().get_conn()
