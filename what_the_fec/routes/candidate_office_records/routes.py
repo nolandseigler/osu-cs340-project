@@ -4,12 +4,12 @@ from typing import Annotated
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
 
-from what_the_fec.routes.candidate_office_records.candidate_office_records import (
-    delete_single_candidate_office_records_func,
+from what_the_fec.routes.candidate_office_records.endpoint_funcs import (
+    delete_single,
     delete_single_candidate_office_records_page_func,
-    get_all_candidate_office_records_func,
-    post_single_candidate_office_records_func,
-    update_single_candidate_office_records_func,
+    get_all,
+    post_single,
+    update_single,
     update_single_candidate_office_records_page_func,
 )
 
@@ -30,7 +30,7 @@ router = APIRouter(
 # FastAPI/SQLAlchemy documentation examples
 @router.get("/", response_class=HTMLResponse)
 def get_all_candidate_office_records(request: Request):
-    return get_all_candidate_office_records_func(
+    return get_all(
         conn=next(request.db_conn),
         request=request,
         templates=request.templates,
@@ -64,7 +64,7 @@ def post_single_candidate_office_records(
     party_type: STR_FORM_FIELD,
     incumbent_challenger_status: STR_FORM_FIELD,
 ):
-    return post_single_candidate_office_records_func(
+    return post_single(
         conn=next(request.db_conn),
         fec_cand_id=fec_cand_id,
         name=name,
@@ -111,7 +111,7 @@ def update_single_candidate_office_records(
     record_id,
     candidate_email: STR_FORM_FIELD,
 ):
-    return update_single_candidate_office_records_func(
+    return update_single(
         conn=next(request.db_conn),
         record_id=record_id,
         candidate_email=candidate_email,
@@ -136,7 +136,7 @@ def delete_single_candidate_office_records(
     request: Request,
     record_id,
 ):
-    return delete_single_candidate_office_records_func(
+    return delete_single(
         conn=next(request.db_conn),
         record_id=record_id,
     )

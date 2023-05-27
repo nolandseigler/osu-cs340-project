@@ -12,9 +12,7 @@ from what_the_fec.routes.helpers import (
 from what_the_fec.storage.mysql.db import get_db_conn
 
 
-def get_all_candidate_office_records_func(
-    conn: Connection, request: Request, templates: Jinja2Templates
-):
+def get_all(conn: Connection, request: Request, templates: Jinja2Templates):
     candidate_office_records_query = """
         SELECT
             `candidate_office_records`.id,
@@ -274,7 +272,7 @@ def delete_single_candidate_office_records_page_func(
     )
 
 
-def post_single_candidate_office_records_func(
+def post_single(
     conn: Connection,
     fec_cand_id,
     name,
@@ -375,7 +373,7 @@ def post_single_candidate_office_records_func(
     )
 
 
-def update_single_candidate_office_records_func(
+def update_single(
     conn: Connection,
     record_id,
     candidate_email: str,
@@ -420,7 +418,7 @@ def update_single_candidate_office_records_func(
     )
 
 
-def delete_single_candidate_office_records_func(
+def delete_single(
     conn: Connection,
     record_id,
 ):
