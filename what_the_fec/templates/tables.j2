@@ -1,4 +1,4 @@
-{% extends 'base.j2' %}
+{% extends '/base.j2' %}
 
 
 {% block head %}
@@ -7,13 +7,13 @@
 
 {% block body %}
     {% with items=items %}
-        {% include 'includes/read_table_only.html' %}
+        {% include '/includes/read_table_only.html' %}
     {% endwith %}
 
 <p>&nbsp;</p>
 
 {% with table_name=table_name, items=items, columns_information=columns_information, dropdown_keys=dropdown_keys, dropdown_items_for_add=dropdown_items_for_add %}
-    {% include 'includes/insert_fieldset.html' %}
+    {% include '/includes/insert_fieldset.html' %}
 {% endwith %}
 
 

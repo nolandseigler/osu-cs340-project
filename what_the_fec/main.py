@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from what_the_fec.dependencies import get_db_conn, get_templates, templates_init
+from what_the_fec.routes.amendment_indicators.routes import router as amendment_indicators_router
 from what_the_fec.routes.candidate_office_records.routes import (
     router as candidate_office_records_router,
 )
@@ -47,6 +48,7 @@ def create_app() -> FastAPI:
 
     app.include_router(home_router)
 
+    app.include_router(amendment_indicators_router)
     app.include_router(candidates_router)
     app.include_router(candidate_office_records_router)
     app.include_router(committees_router)
