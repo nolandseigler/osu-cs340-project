@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 
-from what_the_fec.routes.amendment_indicators.endpoint_funcs import (
+from what_the_fec.routes.incumbent_challenger_statuses.endpoint_funcs import (
     TABLE_NAME,
     get_all_func,
 )

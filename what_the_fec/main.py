@@ -5,11 +5,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from what_the_fec.dependencies import get_db_conn, get_templates, templates_init
-from what_the_fec.routes.amendment_indicators.routes import router as amendment_indicators_router
+from what_the_fec.routes.amendment_indicators.routes import (
+    router as amendment_indicators_router,
+)
 from what_the_fec.routes.candidate_office_records.routes import (
     router as candidate_office_records_router,
 )
 from what_the_fec.routes.candidates.routes import router as candidates_router
+from what_the_fec.routes.committees.routes import router as committee_types_router
 from what_the_fec.routes.committees.routes import router as committees_router
 from what_the_fec.routes.contributions.routes import router as contributions_router
 from what_the_fec.routes.contributor_types.routes import (
@@ -18,7 +21,15 @@ from what_the_fec.routes.contributor_types.routes import (
 from what_the_fec.routes.cycles.routes import router as cycles_router
 from what_the_fec.routes.election_years.routes import router as election_years_router
 from what_the_fec.routes.home.routes import router as home_router
+from what_the_fec.routes.incumbent_challenger_statuses.routes import (
+    router as incumbent_challenger_statuses_router,
+)
 from what_the_fec.routes.office_types.routes import router as office_types_router
+from what_the_fec.routes.party_types.routes import router as party_types_router
+from what_the_fec.routes.report_types.routes import router as report_types_router
+from what_the_fec.routes.transaction_types.routes import (
+    router as transaction_types_router,
+)
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
 
@@ -52,10 +63,15 @@ def create_app() -> FastAPI:
     app.include_router(candidates_router)
     app.include_router(candidate_office_records_router)
     app.include_router(committees_router)
+    app.include_router(committee_types_router)
     app.include_router(contributions_router)
     app.include_router(contributor_types_router)
     app.include_router(cycles_router)
     app.include_router(election_years_router)
+    app.include_router(incumbent_challenger_statuses_router)
     app.include_router(office_types_router)
+    app.include_router(party_types_router)
+    app.include_router(report_types_router)
+    app.include_router(transaction_types_router)
 
     return app
