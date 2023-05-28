@@ -1,39 +1,61 @@
 import os
-from datetime import date
-from typing import Annotated
 
-from fastapi import Depends, FastAPI, Form, Request
-from fastapi.responses import HTMLResponse
+from fastapi import Depends, FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from sqlalchemy import Connection
-from sqlalchemy.sql import text
 
-from what_the_fec.api.candidate_office_records import (
-    delete_single_candidate_office_records_func,
-    delete_single_candidate_office_records_page_func,
-    edit_single_candidate_office_records_page_func,
-    get_all_candidate_office_records_func,
-    post_single_candidate_office_records_func,
-    update_single_candidate_office_records_func,
+from what_the_fec.dependencies import get_db_conn, get_templates, templates_init
+from what_the_fec.routes.amendment_indicators.routes import (
+    router as amendment_indicators_router,
 )
-from what_the_fec.api.election_years import (
-    get_all_election_years_func,
+from what_the_fec.routes.candidate_office_records.routes import (
+    router as candidate_office_records_router,
 )
-from what_the_fec.api.home import home_page_func
+from what_the_fec.routes.candidate_office_records_committees.routes import (
+    router as candidate_office_records_committees_router,
+)
+from what_the_fec.routes.candidate_office_records_contributions.routes import (
+    router as candidate_office_records_contributions_router,
+)
+from what_the_fec.routes.candidates.routes import router as candidates_router
+from what_the_fec.routes.committee_types.routes import router as committee_types_router
+from what_the_fec.routes.committees.routes import router as committees_router
+from what_the_fec.routes.contributions.routes import router as contributions_router
+from what_the_fec.routes.contributor_types.routes import (
+    router as contributor_types_router,
+)
+from what_the_fec.routes.cycles.routes import router as cycles_router
+from what_the_fec.routes.cycles_candidate_office_records.routes import (
+    router as cycles_candidate_office_records_router,
+)
+from what_the_fec.routes.cycles_contributions.routes import (
+    router as cycles_contributions_router,
+)
+from what_the_fec.routes.election_years.routes import router as election_years_router
+from what_the_fec.routes.election_years_candidate_office_records.routes import (
+    router as election_years_candidate_office_records_router,
+)
+from what_the_fec.routes.election_years_contributions.routes import (
+    router as election_years_contributions_router,
+)
+from what_the_fec.routes.home.routes import router as home_router
+from what_the_fec.routes.incumbent_challenger_statuses.routes import (
+    router as incumbent_challenger_statuses_router,
+)
+from what_the_fec.routes.office_types.routes import router as office_types_router
+from what_the_fec.routes.party_types.routes import router as party_types_router
+from what_the_fec.routes.report_types.routes import router as report_types_router
+from what_the_fec.routes.transaction_types.routes import (
+    router as transaction_types_router,
+)
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
 
-# this doesnt feel great but works for today
-from what_the_fec.storage.mysql.db import get_db
-
 
 def create_app() -> FastAPI:
-    app = FastAPI()
-    app.mount(
-        "/static", StaticFiles(directory=os.environ["STATIC_DIR_PATH"]), name="static"
+    templates_init(
+        templates=Jinja2Templates(directory=os.environ["TEMPLATES_DIR_PATH"])
     )
-    templates = Jinja2Templates(directory=os.environ["TEMPLATES_DIR_PATH"])
 
     db_init(
         config=MySQLConfig(
@@ -45,133 +67,35 @@ def create_app() -> FastAPI:
             pool_connections=2,
         )
     )
-    db = get_db()
 
-    @app.get("/", response_class=HTMLResponse)
-    def home_page(request: Request):
-        return home_page_func(
-            request=request,
-            templates=templates,
-        )
-
-    # Citation for the following code:
-    # Date: 04/06/2023
-    # Copied from /OR/ Adapted from /OR/ Based on:
-    # FastAPI/SQLAlchemy documentation examples
-    @app.get("/candidate_office_records/", response_class=HTMLResponse)
-    def get_all_candidate_office_records(
-        request: Request, conn: Connection = Depends(db.get_conn)
-    ):
-        return get_all_candidate_office_records_func(
-            conn=conn, request=request, templates=templates
-        )
-
-    @app.get("/edit_candidate_office_records/{record_id}", response_class=HTMLResponse)
-    def edit_single_candidate_office_records_page(
-        request: Request, record_id, conn: Connection = Depends(db.get_conn)
-    ):
-        return edit_single_candidate_office_records_page_func(
-            conn=conn, request=request, templates=templates, record_id=record_id
-        )
-
-    @app.get(
-        "/delete_candidate_office_records/{record_id}", response_class=HTMLResponse
+    app = FastAPI(
+        dependencies=[Depends(get_db_conn), Depends(get_templates)],
     )
-    def delete_single_candidate_office_records_page(
-        request: Request, record_id, conn: Connection = Depends(db.get_conn)
-    ):
-        return delete_single_candidate_office_records_page_func(
-            conn=conn, request=request, templates=templates, record_id=record_id
-        )
+    app.mount(
+        "/static", StaticFiles(directory=os.environ["STATIC_DIR_PATH"]), name="static"
+    )
 
-    @app.post("/candidate_office_records/")
-    def post_single_candidate_office_records(
-        fec_cand_id: Annotated[str, Form()],
-        name: Annotated[str, Form()],
-        ttl_receipts: Annotated[float, Form()],
-        trans_from_auth: Annotated[float, Form()],
-        coh_bop: Annotated[float, Form()],
-        coh_cop: Annotated[float, Form()],
-        cand_contrib: Annotated[float, Form()],
-        cand_loans: Annotated[float, Form()],
-        other_loans: Annotated[float, Form()],
-        cand_loan_repay: Annotated[float, Form()],
-        other_loan_repay: Annotated[float, Form()],
-        debts_owed_by: Annotated[float, Form()],
-        ttl_indiv_contrib: Annotated[float, Form()],
-        cand_office_st: Annotated[str, Form()],
-        cand_office_district: Annotated[str, Form()],
-        pol_pty_contrib: Annotated[float, Form()],
-        cvg_end_dt: Annotated[date, Form()],
-        indiv_refund: Annotated[float, Form()],
-        cmte_refund: Annotated[float, Form()],
-        office_type: Annotated[str, Form()],
-        candidate_email: Annotated[str, Form()],
-        party_type: Annotated[str, Form()],
-        incumbent_challenger_status: Annotated[str, Form()],
-        conn: Connection = Depends(db.get_conn),
-    ):
-        return post_single_candidate_office_records_func(
-            conn=conn,
-            fec_cand_id=fec_cand_id,
-            name=name,
-            ttl_receipts=ttl_receipts,
-            trans_from_auth=trans_from_auth,
-            coh_bop=coh_bop,
-            coh_cop=coh_cop,
-            cand_contrib=cand_contrib,
-            cand_loans=cand_loans,
-            other_loans=other_loans,
-            cand_loan_repay=cand_loan_repay,
-            other_loan_repay=other_loan_repay,
-            debts_owed_by=debts_owed_by,
-            ttl_indiv_contrib=ttl_indiv_contrib,
-            cand_office_st=cand_office_st,
-            cand_office_district=cand_office_district,
-            pol_pty_contrib=pol_pty_contrib,
-            cvg_end_dt=cvg_end_dt,
-            indiv_refund=indiv_refund,
-            cmte_refund=cmte_refund,
-            office_type=office_type,
-            candidate_email=candidate_email,
-            party_type=party_type,
-            incumbent_challenger_status=incumbent_challenger_status,
-        )
+    app.include_router(home_router)
 
-    # This is gross.
-    # We are using forms everywhere so we get to choose between GET and POST.
-    # No other method options are available.
-    @app.post("/candidate_office_records/update/{record_id}")
-    def update_single_candidate_office_records(
-        record_id,
-        candidate_email: Annotated[str, Form()],
-        conn: Connection = Depends(db.get_conn),
-    ):
-        return update_single_candidate_office_records_func(
-            conn=conn,
-            record_id=record_id,
-            candidate_email=candidate_email,
-        )
-
-    # This is gross.
-    # We are using forms everywhere so we get to choose between GET and POST.
-    # No other method options are available.
-    @app.post("/candidate_office_records/delete/{record_id}")
-    def delete_single_candidate_office_records(
-        record_id,
-        conn: Connection = Depends(db.get_conn),
-    ):
-        return delete_single_candidate_office_records_func(
-            conn=conn,
-            record_id=record_id,
-        )
-    
-    @app.get("/election_years/", response_class=HTMLResponse)
-    def get_all_election_years(
-        request: Request, conn: Connection = Depends(db.get_conn)
-    ):
-        return get_all_election_years_func(
-            conn=conn, request=request, templates=templates
-        )
+    app.include_router(amendment_indicators_router)
+    app.include_router(candidates_router)
+    app.include_router(candidate_office_records_router)
+    app.include_router(candidate_office_records_committees_router)
+    app.include_router(candidate_office_records_contributions_router)
+    app.include_router(committees_router)
+    app.include_router(committee_types_router)
+    app.include_router(contributions_router)
+    app.include_router(contributor_types_router)
+    app.include_router(cycles_router)
+    app.include_router(cycles_candidate_office_records_router)
+    app.include_router(cycles_contributions_router)
+    app.include_router(election_years_router)
+    app.include_router(election_years_candidate_office_records_router)
+    app.include_router(election_years_contributions_router)
+    app.include_router(incumbent_challenger_statuses_router)
+    app.include_router(office_types_router)
+    app.include_router(party_types_router)
+    app.include_router(report_types_router)
+    app.include_router(transaction_types_router)
 
     return app

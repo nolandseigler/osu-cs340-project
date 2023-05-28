@@ -87,7 +87,7 @@ TABLES_INFORMATION = {
 
 def home_page_func(request: Request, templates: Jinja2Templates):
     return templates.TemplateResponse(
-        "home.j2",
+        "home/home.j2",
         {
             "request": request,
             "tables_information": TABLES_INFORMATION,

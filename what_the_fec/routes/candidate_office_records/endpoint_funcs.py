@@ -3,15 +3,13 @@ from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
 
-from what_the_fec.api.columns_information import (
+from what_the_fec.routes.helpers import (
+    get_columns_information_dict,
     get_columns_information_query,
-    get_columns_information_dict
 )
 
 
-def get_all_candidate_office_records_func(
-    conn: Connection, request: Request, templates: Jinja2Templates
-):
+def get_all(conn: Connection, request: Request, templates: Jinja2Templates):
     candidate_office_records_query = """
         SELECT
             `candidate_office_records`.id,
@@ -73,8 +71,12 @@ def get_all_candidate_office_records_func(
     incumbent_challenger_statuses = (
         conn.execute(text(incumbent_challenger_statuses_query)).mappings().all()
     )
-    columns_information_result = conn.execute(text(get_columns_information_query("candidate_office_records"))).mappings().all()
-    columns_information=get_columns_information_dict(columns_information_result)
+    columns_information_result = (
+        conn.execute(text(get_columns_information_query("candidate_office_records")))
+        .mappings()
+        .all()
+    )
+    columns_information = get_columns_information_dict(columns_information_result)
 
     dropdown_items_for_add = {
         "office_type": {
@@ -96,7 +98,7 @@ def get_all_candidate_office_records_func(
     }
 
     return templates.TemplateResponse(
-        "candidate_office_records.j2",
+        "candidate_office_records/read.j2",
         {
             "request": request,
             "items": candidate_office_records,
@@ -113,7 +115,7 @@ def get_all_candidate_office_records_func(
     )
 
 
-def edit_single_candidate_office_records_page_func(
+def update_single_candidate_office_records_page_func(
     conn: Connection, request: Request, templates: Jinja2Templates, record_id
 ):
     candidate_office_records_query = """
@@ -179,7 +181,7 @@ def edit_single_candidate_office_records_page_func(
     }
 
     return templates.TemplateResponse(
-        "edit_candidate_office_records.j2",
+        "candidate_office_records/update.j2",
         {
             "request": request,
             "items": candidate_office_records,
@@ -252,7 +254,7 @@ def delete_single_candidate_office_records_page_func(
     )
 
     return templates.TemplateResponse(
-        "delete_candidate_office_records.j2",
+        "candidate_office_records/delete.j2",
         {
             "request": request,
             "items": candidate_office_records,
@@ -267,7 +269,7 @@ def delete_single_candidate_office_records_page_func(
     )
 
 
-def post_single_candidate_office_records_func(
+def post_single(
     conn: Connection,
     fec_cand_id,
     name,
@@ -368,7 +370,7 @@ def post_single_candidate_office_records_func(
     )
 
 
-def update_single_candidate_office_records_func(
+def update_single(
     conn: Connection,
     record_id,
     candidate_email: str,
@@ -408,12 +410,12 @@ def update_single_candidate_office_records_func(
     conn.commit()
 
     return RedirectResponse(
-        f"/edit_candidate_office_records/{record_id}",
+        f"/candidate_office_records/update/{record_id}",
         status_code=status.HTTP_302_FOUND,
     )
 
 
-def delete_single_candidate_office_records_func(
+def delete_single(
     conn: Connection,
     record_id,
 ):
