@@ -15,9 +15,9 @@
                         {% if columns_information[col_name]["DATA_TYPE"] == "varchar" %}
                             {% set input_max_length = columns_information[col_name]["CHARACTER_MAXIMUM_LENGTH"] %}
                             {% if columns_information[col_name]["IS_NULLABLE"] == "YES" %}
-                                <input type="text" name="{{col_name}}" maxlength="{{input_max_length}}" value="{{input_default}}"><br>
+                                <input type="text" name="{{col_name}}" maxlength="{{input_max_length}}"><br>
                             {% else %}
-                                <input type="text" name="{{col_name}}" maxlength="{{input_max_length}}" value="{{input_default}}" required><br>
+                                <input type="text" name="{{col_name}}" maxlength="{{input_max_length}}" required><br>
                             {% endif %}
                             
                         {% elif columns_information[col_name]["DATA_TYPE"] == "decimal" %}

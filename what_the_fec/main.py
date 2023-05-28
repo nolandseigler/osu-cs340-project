@@ -38,6 +38,7 @@ from what_the_fec.routes.election_years_candidate_office_records.routes import (
 from what_the_fec.routes.election_years_contributions.routes import (
     router as election_years_contributions_router,
 )
+from what_the_fec.routes.error.routes import router as error_router
 from what_the_fec.routes.home.routes import router as home_router
 from what_the_fec.routes.incumbent_challenger_statuses.routes import (
     router as incumbent_challenger_statuses_router,
@@ -76,6 +77,7 @@ def create_app() -> FastAPI:
     )
 
     app.include_router(home_router)
+    app.include_router(error_router)
 
     app.include_router(amendment_indicators_router)
     app.include_router(candidates_router)
