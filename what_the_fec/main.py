@@ -18,7 +18,7 @@ from what_the_fec.routes.candidate_office_records_contributions.routes import (
     router as candidate_office_records_contributions_router,
 )
 from what_the_fec.routes.candidates.routes import router as candidates_router
-from what_the_fec.routes.committees.routes import router as committee_types_router
+from what_the_fec.routes.committee_types.routes import router as committee_types_router
 from what_the_fec.routes.committees.routes import router as committees_router
 from what_the_fec.routes.contributions.routes import router as contributions_router
 from what_the_fec.routes.contributor_types.routes import (
