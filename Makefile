@@ -16,7 +16,7 @@ export
 # NOTE: don't run this locally with that 0.0.0.0 bind
 run:
 	poetry run gunicorn "what_the_fec.main:create_app()" --workers 4 --worker-class uvicorn.workers.UvicornWorker \
-	--bind 0.0.0.0:8675 --caputure-output \
+	--bind 0.0.0.0:8675 --capture-output \
 	--access-logfile ${WEB_SERVER_ACCESS_LOGFILE} --error-logfile ${WEB_SERVER_ERROR_LOGFILE} \
 	-D
 
