@@ -1,18 +1,15 @@
-from fastapi import Request, status
-from fastapi.responses import RedirectResponse
+from fastapi import Request
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
 
-from what_the_fec.routes.helpers import (
-    get_columns_information_dict,
-    get_columns_information_query,
-)
+from what_the_fec.routes.helpers import generic_render_table
 
+TABLE_NAME = "contributions"
 
-def get_all(conn: Connection, request: Request, templates: Jinja2Templates):
-    contributions_query = """
+def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates):
+    contributions_query = f"""
         SELECT 
-            `contributions`.id,
+            `{TABLE_NAME}`.id,
             transaction_pgi,
             image_num,
             transaction_dt,
@@ -27,17 +24,17 @@ def get_all(conn: Connection, request: Request, templates: Jinja2Templates):
             `transaction_types`.name as transaction_type,
             `amendment_indicators`.name as amendment_indicator,
             `contributor_types`.name as contributor_type
-        FROM `contributions`
+        FROM `{TABLE_NAME}`
             INNER JOIN `committees` 
-                ON `contributions`.committees_id = `committees`.id
+                ON `{TABLE_NAME}`.committees_id = `committees`.id
             INNER JOIN `report_types` 
-                ON `contributions`.report_types_id = `report_types`.id
+                ON `{TABLE_NAME}`.report_types_id = `report_types`.id
             INNER JOIN `transaction_types` 
-                ON `contributions`.transaction_types_id = `transaction_types`.id
+                ON `{TABLE_NAME}`.transaction_types_id = `transaction_types`.id
             INNER JOIN `amendment_indicators` 
-                ON `contributions`.amendment_indicators_id = `amendment_indicators`.id
+                ON `{TABLE_NAME}`.amendment_indicators_id = `amendment_indicators`.id
             INNER JOIN `contributor_types` 
-                ON `contributions`.contributor_types_id = `contributor_types`.id;
+                ON `{TABLE_NAME}`.contributor_types_id = `contributor_types`.id;
     """
 
     committees_query = "SELECT id, name FROM committees"
@@ -55,9 +52,6 @@ def get_all(conn: Connection, request: Request, templates: Jinja2Templates):
     # Date: 05/20/2023
     # Copied from /OR/ Adapted from /OR/ Based on:
     # https://stackoverflow.com/a/58660606
-    contributions = (
-        conn.execute(text(contributions_query)).mappings().all()
-    )
     committees = conn.execute(text(committees_query)).mappings().all()
     report_types = conn.execute(text(report_types_query)).mappings().all()
     transaction_types = conn.execute(text(transaction_types_query)).mappings().all()
@@ -67,12 +61,7 @@ def get_all(conn: Connection, request: Request, templates: Jinja2Templates):
     contributor_types = (
         conn.execute(text(contributor_types_query)).mappings().all()
     )
-    columns_information_result = (
-        conn.execute(text(get_columns_information_query("contributions")))
-        .mappings()
-        .all()
-    )
-    columns_information = get_columns_information_dict(columns_information_result)
+
 
     dropdown_items_for_add = {
         "committee": {
@@ -97,20 +86,18 @@ def get_all(conn: Connection, request: Request, templates: Jinja2Templates):
         },
     }
 
-    return templates.TemplateResponse(
-        "contributions/read.j2",
-        {
-            "request": request,
-            "items": contributions,
-            "table_name": "contributions",
-            "dropdown_keys": [
-                "committee",
-                "report_type",
-                "transaction_type",
-                "amendment_indicator",
-                "contributor_type",
-            ],
-            "dropdown_items_for_add": dropdown_items_for_add,
-            "columns_information": columns_information,
-        },
+    return generic_render_table(
+        conn=conn,
+        query=contributions_query,
+        request=request,
+        table_name=TABLE_NAME,
+        templates=templates,
+        dropdown_keys=[
+            "committee",
+            "report_type",
+            "transaction_type",
+            "amendment_indicator",
+            "contributor_type",
+        ],
+        dropdown_items_for_add=dropdown_items_for_add,
     )

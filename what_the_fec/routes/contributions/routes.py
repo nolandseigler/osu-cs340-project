@@ -6,7 +6,7 @@ from fastapi.responses import HTMLResponse
 
 
 from what_the_fec.routes.contributions.endpoint_funcs import (
-    get_all
+    get_all_func
 )
 
 router = APIRouter(
@@ -22,7 +22,7 @@ router = APIRouter(
 # FastAPI/SQLAlchemy documentation examples
 @router.get("/", response_class=HTMLResponse)
 def get_all_contributions(request: Request):
-    return get_all(
+    return get_all_func(
         conn=next(request.db_conn),
         request=request,
         templates=request.templates,
