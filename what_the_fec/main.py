@@ -1,10 +1,12 @@
 import os
+import structlog
 
-from fastapi import Depends, FastAPI
+from fastapi import Depends, FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
 from what_the_fec.dependencies import get_db_conn, get_templates, templates_init
+from what_the_fec.logging import logging_init
 from what_the_fec.routes.amendment_indicators.routes import (
     router as amendment_indicators_router,
 )
@@ -51,12 +53,17 @@ from what_the_fec.routes.transaction_types.routes import (
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
 
+logging_init()
+logger = structlog.get_logger(__name__)
+
 
 def create_app() -> FastAPI:
+    logger.info("begin application creation")
     templates_init(
         templates=Jinja2Templates(directory=os.environ["TEMPLATES_DIR_PATH"])
     )
 
+    logger.debug("initializing db")
     db_init(
         config=MySQLConfig(
             db_user=os.environ["MARIA_DB_USER"],
@@ -71,10 +78,12 @@ def create_app() -> FastAPI:
     app = FastAPI(
         dependencies=[Depends(get_db_conn), Depends(get_templates)],
     )
+    logger.debug("mounting static")
     app.mount(
         "/static", StaticFiles(directory=os.environ["STATIC_DIR_PATH"]), name="static"
     )
 
+    logger.debug("including routers")
     app.include_router(home_router)
 
     app.include_router(amendment_indicators_router)
@@ -98,4 +107,5 @@ def create_app() -> FastAPI:
     app.include_router(report_types_router)
     app.include_router(transaction_types_router)
 
+    logger.info("completed application creation")
     return app
