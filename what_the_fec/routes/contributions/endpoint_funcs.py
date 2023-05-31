@@ -7,7 +7,7 @@ from what_the_fec.routes.helpers import generic_render_table
 TABLE_NAME = "contributions"
 
 def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates):
-    contributions_query = f"""
+    query = f"""
         SELECT 
             `{TABLE_NAME}`.id,
             transaction_pgi,
@@ -88,7 +88,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
 
     return generic_render_table(
         conn=conn,
-        query=contributions_query,
+        query=query,
         request=request,
         table_name=TABLE_NAME,
         templates=templates,

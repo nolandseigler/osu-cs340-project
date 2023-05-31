@@ -8,7 +8,7 @@ TABLE_NAME = "committees"
 
 
 def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates):
-    committees_query = f"""
+    query = f"""
         SELECT 
             `{TABLE_NAME}`.id,
             cmte_id,
@@ -35,7 +35,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
 
     return generic_render_table(
         conn=conn,
-        query=committees_query,
+        query=query,
         request=request,
         table_name=TABLE_NAME,
         templates=templates,
