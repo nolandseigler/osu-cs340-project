@@ -1,17 +1,14 @@
-from datetime import date
-from typing import Annotated
-
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse
 
 
 from what_the_fec.routes.contributions.endpoint_funcs import (
-    get_all_func
+    get_all_func, TABLE_NAME
 )
 
 router = APIRouter(
-    prefix="/contributions",
-    tags=["contributions"],
+    prefix=f"/{TABLE_NAME}",
+    tags=[f"{TABLE_NAME}"],
     responses={404: {"description": "Not found"}},
 )
 
@@ -21,7 +18,7 @@ router = APIRouter(
 # Copied from /OR/ Adapted from /OR/ Based on:
 # FastAPI/SQLAlchemy documentation examples
 @router.get("/", response_class=HTMLResponse)
-def get_all_contributions(request: Request):
+def get_all(request: Request):
     return get_all_func(
         conn=next(request.db_conn),
         request=request,
