@@ -12,7 +12,7 @@
                             {% set input_default = "" %}
                         {% endif %}
 
-                        {% if columns_information[col_name]["DATA_TYPE"] == "varchar" %}
+                        {% if columns_information[col_name]["DATA_TYPE"] == "varchar" or columns_information[col_name]["DATA_TYPE"] == "text" %}
                             {% set input_max_length = columns_information[col_name]["CHARACTER_MAXIMUM_LENGTH"] %}
                             {% if columns_information[col_name]["IS_NULLABLE"] == "YES" %}
                                 <input type="text" name="{{col_name}}" maxlength="{{input_max_length}}"><br>
