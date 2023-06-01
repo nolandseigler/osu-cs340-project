@@ -49,9 +49,12 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
     cycles_dropdown_selections_query = "SELECT * FROM `cycles`"
     contributions_dropdown_selections_query = "SELECT id FROM `contributions`"
 
-    cycles_dropdown_selections = conn.execute(text(cycles_dropdown_selections_query)).mappings().all()
-    contributions_dropdown_selections = conn.execute(text(contributions_dropdown_selections_query)).mappings().all()
-
+    cycles_dropdown_selections = (
+        conn.execute(text(cycles_dropdown_selections_query)).mappings().all()
+    )
+    contributions_dropdown_selections = (
+        conn.execute(text(contributions_dropdown_selections_query)).mappings().all()
+    )
 
     dropdown_items_for_add = {
         "cycles_year": {
@@ -75,6 +78,5 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         entity_2_table_name="contributions",
         entity_2_query=contributions_query,
         dropdown_keys=dropdown_items_for_add.keys(),
-        dropdown_items_for_add = dropdown_items_for_add
-
+        dropdown_items_for_add=dropdown_items_for_add,
     )

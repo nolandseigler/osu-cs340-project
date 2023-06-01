@@ -80,10 +80,18 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
     """
 
     contributions_dropdown_selections_query = "SELECT id FROM `contributions`"
-    candidate_office_records_dropdown_selections_query = "SELECT id FROM `candidate_office_records`"
+    candidate_office_records_dropdown_selections_query = (
+        "SELECT id FROM `candidate_office_records`"
+    )
 
-    contributions_dropdown_selections = conn.execute(text(contributions_dropdown_selections_query)).mappings().all()
-    candidate_office_records_dropdown_selections = conn.execute(text(candidate_office_records_dropdown_selections_query)).mappings().all()
+    contributions_dropdown_selections = (
+        conn.execute(text(contributions_dropdown_selections_query)).mappings().all()
+    )
+    candidate_office_records_dropdown_selections = (
+        conn.execute(text(candidate_office_records_dropdown_selections_query))
+        .mappings()
+        .all()
+    )
 
     dropdown_items_for_add = {
         "contributions_id": {
@@ -96,7 +104,6 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         },
     }
 
-
     return intersection_render_table(
         conn=conn,
         query=query,
@@ -108,6 +115,5 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         entity_2_table_name="candidate_office_records",
         entity_2_query=candidate_office_records_query,
         dropdown_keys=dropdown_items_for_add.keys(),
-        dropdown_items_for_add = dropdown_items_for_add
-
+        dropdown_items_for_add=dropdown_items_for_add,
     )

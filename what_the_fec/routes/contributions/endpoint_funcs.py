@@ -6,6 +6,7 @@ from what_the_fec.routes.helpers import generic_render_table
 
 TABLE_NAME = "contributions"
 
+
 def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates):
     query = f"""
         SELECT 
@@ -58,10 +59,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
     amendment_indicators = (
         conn.execute(text(amendment_indicators_query)).mappings().all()
     )
-    contributor_types = (
-        conn.execute(text(contributor_types_query)).mappings().all()
-    )
-
+    contributor_types = conn.execute(text(contributor_types_query)).mappings().all()
 
     dropdown_items_for_add = {
         "committee": {

@@ -1,6 +1,6 @@
 import os
-import structlog
 
+import structlog
 from fastapi import Depends, FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates

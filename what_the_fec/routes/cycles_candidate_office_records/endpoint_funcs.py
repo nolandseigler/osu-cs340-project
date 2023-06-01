@@ -54,12 +54,18 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
     """
 
     cycles_dropdown_selections_query = "SELECT * FROM `cycles`"
-    candidate_office_records_dropdown_selections_query = "SELECT id FROM `candidate_office_records`"
+    candidate_office_records_dropdown_selections_query = (
+        "SELECT id FROM `candidate_office_records`"
+    )
 
-
-    cycles_dropdown_selections = conn.execute(text(cycles_dropdown_selections_query)).mappings().all()
-    candidate_office_records_dropdown_selections = conn.execute(text(candidate_office_records_dropdown_selections_query)).mappings().all()
-
+    cycles_dropdown_selections = (
+        conn.execute(text(cycles_dropdown_selections_query)).mappings().all()
+    )
+    candidate_office_records_dropdown_selections = (
+        conn.execute(text(candidate_office_records_dropdown_selections_query))
+        .mappings()
+        .all()
+    )
 
     dropdown_items_for_add = {
         "cycles_year": {
@@ -83,6 +89,5 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         entity_2_table_name="candidate_office_records",
         entity_2_query=candidate_office_records_query,
         dropdown_keys=dropdown_items_for_add.keys(),
-        dropdown_items_for_add = dropdown_items_for_add
-
+        dropdown_items_for_add=dropdown_items_for_add,
     )

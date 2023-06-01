@@ -5,12 +5,13 @@ from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
 
 from what_the_fec.routes.candidate_office_records.endpoint_funcs import (
-    delete_single,
-    delete_single_candidate_office_records_page_func,
-    get_all,
-    post_single,
-    update_single,
-    update_single_candidate_office_records_page_func,
+    TABLE_NAME,
+    create_single_func,
+    delete_single_func,
+    delete_single_page_func,
+    get_all_func,
+    update_single_func,
+    update_single_page_func,
 )
 
 STR_FORM_FIELD = Annotated[str, Form()]
@@ -18,8 +19,8 @@ FLOAT_FORM_FIELD = Annotated[float, Form()]
 DATE_FORM_FIELD = Annotated[date, Form()]
 
 router = APIRouter(
-    prefix="/candidate_office_records",
-    tags=["candidate_office_records"],
+    prefix=f"/{TABLE_NAME}",
+    tags=[f"{TABLE_NAME}"],
     responses={404: {"description": "Not found"}},
 )
 
@@ -30,7 +31,7 @@ router = APIRouter(
 # FastAPI/SQLAlchemy documentation examples
 @router.get("/", response_class=HTMLResponse)
 def get_all_candidate_office_records(request: Request):
-    return get_all(
+    return get_all_func(
         conn=next(request.db_conn),
         request=request,
         templates=request.templates,
@@ -38,7 +39,7 @@ def get_all_candidate_office_records(request: Request):
 
 
 @router.post("/")
-def post_single_candidate_office_records(
+def create_single(
     request: Request,
     fec_cand_id: STR_FORM_FIELD,
     name: STR_FORM_FIELD,
@@ -64,7 +65,7 @@ def post_single_candidate_office_records(
     party_type: STR_FORM_FIELD,
     incumbent_challenger_status: STR_FORM_FIELD,
 ):
-    return post_single(
+    return create_single_func(
         conn=next(request.db_conn),
         fec_cand_id=fec_cand_id,
         name=name,
@@ -93,11 +94,11 @@ def post_single_candidate_office_records(
 
 
 @router.get("/update/{record_id}", response_class=HTMLResponse)
-def update_single_candidate_office_records_page(
+def update_single_page(
     request: Request,
     record_id,
 ):
-    return update_single_candidate_office_records_page_func(
+    return update_single_page_func(
         conn=next(request.db_conn),
         request=request,
         templates=request.templates,
@@ -106,12 +107,12 @@ def update_single_candidate_office_records_page(
 
 
 @router.post("/update/{record_id}")
-def update_single_candidate_office_records(
+def update_single(
     request: Request,
     record_id,
     candidate_email: STR_FORM_FIELD,
 ):
-    return update_single(
+    return update_single_func(
         conn=next(request.db_conn),
         record_id=record_id,
         candidate_email=candidate_email,
@@ -119,11 +120,11 @@ def update_single_candidate_office_records(
 
 
 @router.get("/delete/{record_id}", response_class=HTMLResponse)
-def delete_single_candidate_office_records_page(
+def delete_single_page(
     request: Request,
     record_id,
 ):
-    return delete_single_candidate_office_records_page_func(
+    return delete_single_page_func(
         conn=next(request.db_conn),
         request=request,
         templates=request.templates,
@@ -132,11 +133,11 @@ def delete_single_candidate_office_records_page(
 
 
 @router.post("/delete/{record_id}")
-def delete_single_candidate_office_records(
+def delete_single(
     request: Request,
     record_id,
 ):
-    return delete_single(
+    return delete_single_func(
         conn=next(request.db_conn),
         record_id=record_id,
     )

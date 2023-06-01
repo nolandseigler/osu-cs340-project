@@ -49,8 +49,12 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
     election_years_dropdown_selections_query = "SELECT * FROM `election_years`"
     contributions_dropdown_selections_query = "SELECT id FROM `contributions`"
 
-    election_years_dropdown_selections = conn.execute(text(election_years_dropdown_selections_query)).mappings().all()
-    contributions_dropdown_selections = conn.execute(text(contributions_dropdown_selections_query)).mappings().all()
+    election_years_dropdown_selections = (
+        conn.execute(text(election_years_dropdown_selections_query)).mappings().all()
+    )
+    contributions_dropdown_selections = (
+        conn.execute(text(contributions_dropdown_selections_query)).mappings().all()
+    )
 
     dropdown_items_for_add = {
         "election_years_year": {
@@ -63,7 +67,6 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         },
     }
 
-
     return intersection_render_table(
         conn=conn,
         query=query,
@@ -75,6 +78,5 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         entity_2_table_name="contributions",
         entity_2_query=contributions_query,
         dropdown_keys=dropdown_items_for_add.keys(),
-        dropdown_items_for_add = dropdown_items_for_add
-
+        dropdown_items_for_add=dropdown_items_for_add,
     )
