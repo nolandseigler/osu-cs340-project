@@ -33,7 +33,7 @@
 
 <p>&nbsp;</p>
 <div id="edit" style="display: block">
-    <form id="edit{{table_name}}" action="/{{table_name}}/update/{{items[0].id}}" method="post">
+    <form id="edit{{table_name}}" action="/{{table_name}}/update/{{items[0].id}}/" method="post">
         <fieldset class="fields">
             <legend><strong>Edit item in {{table_name}}</strong></legend>
             <label> candidate_email </label>
@@ -47,7 +47,7 @@
             </select>
         </fieldset>
     <input type="submit" form="edit{{table_name}}" value="Edit" name="{{table_name}}/update" class="btn btn-primary" style="margin:.5rem;">
-    <a href="/{{table_name}}"><input class="btn" type="button" value="Cancel"></a> 
+    <a href="/{{table_name}}/"><input class="btn" type="button" value="Cancel"></a> 
   </form> 
 </div><!-- update -->
 

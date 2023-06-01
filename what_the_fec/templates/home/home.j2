@@ -29,7 +29,7 @@
                 {% for entry in tables_information %}
                     {% if tables_information[entry]["type"] == "entity" %}
                         <li>
-                            <a href="/{{entry}}">{{entry}}</a>
+                            <a href="/{{entry}}/">{{entry}}</a>
                             <ul>
                                 <li>{{tables_information[entry]["description"]}}</li>
                             </ul>
@@ -45,7 +45,7 @@
                 {% for entry in tables_information %}
                     {% if tables_information[entry]["type"] == "intersection" %}
                         <li>
-                            <a href="/{{entry}}">{{entry}}</a>
+                            <a href="/{{entry}}/">{{entry}}</a>
                             <ul>
                                 <li>{{tables_information[entry]["description"]}}</li>
                             </ul>
@@ -61,7 +61,7 @@
                 {% for entry in tables_information %}
                     {% if tables_information[entry]["type"] == "category" %}
                         <li>
-                            <a href="/{{entry}}">{{entry}}</a>
+                            <a href="/{{entry}}/">{{entry}}</a>
                             <ul>
                                 <li>{{tables_information[entry]["description"]}}</li>
                             </ul>

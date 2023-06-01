@@ -1,5 +1,5 @@
 <div id="insert" style="display: block">
-    <form id="insert_{{table_name}}" action="/{{table_name}}" method="post">
+    <form id="insert_{{table_name}}" action="/{{table_name}}/" method="post">
             <fieldset>
                 <legend><strong>Add item to {{table_name}}</strong></legend>
 
@@ -76,6 +76,6 @@
                 {% endfor %}
             </fieldset>
             <input type="submit" form="insert_{{table_name}}" value="Add" name="add_{{table_name}}" class="btn btn-primary" style="margin:.5rem;">
-            <a href="/{{table_name}}"><input class="btn" type="button" value="Cancel"></a> 
+            <a href="/{{table_name}}/"><input class="btn" type="button" value="Cancel"></a> 
 	</form> <!--add new item to items
 </div>insert -->
