@@ -254,7 +254,7 @@ INSERT INTO `committees` (
     :city_input,
     :state_input,
     :zip_code_input,
-    (SELECT id FROM `committee_types` WHERE code = :committee_types_code_input)
+    (SELECT id FROM `committee_types` WHERE name = :committee_types_name_input)
 );
 
 
