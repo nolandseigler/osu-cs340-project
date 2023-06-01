@@ -26,7 +26,7 @@ def create_single_func(
     name,
 ):
     insert_query = f"""
-        INSERT INTO `amendment_indicators` (code, name)
+        INSERT INTO `{TABLE_NAME}` (code, name)
         VALUES
         (:code, :name)
     """

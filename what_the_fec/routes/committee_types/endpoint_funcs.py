@@ -27,7 +27,7 @@ def create_single_func(
     explanation,
 ):
     insert_query = f"""
-        INSERT INTO `committee_types` (code, name, explanation)
+        INSERT INTO `{TABLE_NAME}` (code, name, explanation)
         VALUES
             (:code, :name, :explanation)
     """
