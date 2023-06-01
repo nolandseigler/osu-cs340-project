@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
 
-from what_the_fec.routes.committees.endpoint_funcs import create_single_func
+from what_the_fec.routes.contributions.endpoint_funcs import create_single_func
 from what_the_fec.routes.contributions.endpoint_funcs import TABLE_NAME, get_all_func
 
 router = APIRouter(

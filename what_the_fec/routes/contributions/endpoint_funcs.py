@@ -39,7 +39,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
             INNER JOIN `amendment_indicators` 
                 ON `{TABLE_NAME}`.amendment_indicators_id = `amendment_indicators`.id
             INNER JOIN `contributor_types` 
-                ON `{TABLE_NAME}`.contributor_types_id = `contributor_types`.id;
+                ON `{TABLE_NAME}`.contributor_types_id = `contributor_types`.id
     """
 
     committees_query = "SELECT id, cmte_id FROM committees"
@@ -148,7 +148,7 @@ def create_single_func(
             (SELECT id FROM `report_types` WHERE name = :report_type),
             (SELECT id FROM `transaction_types` WHERE name = :transaction_type),
             (SELECT id FROM `amendment_indicators` WHERE name = :amendment_indicator),
-            (SELECT id FROM `contributor_types` WHERE name = :contributor_type);
+            (SELECT id FROM `contributor_types` WHERE name = :contributor_type)
         )
     """
 
