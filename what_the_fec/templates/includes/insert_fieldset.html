@@ -22,9 +22,9 @@
                             
                         {% elif columns_information[col_name]["DATA_TYPE"] == "decimal" %}
                             {% if columns_information[col_name]["IS_NULLABLE"] == "YES" %}
-                                <input type="number" name="{{col_name}}" step=".01" value="{{input_default}}"><br>
+                                <input type="number" name="{{col_name}}" value="{{input_default}}"><br>
                             {% else %}
-                                <input type="number" name="{{col_name}}" step=".01" value="{{input_default}}" required><br>
+                                <input type="number" name="{{col_name}}" value="{{input_default}}" required><br>
                             {% endif %}
 
                         {% elif columns_information[col_name]["DATA_TYPE"] == "date" %}

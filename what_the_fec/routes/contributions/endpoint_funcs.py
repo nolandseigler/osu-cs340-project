@@ -24,7 +24,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
             memo_cd,
             memo_text,
             sub_id,
-            `committees`.name as committee,
+            `committees`.cmte_id as cmte_id,
             `report_types`.name as report_type,
             `transaction_types`.name as transaction_type,
             `amendment_indicators`.name as amendment_indicator,
@@ -67,7 +67,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
     contributor_types = conn.execute(text(contributor_types_query)).mappings().all()
 
     dropdown_items_for_add = {
-        "committee": {  # it breaks if this is cmte_id
+        "cmte_id": {
             "data": committees,
             "relevant_column_name": "cmte_id",
         },
@@ -95,13 +95,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         request=request,
         table_name=TABLE_NAME,
         templates=templates,
-        dropdown_keys=[
-            "committee",  # it breaks if this is cmte_id
-            "report_type",
-            "transaction_type",
-            "amendment_indicator",
-            "contributor_type",
-        ],
+        dropdown_keys=dropdown_items_for_add.keys(),
         dropdown_items_for_add=dropdown_items_for_add,
     )
 
