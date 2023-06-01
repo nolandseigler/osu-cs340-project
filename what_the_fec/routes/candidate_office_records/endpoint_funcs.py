@@ -2,12 +2,13 @@ from fastapi import HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
+import structlog
 
 from what_the_fec.routes.helpers import (
     get_columns_information_dict,
     get_columns_information_query,
 )
-
+logger: structlog.types.FilteringBoundLogger = structlog.get_logger(__name__)
 TABLE_NAME = "candidate_office_records"
 
 
@@ -144,8 +145,10 @@ def create_single_func(
     incumbent_challenger_status,
 ):
     if candidate_email == "none":
+        logger.debug("no candidate email provided")
         candidates_id = None
     else:
+        logger.debug("candidate email provided")
         candidates_email_populator = (
             f"SELECT id FROM `candidates` WHERE email = :candidate_email"
         )
@@ -157,7 +160,7 @@ def create_single_func(
         # https://stackoverflow.com/a/58660606
         result = (
             conn.execute(
-                text(insert_query),
+                text(candidates_email_populator),
                 *bind_params,
             )
             .mappings()
