@@ -307,11 +307,11 @@ INSERT INTO `candidate_office_records_committees`(
     (
         (
             SELECT id FROM `candidate_office_records` 
-            WHERE fec_cand_id = :candidate_office_records_fec_cand_id_input_from_dropdown
+            WHERE id = :candidate_office_records_id
         ),
         (
             SELECT id FROM `committees` 
-            WHERE cmte_id = :committees_cmte_id_input_from_dropdown
+            WHERE id = :committees_id
         )
     );
 
@@ -322,11 +322,11 @@ INSERT INTO `candidate_office_records_contributions`(
     (
         (
             SELECT id FROM `candidate_office_records` 
-            WHERE fec_cand_id = :candidate_office_records_fec_cand_id_input_from_dropdown
+            WHERE id = :candidate_office_records_id
         ),
         (
             SELECT id FROM `contributions` 
-            WHERE sub_id = :contributions_sub_id_input_from_dropdown
+            WHERE id = :contributions_id
         )
     );
 
