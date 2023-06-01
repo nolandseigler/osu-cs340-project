@@ -1,4 +1,5 @@
 from typing import Annotated
+
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
 
@@ -16,6 +17,7 @@ router = APIRouter(
 
 STR_FORM_FIELD = Annotated[str, Form()]
 
+
 @router.get("/", response_class=HTMLResponse)
 def get_all(request: Request):
     return get_all_func(
@@ -23,6 +25,7 @@ def get_all(request: Request):
         request=request,
         templates=request.templates,
     )
+
 
 @router.post("/")
 def create_single(

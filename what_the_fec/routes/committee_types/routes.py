@@ -1,8 +1,13 @@
 from typing import Annotated
+
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
 
-from what_the_fec.routes.committee_types.endpoint_funcs import TABLE_NAME, create_single_func, get_all_func
+from what_the_fec.routes.committee_types.endpoint_funcs import (
+    TABLE_NAME,
+    create_single_func,
+    get_all_func,
+)
 
 router = APIRouter(
     prefix=f"/{TABLE_NAME}",
@@ -12,6 +17,7 @@ router = APIRouter(
 
 STR_FORM_FIELD = Annotated[str, Form()]
 
+
 @router.get("/", response_class=HTMLResponse)
 def get_all(request: Request):
     return get_all_func(
@@ -19,6 +25,7 @@ def get_all(request: Request):
         request=request,
         templates=request.templates,
     )
+
 
 @router.post("/")
 def create_single(

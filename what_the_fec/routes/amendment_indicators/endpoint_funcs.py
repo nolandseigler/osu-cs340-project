@@ -20,6 +20,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         templates=templates,
     )
 
+
 def create_single_func(
     conn: Connection,
     code,
@@ -53,4 +54,3 @@ def create_single_func(
         f"/{TABLE_NAME}/",
         status_code=status.HTTP_302_FOUND,
     )
-

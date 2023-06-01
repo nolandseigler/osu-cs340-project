@@ -17,6 +17,7 @@ router = APIRouter(
 
 STR_FORM_FIELD = Annotated[str, Form()]
 
+
 @router.get("/", response_class=HTMLResponse)
 def get_all(request: Request):
     return get_all_func(
