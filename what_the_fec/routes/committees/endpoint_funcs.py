@@ -1,4 +1,4 @@
-from fastapi import HTTPException, Request, status
+from fastapi import Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text

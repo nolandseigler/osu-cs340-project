@@ -26,6 +26,8 @@ def get_columns_information_dict(columns_information_list):
             "COLUMN_DEFAULT": entry["COLUMN_DEFAULT"],
             "IS_NULLABLE": entry["IS_NULLABLE"],
         }
+    print(columns_information_dict)
+    print(columns_information_dict)
     return columns_information_dict
 
 
