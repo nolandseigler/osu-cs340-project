@@ -1,13 +1,14 @@
+import structlog
 from fastapi import HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
-import structlog
 
 from what_the_fec.routes.helpers import (
     get_columns_information_dict,
     get_columns_information_query,
 )
+
 logger: structlog.types.FilteringBoundLogger = structlog.get_logger(__name__)
 TABLE_NAME = "candidate_office_records"
 
@@ -75,7 +76,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         conn.execute(text(incumbent_challenger_statuses_query)).mappings().all()
     )
     columns_information_result = (
-        conn.execute(text(get_columns_information_query("candidate_office_records")))
+        conn.execute(text(get_columns_information_query(table_name=TABLE_NAME)))
         .mappings()
         .all()
     )
@@ -101,11 +102,11 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
     }
 
     return templates.TemplateResponse(
-        "candidate_office_records/read.j2",
+        f"{TABLE_NAME}/read.j2",
         {
             "request": request,
             "items": candidate_office_records,
-            "table_name": "candidate_office_records",
+            "table_name": TABLE_NAME,
             "dropdown_keys": [
                 "office_type",
                 "candidate_email",
@@ -266,7 +267,7 @@ def create_single_func(
     # Copied from /OR/ Adapted from /OR/ Based on:
     # https://stackoverflow.com/a/73088816
     return RedirectResponse(
-        "/candidate_office_records",
+        f"/{TABLE_NAME}/",
         status_code=status.HTTP_302_FOUND,
     )
 
@@ -337,11 +338,11 @@ def update_single_page_func(
     }
 
     return templates.TemplateResponse(
-        "candidate_office_records/update.j2",
+        f"{TABLE_NAME}/update.j2",
         {
             "request": request,
             "items": candidate_office_records,
-            "table_name": "candidate_office_records",
+            "table_name": TABLE_NAME,
             "dropdown_keys": [
                 "office_type",
                 "candidate_email",
@@ -393,7 +394,7 @@ def update_single_func(
     conn.commit()
 
     return RedirectResponse(
-        f"/candidate_office_records/update/{record_id}",
+        f"/{TABLE_NAME}/update/{record_id}/",
         status_code=status.HTTP_302_FOUND,
     )
 
@@ -455,11 +456,11 @@ def delete_single_page_func(
     )
 
     return templates.TemplateResponse(
-        "candidate_office_records/delete.j2",
+        f"{TABLE_NAME}/delete.j2",
         {
             "request": request,
             "items": candidate_office_records,
-            "table_name": "candidate_office_records",
+            "table_name": TABLE_NAME,
             "dropdown_keys": [
                 "office_type",
                 "candidate_email",
@@ -488,6 +489,6 @@ def delete_single_func(
     conn.commit()
 
     return RedirectResponse(
-        "/candidate_office_records",
+        f"/{TABLE_NAME}/",
         status_code=status.HTTP_302_FOUND,
     )
