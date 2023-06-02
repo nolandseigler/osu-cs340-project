@@ -338,11 +338,11 @@ INSERT INTO `election_years_contributions`(
     (
         (
             SELECT year FROM `election_years` 
-            WHERE year = :election_years_year_input_from_drop_down
+            WHERE year = :election_years_year
         ),
         (
             SELECT id FROM `contributions` 
-            WHERE sub_id = :contributions_sub_id_input_from_dropdown
+            WHERE id = :contributions_id
         )
     );
 
@@ -354,11 +354,11 @@ INSERT INTO `cycles_contributions`(
     (
         (
             SELECT year FROM `cycles` 
-            WHERE year = :cycles_year_input_from_drop_down
+            WHERE year = :cycles_year
         ),
         (
             SELECT id FROM `contributions` 
-            WHERE sub_id = :contributions_sub_id_input_from_dropdown
+            WHERE id = :contributions_id
         )
     );
 
@@ -367,10 +367,10 @@ INSERT INTO `election_years_candidate_office_records`(
     candidate_office_records_id
 ) VALUES
     (
-        :election_years_year_input_from_drop_down
+        :election_years_year_input_from_drop_down,
         (
-            SELECT id FROM `candidate_office_records` 
-            WHERE fec_cand_id = :candidate_office_records_fec_cand_id_input_from_dropdown
+            SELECT id FROM `candidate_office_records`,
+            WHERE id = :candidate_office_records_id
         )
     );
 
@@ -380,10 +380,10 @@ INSERT INTO `cycles_candidate_office_records`(
     candidate_office_records_id
 ) VALUES
     (
-        :cycles_year_input_from_drop_down
+        :cycles_year,
         (
             SELECT id FROM `candidate_office_records` 
-            WHERE fec_cand_id = :candidate_office_records_fec_cand_id_input_from_dropdown
+            WHERE id = :candidate_office_records_id
         )
     );
 
