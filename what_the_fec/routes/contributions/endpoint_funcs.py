@@ -58,7 +58,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
     # Copied from /OR/ Adapted from /OR/ Based on:
     # https://stackoverflow.com/a/58660606
     committees = conn.execute(text(committees_query)).mappings().all()
-    print(committees)
+
     report_types = conn.execute(text(report_types_query)).mappings().all()
     transaction_types = conn.execute(text(transaction_types_query)).mappings().all()
     amendment_indicators = (
