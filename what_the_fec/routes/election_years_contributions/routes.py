@@ -8,11 +8,12 @@ from what_the_fec.routes.election_years_contributions.endpoint_funcs import (
     create_single_func,
     get_all_func,
 )
+from what_the_fec.routes.route import BaseRoute
 
 router = APIRouter(
     prefix=f"/{TABLE_NAME}",
     tags=[f"{TABLE_NAME}"],
-    responses={404: {"description": f"{TABLE_NAME} not found"}},
+    route_class=BaseRoute,
 )
 
 INT_FORM_FIELD = Annotated[int, Form()]

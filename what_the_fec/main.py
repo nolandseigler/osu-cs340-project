@@ -54,7 +54,7 @@ from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
 
 logging_init(log_level="DEBUG")
-logger = structlog.get_logger(__name__)
+logger: structlog.types.FilteringBoundLogger = structlog.get_logger(__name__)
 
 
 def create_app() -> FastAPI:

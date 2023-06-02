@@ -13,15 +13,14 @@ from what_the_fec.routes.candidate_office_records.endpoint_funcs import (
     update_single_func,
     update_single_page_func,
 )
+from what_the_fec.routes.route import BaseRoute
 
 STR_FORM_FIELD = Annotated[str, Form()]
 FLOAT_FORM_FIELD = Annotated[float, Form()]
 DATE_FORM_FIELD = Annotated[date, Form()]
 
 router = APIRouter(
-    prefix=f"/{TABLE_NAME}",
-    tags=[f"{TABLE_NAME}"],
-    responses={404: {"description": "Not found"}},
+    prefix=f"/{TABLE_NAME}", tags=[f"{TABLE_NAME}"], route_class=BaseRoute
 )
 
 

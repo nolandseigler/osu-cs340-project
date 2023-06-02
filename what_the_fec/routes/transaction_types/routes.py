@@ -3,6 +3,7 @@ from typing import Annotated
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
 
+from what_the_fec.routes.route import BaseRoute
 from what_the_fec.routes.transaction_types.endpoint_funcs import (
     TABLE_NAME,
     create_single_func,
@@ -12,7 +13,7 @@ from what_the_fec.routes.transaction_types.endpoint_funcs import (
 router = APIRouter(
     prefix=f"/{TABLE_NAME}",
     tags=[f"{TABLE_NAME}"],
-    responses={404: {"description": f"{TABLE_NAME} not found"}},
+    route_class=BaseRoute,
 )
 
 STR_FORM_FIELD = Annotated[str, Form()]
