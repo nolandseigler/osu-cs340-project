@@ -16,13 +16,15 @@
     {% endwith %}
     <p>&nbsp;</p>
 
-    {{entity_1_table_name}}
+    <h2 style="text-align: center;">Intersected Entities</h2>
+
+    <h3>{{entity_1_table_name}}</h3>
     {% with items=entity_1 %}
         {% include '/includes/read_table_only.html' %}
     {% endwith %}
     <p>&nbsp;</p>
 
-    {{entity_2_table_name}}
+    <h3>{{entity_2_table_name}}</h3>
     {% with items=entity_2 %}
         {% include '/includes/read_table_only.html' %}
     {% endwith %}
