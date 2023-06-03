@@ -1,4 +1,5 @@
-from fastapi import Request
+from fastapi import Request, status
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
 
@@ -54,10 +55,18 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
     """
 
     election_years_dropdown_selections_query = "SELECT * FROM `election_years`"
-    candidate_office_records_dropdown_selections_query = "SELECT id FROM `candidate_office_records`"
+    candidate_office_records_dropdown_selections_query = (
+        "SELECT id FROM `candidate_office_records`"
+    )
 
-    election_years_dropdown_selections = conn.execute(text(election_years_dropdown_selections_query)).mappings().all()
-    candidate_office_records_dropdown_selections = conn.execute(text(candidate_office_records_dropdown_selections_query)).mappings().all()
+    election_years_dropdown_selections = (
+        conn.execute(text(election_years_dropdown_selections_query)).mappings().all()
+    )
+    candidate_office_records_dropdown_selections = (
+        conn.execute(text(candidate_office_records_dropdown_selections_query))
+        .mappings()
+        .all()
+    )
 
     dropdown_items_for_add = {
         "election_years_year": {
@@ -81,6 +90,48 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         entity_2_table_name="candidate_office_records",
         entity_2_query=candidate_office_records_query,
         dropdown_keys=dropdown_items_for_add.keys(),
-        dropdown_items_for_add = dropdown_items_for_add
+        dropdown_items_for_add=dropdown_items_for_add,
+    )
 
+
+def create_single_func(
+    conn: Connection,
+    election_years_year,
+    candidate_office_records_id,
+):
+    insert_query = f"""
+        INSERT INTO `{TABLE_NAME}`(
+            election_years_year,
+            candidate_office_records_id
+        ) VALUES
+            (
+                :election_years_year,
+                (
+                    SELECT id FROM `candidate_office_records`
+                    WHERE id = :candidate_office_records_id
+                )
+            )
+    """
+
+    bind_params = [
+        dict(
+            election_years_year=election_years_year,
+            candidate_office_records_id=candidate_office_records_id,
+        )
+    ]
+    conn.execute(
+        text(insert_query),
+        *bind_params,
+    )
+    # we are in a transaction already due to pep idk one of them
+    conn.commit()
+
+    # NOTE: Redirect Path
+    # Citation for the following code:
+    # Date: 05/21/2023
+    # Copied from /OR/ Adapted from /OR/ Based on:
+    # https://stackoverflow.com/a/73088816
+    return RedirectResponse(
+        f"/{TABLE_NAME}/",
+        status_code=status.HTTP_302_FOUND,
     )

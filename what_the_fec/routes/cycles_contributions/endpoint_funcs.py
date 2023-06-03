@@ -1,4 +1,5 @@
-from fastapi import Request
+from fastapi import Request, status
+from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
 
@@ -49,9 +50,12 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
     cycles_dropdown_selections_query = "SELECT * FROM `cycles`"
     contributions_dropdown_selections_query = "SELECT id FROM `contributions`"
 
-    cycles_dropdown_selections = conn.execute(text(cycles_dropdown_selections_query)).mappings().all()
-    contributions_dropdown_selections = conn.execute(text(contributions_dropdown_selections_query)).mappings().all()
-
+    cycles_dropdown_selections = (
+        conn.execute(text(cycles_dropdown_selections_query)).mappings().all()
+    )
+    contributions_dropdown_selections = (
+        conn.execute(text(contributions_dropdown_selections_query)).mappings().all()
+    )
 
     dropdown_items_for_add = {
         "cycles_year": {
@@ -75,6 +79,51 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         entity_2_table_name="contributions",
         entity_2_query=contributions_query,
         dropdown_keys=dropdown_items_for_add.keys(),
-        dropdown_items_for_add = dropdown_items_for_add
+        dropdown_items_for_add=dropdown_items_for_add,
+    )
 
+
+def create_single_func(
+    conn: Connection,
+    cycles_year,
+    contributions_id,
+):
+    insert_query = f"""
+        INSERT INTO `{TABLE_NAME}`(
+            cycles_year,
+            contributions_id
+        ) VALUES
+            (
+                (
+                    SELECT year FROM `cycles` 
+                    WHERE year = :cycles_year
+                ),
+                (
+                    SELECT id FROM `contributions` 
+                    WHERE id = :contributions_id
+                )
+            )
+    """
+
+    bind_params = [
+        dict(
+            cycles_year=cycles_year,
+            contributions_id=contributions_id,
+        )
+    ]
+    conn.execute(
+        text(insert_query),
+        *bind_params,
+    )
+    # we are in a transaction already due to pep idk one of them
+    conn.commit()
+
+    # NOTE: Redirect Path
+    # Citation for the following code:
+    # Date: 05/21/2023
+    # Copied from /OR/ Adapted from /OR/ Based on:
+    # https://stackoverflow.com/a/73088816
+    return RedirectResponse(
+        f"/{TABLE_NAME}/",
+        status_code=status.HTTP_302_FOUND,
     )

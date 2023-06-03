@@ -8,20 +8,17 @@ import structlog
 # Copied from /OR/ Adapted from /OR/ Based on:
 # https://www.structlog.org/en/stable/standard-library.html#rendering-within-structlog
 
+
 # Just call this once at entrypoint
 def logging_init(log_level: str = "INFO"):
     if not isinstance(log_level, str):
         raise TypeError("invalid log level")
-    
+
     log_level = logging.getLevelName(level=log_level)
     if isinstance(log_level, str):
         raise ValueError("invalid log level")
-    
-    logging.basicConfig(
-        format="%(message)s",
-        stream=sys.stdout,
-        level=log_level
-    )
+
+    logging.basicConfig(format="%(message)s", stream=sys.stdout, level=log_level)
     structlog.configure(
         processors=[
             # If log level is too low, abort pipeline and throw away log entry.
@@ -52,7 +49,7 @@ def logging_init(log_level: str = "INFO"):
                 }
             ),
             # Render the final event dict as JSON.
-            structlog.processors.JSONRenderer()
+            structlog.processors.JSONRenderer(),
         ],
         # `wrapper_class` is the bound logger that you get back from
         # get_logger().

@@ -18,6 +18,7 @@ class MySQLDB:
         self._engine = create_engine(
             f"mysql+pymysql://{config.db_user}:{config.db_password}@{config.db_hostname}:{config.db_port}/{config.db_name}?charset=utf8mb4",
             pool_size=config.pool_connections,
+            pool_pre_ping=True,
         )
 
     def get_conn(self) -> Connection:

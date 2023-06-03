@@ -1,4 +1,5 @@
-from fastapi import Request, status
+import structlog
+from fastapi import HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
@@ -8,13 +9,16 @@ from what_the_fec.routes.helpers import (
     get_columns_information_query,
 )
 
+logger: structlog.types.FilteringBoundLogger = structlog.get_logger(__name__)
+TABLE_NAME = "candidate_office_records"
 
-def get_all(conn: Connection, request: Request, templates: Jinja2Templates):
-    candidate_office_records_query = """
+
+def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates):
+    candidate_office_records_query = f"""
         SELECT
-            `candidate_office_records`.id,
+            `{TABLE_NAME}`.id,
             fec_cand_id,
-            `candidate_office_records`.name,
+            `{TABLE_NAME}`.name,
             ttl_receipts,
             trans_from_auth,
             coh_bop,
@@ -36,15 +40,15 @@ def get_all(conn: Connection, request: Request, templates: Jinja2Templates):
             `candidates`.email as candidate_email,
             `party_types`.short_name as party_type,
             `incumbent_challenger_statuses`.name as incumbent_challenger_status
-        FROM `candidate_office_records`
+        FROM `{TABLE_NAME}`
             INNER JOIN `office_types` 
-                ON `candidate_office_records`.office_types_id = `office_types`.id
+                ON `{TABLE_NAME}`.office_types_id = `office_types`.id
             LEFT OUTER JOIN `candidates` 
-                ON `candidate_office_records`.candidates_id = `candidates`.id
+                ON `{TABLE_NAME}`.candidates_id = `candidates`.id
             INNER JOIN `party_types` 
-                ON `candidate_office_records`.party_types_id = `party_types`.id
+                ON `{TABLE_NAME}`.party_types_id = `party_types`.id
             INNER JOIN `incumbent_challenger_statuses` 
-                ON `candidate_office_records`.incumbent_challenger_statuses_id = `incumbent_challenger_statuses`.id
+                ON `{TABLE_NAME}`.incumbent_challenger_statuses_id = `incumbent_challenger_statuses`.id
     """
 
     office_types_query = "SELECT id, name FROM office_types"
@@ -72,7 +76,7 @@ def get_all(conn: Connection, request: Request, templates: Jinja2Templates):
         conn.execute(text(incumbent_challenger_statuses_query)).mappings().all()
     )
     columns_information_result = (
-        conn.execute(text(get_columns_information_query("candidate_office_records")))
+        conn.execute(text(get_columns_information_query(table_name=TABLE_NAME)))
         .mappings()
         .all()
     )
@@ -98,11 +102,11 @@ def get_all(conn: Connection, request: Request, templates: Jinja2Templates):
     }
 
     return templates.TemplateResponse(
-        "candidate_office_records/read.j2",
+        f"{TABLE_NAME}/read.j2",
         {
             "request": request,
             "items": candidate_office_records,
-            "table_name": "candidate_office_records",
+            "table_name": TABLE_NAME,
             "dropdown_keys": [
                 "office_type",
                 "candidate_email",
@@ -115,14 +119,167 @@ def get_all(conn: Connection, request: Request, templates: Jinja2Templates):
     )
 
 
-def update_single_candidate_office_records_page_func(
+def create_single_func(
+    conn: Connection,
+    fec_cand_id,
+    name,
+    ttl_receipts,
+    trans_from_auth,
+    coh_bop,
+    coh_cop,
+    cand_contrib,
+    cand_loans,
+    other_loans,
+    cand_loan_repay,
+    other_loan_repay,
+    debts_owed_by,
+    ttl_indiv_contrib,
+    cand_office_st,
+    cand_office_district,
+    pol_pty_contrib,
+    cvg_end_dt,
+    indiv_refund,
+    cmte_refund,
+    office_type,
+    candidate_email,
+    party_type,
+    incumbent_challenger_status,
+):
+    if candidate_email == "none":
+        logger.debug("no candidate email provided")
+        candidates_id = None
+    else:
+        logger.debug("candidate email provided")
+        candidates_email_populator = (
+            f"SELECT id FROM `candidates` WHERE email = :candidate_email"
+        )
+        bind_params = [dict(candidate_email=candidate_email)]
+        # had to dig this one up. its been a bit and this is never intuitive.
+        # Citation for the following code:
+        # Date: 05/20/2023
+        # Copied from /OR/ Adapted from /OR/ Based on:
+        # https://stackoverflow.com/a/58660606
+        result = (
+            conn.execute(
+                text(candidates_email_populator),
+                *bind_params,
+            )
+            .mappings()
+            .one_or_none()
+        )
+        if result is None:
+            raise HTTPException(
+                status_code=404,
+                detail=f"no candidates record for provided candidate email; candidate email: {candidate_email}",
+            )
+        candidates_id = result["id"]
+
+    insert_query = f"""
+        INSERT INTO `{TABLE_NAME}` (
+            fec_cand_id,
+            name,
+            ttl_receipts,
+            trans_from_auth,
+            coh_bop,
+            coh_cop,
+            cand_contrib,
+            cand_loans,
+            other_loans,
+            cand_loan_repay,
+            other_loan_repay,
+            debts_owed_by,
+            ttl_indiv_contrib,
+            cand_office_st,
+            cand_office_district,
+            pol_pty_contrib,
+            cvg_end_dt,
+            indiv_refund,
+            cmte_refund,
+            office_types_id,
+            candidates_id,
+            party_types_id,
+            incumbent_challenger_statuses_id
+        ) VALUES (
+            :fec_cand_id,
+            :name,
+            :ttl_receipts,
+            :trans_from_auth,
+            :coh_bop,
+            :coh_cop,
+            :cand_contrib,
+            :cand_loans,
+            :other_loans,
+            :cand_loan_repay,
+            :other_loan_repay,
+            :debts_owed_by,
+            :ttl_indiv_contrib,
+            :cand_office_st,
+            :cand_office_district,
+            :pol_pty_contrib,
+            :cvg_end_dt,
+            :indiv_refund,
+            :cmte_refund,
+            (SELECT id FROM `office_types` WHERE name = :office_type),
+            :candidates_id,
+            (SELECT id FROM `party_types` WHERE short_name = :party_type),
+            (SELECT id FROM `incumbent_challenger_statuses` WHERE name = :incumbent_challenger_status)
+        )
+    """
+
+    bind_params = [
+        dict(
+            fec_cand_id=fec_cand_id,
+            name=name,
+            ttl_receipts=ttl_receipts,
+            trans_from_auth=trans_from_auth,
+            coh_bop=coh_bop,
+            coh_cop=coh_cop,
+            cand_contrib=cand_contrib,
+            cand_loans=cand_loans,
+            other_loans=other_loans,
+            cand_loan_repay=cand_loan_repay,
+            other_loan_repay=other_loan_repay,
+            debts_owed_by=debts_owed_by,
+            ttl_indiv_contrib=ttl_indiv_contrib,
+            cand_office_st=cand_office_st,
+            cand_office_district=cand_office_district,
+            pol_pty_contrib=pol_pty_contrib,
+            cvg_end_dt=cvg_end_dt,
+            indiv_refund=indiv_refund,
+            cmte_refund=cmte_refund,
+            office_type=office_type,
+            candidate_email=candidate_email,
+            party_type=party_type,
+            incumbent_challenger_status=incumbent_challenger_status,
+            candidates_id=candidates_id,
+        )
+    ]
+    conn.execute(
+        text(insert_query),
+        *bind_params,
+    )
+    # we are in a transaction already due to pep idk one of them
+    conn.commit()
+
+    # NOTE: Redirect Path
+    # Citation for the following code:
+    # Date: 05/21/2023
+    # Copied from /OR/ Adapted from /OR/ Based on:
+    # https://stackoverflow.com/a/73088816
+    return RedirectResponse(
+        f"/{TABLE_NAME}/",
+        status_code=status.HTTP_302_FOUND,
+    )
+
+
+def update_single_page_func(
     conn: Connection, request: Request, templates: Jinja2Templates, record_id
 ):
-    candidate_office_records_query = """
+    candidate_office_records_query = f"""
         SELECT
-            `candidate_office_records`.id,
+            `{TABLE_NAME}`.id,
             fec_cand_id,
-            `candidate_office_records`.name,
+            `{TABLE_NAME}`.name,
             ttl_receipts,
             trans_from_auth,
             coh_bop,
@@ -144,16 +301,16 @@ def update_single_candidate_office_records_page_func(
             `candidates`.email as candidate_email,
             `party_types`.short_name as party_type,
             `incumbent_challenger_statuses`.name as incumbent_challenger_status
-        FROM `candidate_office_records`
+        FROM `{TABLE_NAME}`
             INNER JOIN `office_types` 
-                ON `candidate_office_records`.office_types_id = `office_types`.id
+                ON `{TABLE_NAME}`.office_types_id = `office_types`.id
             LEFT OUTER JOIN `candidates` 
-                ON `candidate_office_records`.candidates_id = `candidates`.id
+                ON `{TABLE_NAME}`.candidates_id = `candidates`.id
             INNER JOIN `party_types` 
-                ON `candidate_office_records`.party_types_id = `party_types`.id
+                ON `{TABLE_NAME}`.party_types_id = `party_types`.id
             INNER JOIN `incumbent_challenger_statuses` 
-                ON `candidate_office_records`.incumbent_challenger_statuses_id = `incumbent_challenger_statuses`.id
-        WHERE `candidate_office_records`.id = :candidate_office_records_id
+                ON `{TABLE_NAME}`.incumbent_challenger_statuses_id = `incumbent_challenger_statuses`.id
+        WHERE `{TABLE_NAME}`.id = :candidate_office_records_id
     """
 
     bind_params = [dict(candidate_office_records_id=record_id)]
@@ -181,11 +338,11 @@ def update_single_candidate_office_records_page_func(
     }
 
     return templates.TemplateResponse(
-        "candidate_office_records/update.j2",
+        f"{TABLE_NAME}/update.j2",
         {
             "request": request,
             "items": candidate_office_records,
-            "table_name": "candidate_office_records",
+            "table_name": TABLE_NAME,
             "dropdown_keys": [
                 "office_type",
                 "candidate_email",
@@ -197,180 +354,7 @@ def update_single_candidate_office_records_page_func(
     )
 
 
-def delete_single_candidate_office_records_page_func(
-    conn: Connection, request: Request, templates: Jinja2Templates, record_id
-):
-    candidate_office_records_query = """
-        SELECT
-            `candidate_office_records`.id,
-            fec_cand_id,
-            `candidate_office_records`.name,
-            ttl_receipts,
-            trans_from_auth,
-            coh_bop,
-            coh_cop,
-            cand_contrib,
-            cand_loans,
-            other_loans,
-            cand_loan_repay,
-            other_loan_repay,
-            debts_owed_by,
-            ttl_indiv_contrib,
-            cand_office_st,
-            cand_office_district,
-            pol_pty_contrib,
-            cvg_end_dt,
-            indiv_refund,
-            cmte_refund,
-            `office_types`.name as office_type,
-            `candidates`.email as candidate_email,
-            `party_types`.short_name as party_type,
-            `incumbent_challenger_statuses`.name as incumbent_challenger_status
-        FROM `candidate_office_records`
-            INNER JOIN `office_types` 
-                ON `candidate_office_records`.office_types_id = `office_types`.id
-            LEFT OUTER JOIN `candidates` 
-                ON `candidate_office_records`.candidates_id = `candidates`.id
-            INNER JOIN `party_types` 
-                ON `candidate_office_records`.party_types_id = `party_types`.id
-            INNER JOIN `incumbent_challenger_statuses` 
-                ON `candidate_office_records`.incumbent_challenger_statuses_id = `incumbent_challenger_statuses`.id
-        WHERE `candidate_office_records`.id = :candidate_office_records_id
-    """
-
-    bind_params = [dict(candidate_office_records_id=record_id)]
-    # had to dig this one up. its been a bit and this is never intuitive.
-    # Citation for the following code:
-    # Date: 05/20/2023
-    # Copied from /OR/ Adapted from /OR/ Based on:
-    # https://stackoverflow.com/a/58660606
-    candidate_office_records = (
-        conn.execute(
-            text(candidate_office_records_query),
-            *bind_params,
-        )
-        .mappings()
-        .all()
-    )
-
-    return templates.TemplateResponse(
-        "candidate_office_records/delete.j2",
-        {
-            "request": request,
-            "items": candidate_office_records,
-            "table_name": "candidate_office_records",
-            "dropdown_keys": [
-                "office_type",
-                "candidate_email",
-                "party_type",
-                "incumbent_challenger_status",
-            ],
-        },
-    )
-
-
-def post_single(
-    conn: Connection,
-    fec_cand_id,
-    name,
-    ttl_receipts,
-    trans_from_auth,
-    coh_bop,
-    coh_cop,
-    cand_contrib,
-    cand_loans,
-    other_loans,
-    cand_loan_repay,
-    other_loan_repay,
-    debts_owed_by,
-    ttl_indiv_contrib,
-    cand_office_st,
-    cand_office_district,
-    pol_pty_contrib,
-    cvg_end_dt,
-    indiv_refund,
-    cmte_refund,
-    office_type,
-    candidate_email,
-    party_type,
-    incumbent_challenger_status,
-):
-    if candidate_email == "none":
-        candidates_email_populator = "NULL"
-    else:
-        candidates_email_populator = (
-            f"(SELECT id FROM `candidates` WHERE email = '{candidate_email}')"
-        )
-
-    insert_query = f"""
-        INSERT INTO `candidate_office_records` (
-            fec_cand_id,
-            name,
-            ttl_receipts,
-            trans_from_auth,
-            coh_bop,
-            coh_cop,
-            cand_contrib,
-            cand_loans,
-            other_loans,
-            cand_loan_repay,
-            other_loan_repay,
-            debts_owed_by,
-            ttl_indiv_contrib,
-            cand_office_st,
-            cand_office_district,
-            pol_pty_contrib,
-            cvg_end_dt,
-            indiv_refund,
-            cmte_refund,
-            office_types_id,
-            candidates_id,
-            party_types_id,
-            incumbent_challenger_statuses_id
-        ) VALUES (
-            '{fec_cand_id}',
-            '{name}',
-            {ttl_receipts},
-            {trans_from_auth},
-            {coh_bop},
-            {coh_cop},
-            {cand_contrib},
-            {cand_loans},
-            {other_loans},
-            {cand_loan_repay},
-            {other_loan_repay},
-            {debts_owed_by},
-            {ttl_indiv_contrib},
-            '{cand_office_st}',
-            '{cand_office_district}',
-            {pol_pty_contrib},
-            '{cvg_end_dt}',
-            {indiv_refund},
-            {cmte_refund},
-            (SELECT id FROM `office_types` WHERE name = '{office_type}'),
-            {candidates_email_populator},
-            (SELECT id FROM `party_types` WHERE short_name = '{party_type}'),
-            (SELECT id FROM `incumbent_challenger_statuses` WHERE name = '{incumbent_challenger_status}')
-        )
-    """
-
-    # TODO: Use bind params
-    conn.execute(text(insert_query))
-    # we are in a transaction already due to pep idk one of them
-    conn.commit()
-
-    # NOTE: Redirect Path
-    # Citation for the following code:
-    # Date: 05/21/2023
-    # Copied from /OR/ Adapted from /OR/ Based on:
-    # https://stackoverflow.com/a/73088816
-    return RedirectResponse(
-        "/candidate_office_records",
-        status_code=status.HTTP_302_FOUND,
-    )
-
-
-def update_single(
+def update_single_func(
     conn: Connection,
     record_id,
     candidate_email: str,
@@ -395,8 +379,8 @@ def update_single(
         else:
             candidates_id = None
 
-    update_sql = """
-        UPDATE `candidate_office_records`
+    update_sql = f"""
+        UPDATE `{TABLE_NAME}`
             SET candidates_id = :candidates_id
         WHERE id = :candidate_office_records_id
     """
@@ -410,17 +394,89 @@ def update_single(
     conn.commit()
 
     return RedirectResponse(
-        f"/candidate_office_records/update/{record_id}",
+        f"/{TABLE_NAME}/update/{record_id}/",
         status_code=status.HTTP_302_FOUND,
     )
 
 
-def delete_single(
+def delete_single_page_func(
+    conn: Connection, request: Request, templates: Jinja2Templates, record_id
+):
+    candidate_office_records_query = f"""
+        SELECT
+            `{TABLE_NAME}`.id,
+            fec_cand_id,
+            `{TABLE_NAME}`.name,
+            ttl_receipts,
+            trans_from_auth,
+            coh_bop,
+            coh_cop,
+            cand_contrib,
+            cand_loans,
+            other_loans,
+            cand_loan_repay,
+            other_loan_repay,
+            debts_owed_by,
+            ttl_indiv_contrib,
+            cand_office_st,
+            cand_office_district,
+            pol_pty_contrib,
+            cvg_end_dt,
+            indiv_refund,
+            cmte_refund,
+            `office_types`.name as office_type,
+            `candidates`.email as candidate_email,
+            `party_types`.short_name as party_type,
+            `incumbent_challenger_statuses`.name as incumbent_challenger_status
+        FROM `{TABLE_NAME}`
+            INNER JOIN `office_types` 
+                ON `{TABLE_NAME}`.office_types_id = `office_types`.id
+            LEFT OUTER JOIN `candidates` 
+                ON `{TABLE_NAME}`.candidates_id = `candidates`.id
+            INNER JOIN `party_types` 
+                ON `{TABLE_NAME}`.party_types_id = `party_types`.id
+            INNER JOIN `incumbent_challenger_statuses` 
+                ON `{TABLE_NAME}`.incumbent_challenger_statuses_id = `incumbent_challenger_statuses`.id
+        WHERE `{TABLE_NAME}`.id = :candidate_office_records_id
+    """
+
+    bind_params = [dict(candidate_office_records_id=record_id)]
+    # had to dig this one up. its been a bit and this is never intuitive.
+    # Citation for the following code:
+    # Date: 05/20/2023
+    # Copied from /OR/ Adapted from /OR/ Based on:
+    # https://stackoverflow.com/a/58660606
+    candidate_office_records = (
+        conn.execute(
+            text(candidate_office_records_query),
+            *bind_params,
+        )
+        .mappings()
+        .all()
+    )
+
+    return templates.TemplateResponse(
+        f"{TABLE_NAME}/delete.j2",
+        {
+            "request": request,
+            "items": candidate_office_records,
+            "table_name": TABLE_NAME,
+            "dropdown_keys": [
+                "office_type",
+                "candidate_email",
+                "party_type",
+                "incumbent_challenger_status",
+            ],
+        },
+    )
+
+
+def delete_single_func(
     conn: Connection,
     record_id,
 ):
-    delete_sql = """
-        DELETE FROM `candidate_office_records`
+    delete_sql = f"""
+        DELETE FROM `{TABLE_NAME}`
         WHERE id = :candidate_office_records_id
     """
 
@@ -433,6 +489,6 @@ def delete_single(
     conn.commit()
 
     return RedirectResponse(
-        "/candidate_office_records",
+        f"/{TABLE_NAME}/",
         status_code=status.HTTP_302_FOUND,
     )

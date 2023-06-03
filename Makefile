@@ -27,11 +27,7 @@ docker-down:
 	cd docker && docker-compose down
 
 dev: docker-up
-	poetry run gunicorn "what_the_fec.main:create_app()" --workers 1 --worker-class uvicorn.workers.UvicornWorker \
-	--bind 127.0.0.1:8000 --capture-output \
-	--access-logfile - --error-logfile - \
-	--reload
-
+	poetry run uvicorn what_the_fec.main:create_app --factory --reload
 
 fmt:
 	poetry run isort .

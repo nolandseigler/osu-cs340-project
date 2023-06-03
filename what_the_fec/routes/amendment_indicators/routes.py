@@ -1,16 +1,22 @@
-from fastapi import APIRouter, Request
+from typing import Annotated
+
+from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
 
 from what_the_fec.routes.amendment_indicators.endpoint_funcs import (
     TABLE_NAME,
+    create_single_func,
     get_all_func,
 )
+from what_the_fec.routes.route import BaseRoute
 
 router = APIRouter(
     prefix=f"/{TABLE_NAME}",
     tags=[f"{TABLE_NAME}"],
-    responses={404: {"description": f"{TABLE_NAME} not found"}},
+    route_class=BaseRoute,
 )
+
+STR_FORM_FIELD = Annotated[str, Form()]
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -19,4 +25,17 @@ def get_all(request: Request):
         conn=next(request.db_conn),
         request=request,
         templates=request.templates,
+    )
+
+
+@router.post("/")
+def create_single(
+    request: Request,
+    code: STR_FORM_FIELD,
+    name: STR_FORM_FIELD,
+):
+    return create_single_func(
+        conn=next(request.db_conn),
+        code=code,
+        name=name,
     )

@@ -1,6 +1,6 @@
 import os
-import structlog
 
+import structlog
 from fastapi import Depends, FastAPI, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -53,8 +53,8 @@ from what_the_fec.routes.transaction_types.routes import (
 from what_the_fec.storage.db import init as db_init
 from what_the_fec.storage.mysql.config import MySQLConfig
 
-logging_init()
-logger = structlog.get_logger(__name__)
+logging_init(log_level="DEBUG")
+logger: structlog.types.FilteringBoundLogger = structlog.get_logger(__name__)
 
 
 def create_app() -> FastAPI:

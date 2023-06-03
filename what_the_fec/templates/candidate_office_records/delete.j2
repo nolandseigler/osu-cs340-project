@@ -9,7 +9,7 @@
 
 <p>&nbsp;</p>
 <div id="delete" style="display: block">
-  <form id="delete{{table_name}}" action="/{{table_name}}/delete/{{items[0].id}}" method="post"></form>
+  <form id="delete{{table_name}}" action="/{{table_name}}/delete/{{items[0].id}}/" method="post"></form>
       
     <fieldset class="fields">
         <legend><strong>Are you sure you want to delete the following item in {{table_name}}?</strong></legend>
@@ -19,7 +19,7 @@
     </fieldset>
 
     <input type="submit" form="delete{{table_name}}" value="Delete" name="delete_{{table_name}}" class="btn btn-primary" style="margin:.5rem;">
-    <a href="/{{table_name}}"><input class="btn" type="button" value="Cancel"></a> 
+    <a href="/{{table_name}}/"><input class="btn" type="button" value="Cancel"></a> 
 
   </form> 
 </div><!-- delete -->
