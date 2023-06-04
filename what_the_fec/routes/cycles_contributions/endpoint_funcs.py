@@ -9,15 +9,28 @@ TABLE_NAME = "cycles_contributions"
 
 
 def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates):
+    entity_1_table_name = "cycles"
+    entity_1_attribute = "year"
+    
+    entity_2_table_name = "contributions"
+    entity_2_attribute = "sub_id"
+
     query = f"""
-        SELECT * FROM {TABLE_NAME}
+        SELECT 
+            `{entity_1_table_name}`.{entity_1_attribute} as `{entity_1_table_name}_{entity_1_attribute}`,
+            `{entity_2_table_name}`.{entity_2_attribute} as `{entity_2_attribute}`
+        FROM `{TABLE_NAME}`
+            INNER JOIN `{entity_1_table_name}` 
+                ON `{TABLE_NAME}`.{entity_1_table_name}_year = `{entity_1_table_name}`.year
+            INNER JOIN `{entity_2_table_name}` 
+                ON `{TABLE_NAME}`.{entity_2_table_name}_id = `{entity_2_table_name}`.id
     """
 
-    cycles_query = f"""
+    entity_1_query = f"""
         SELECT * from cycles
     """
 
-    contributions_query = f"""
+    entity_2_query = f"""
         SELECT 
             `contributions`.id,
             transaction_pgi,
@@ -47,24 +60,22 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
                 ON `contributions`.contributor_types_id = `contributor_types`.id;
     """
 
-    cycles_dropdown_selections_query = "SELECT * FROM `cycles`"
-    contributions_dropdown_selections_query = "SELECT id FROM `contributions`"
+    entity_1_dropdown_selections_query = f"SELECT * FROM `{entity_1_table_name}`"
+    entity_2_dropdown_selections_query = f"SELECT {entity_2_attribute} FROM `{entity_2_table_name}`"
 
-    cycles_dropdown_selections = (
-        conn.execute(text(cycles_dropdown_selections_query)).mappings().all()
-    )
-    contributions_dropdown_selections = (
-        conn.execute(text(contributions_dropdown_selections_query)).mappings().all()
-    )
+    entity_1_dropdown_selections = conn.execute(text(entity_1_dropdown_selections_query)).mappings().all()
+    entity_2_dropdown_selections = conn.execute(text(entity_2_dropdown_selections_query)).mappings().all()
 
     dropdown_items_for_add = {
-        "cycles_year": {
-            "data": cycles_dropdown_selections,
-            "relevant_column_name": "year",
+        f"{entity_1_table_name}_{entity_1_attribute}": {
+            "data": entity_1_dropdown_selections,
+            "relevant_column_name": entity_1_attribute,
+            "table_name": entity_1_table_name
         },
-        "contributions_id": {
-            "data": contributions_dropdown_selections,
-            "relevant_column_name": "id",
+        entity_2_attribute: {
+            "data": entity_2_dropdown_selections,
+            "relevant_column_name": entity_2_attribute,
+            "table_name": entity_2_table_name
         },
     }
 
@@ -74,19 +85,19 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         request=request,
         table_name=TABLE_NAME,
         templates=templates,
-        entity_1_table_name="cycles",
-        entity_1_query=cycles_query,
-        entity_2_table_name="contributions",
-        entity_2_query=contributions_query,
+        entity_1_table_name=entity_1_table_name,
+        entity_1_query=entity_1_query,
+        entity_2_table_name=entity_2_table_name,
+        entity_2_query=entity_2_query,
         dropdown_keys=dropdown_items_for_add.keys(),
-        dropdown_items_for_add=dropdown_items_for_add,
+        dropdown_items_for_add = dropdown_items_for_add
     )
 
 
 def create_single_func(
     conn: Connection,
     cycles_year,
-    contributions_id,
+    sub_id,
 ):
     insert_query = f"""
         INSERT INTO `{TABLE_NAME}`(
@@ -100,7 +111,7 @@ def create_single_func(
                 ),
                 (
                     SELECT id FROM `contributions` 
-                    WHERE id = :contributions_id
+                    WHERE sub_id = :sub_id
                 )
             )
     """
@@ -108,7 +119,7 @@ def create_single_func(
     bind_params = [
         dict(
             cycles_year=cycles_year,
-            contributions_id=contributions_id,
+            sub_id=sub_id,
         )
     ]
     conn.execute(
