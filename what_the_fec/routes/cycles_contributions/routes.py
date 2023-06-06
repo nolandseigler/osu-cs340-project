@@ -32,10 +32,10 @@ def get_all(request: Request):
 def create_single(
     request: Request,
     cycles_year: INT_FORM_FIELD,
-    contributions_id: INT_FORM_FIELD,
+    sub_id: INT_FORM_FIELD,
 ):
     return create_single_func(
         conn=next(request.db_conn),
         cycles_year=cycles_year,
-        contributions_id=contributions_id,
+        sub_id=sub_id,
     )

@@ -17,6 +17,7 @@ router = APIRouter(
 )
 
 INT_FORM_FIELD = Annotated[int, Form()]
+STR_FORM_FIELD = Annotated[str, Form()]
 
 
 @router.get("/", response_class=HTMLResponse)
@@ -31,11 +32,11 @@ def get_all(request: Request):
 @router.post("/")
 def create_single(
     request: Request,
-    contributions_id: INT_FORM_FIELD,
-    candidate_office_records_id: INT_FORM_FIELD,
+    sub_id: INT_FORM_FIELD,
+    fec_cand_id: STR_FORM_FIELD,
 ):
     return create_single_func(
         conn=next(request.db_conn),
-        contributions_id=contributions_id,
-        candidate_office_records_id=candidate_office_records_id,
+        sub_id=sub_id,
+        fec_cand_id=fec_cand_id,
     )
