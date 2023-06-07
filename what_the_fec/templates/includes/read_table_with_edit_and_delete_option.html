@@ -16,7 +16,11 @@
             <td><a href="/{{table_name}}/update/{{item.id}}/"><input class="btn" type="button" value="Edit"></a></td>
             <td><a href="/{{table_name}}/delete/{{item.id}}/"><input class="btn" type="button" value="Delete"></a></td> 
             {% for key in item.keys() %}
-                <td>{{item[key]}}</td>
+                {% if item[key] is none %}
+                    <td></td>
+                {% else %}
+                    <td>{{item[key]}}</td>
+                {% endif %}
             {% endfor %}
 
         </tr>
