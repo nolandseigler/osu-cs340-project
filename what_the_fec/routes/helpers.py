@@ -1,6 +1,7 @@
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
+from what_the_fec.static.tables_information import TABLES_INFORMATION
 
 
 # TODO: https://github.com/nolandseigler/osu-cs340-project/pull/7#discussion_r1206133030
@@ -61,6 +62,7 @@ def generic_render_table(
             "columns_information": columns_information,
             "dropdown_keys": dropdown_keys,
             "dropdown_items_for_add": dropdown_items_for_add,
+            "table_information": TABLES_INFORMATION[table_name]
         },
     )
 
@@ -108,5 +110,6 @@ def intersection_render_table(
             "entity_1": entity_1,
             "entity_2_table_name": entity_2_table_name,
             "entity_2": entity_2,
+            "table_information": TABLES_INFORMATION[table_name]
         },
     )

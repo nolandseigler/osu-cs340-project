@@ -7,6 +7,16 @@
 
 
 {% block body %}
+
+    {% with table_information=table_information  %}
+        {% include '/includes/table_description.html' %}
+    {% endwith %}
+
+    {% with table_information=table_information  %}
+        {% include '/includes/table_attribute_descriptions.html' %}
+    {% endwith %}
+    <p>&nbsp;</p>
+
     {% with items=items %}
         {% include '/includes/read_table_with_edit_and_delete_option.html' %}
     {% endwith %}
