@@ -3,7 +3,7 @@ from fastapi import HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
-from what_the_fec.static.tables_information import TABLES_INFORMATION
+from what_the_fec.routes.common.tables_information import TABLES_INFORMATION
 
 from what_the_fec.routes.helpers import (
     get_columns_information_dict,

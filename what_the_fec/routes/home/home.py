@@ -1,6 +1,6 @@
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
-from what_the_fec.static.tables_information import TABLES_INFORMATION
+from what_the_fec.routes.common.tables_information import TABLES_INFORMATION
 
 
 def home_page_func(request: Request, templates: Jinja2Templates):

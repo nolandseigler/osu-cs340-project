@@ -1,7 +1,7 @@
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
-from what_the_fec.static.tables_information import TABLES_INFORMATION
+from what_the_fec.routes.common.tables_information import TABLES_INFORMATION
 
 
 # TODO: https://github.com/nolandseigler/osu-cs340-project/pull/7#discussion_r1206133030
