@@ -17,7 +17,7 @@
             <td><a href="/{{table_name}}/delete/{{item.id}}/"><input class="btn" type="button" value="Delete"></a></td> 
             {% for key in item.keys() %}
                 {% if item[key] is none %}
-                    <td></td>
+                    <td>NULL</td>
                 {% else %}
                     <td>{{item[key]}}</td>
                 {% endif %}

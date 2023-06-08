@@ -147,7 +147,7 @@ def create_single_func(
     party_type,
     incumbent_challenger_status,
 ):
-    if candidate_email == "none":
+    if candidate_email == "NULL":
         logger.debug("no candidate email provided")
         candidates_id = None
     else:

@@ -13,7 +13,7 @@
         <tr>
             {% for key in item.keys() %}
                 {% if item[key] is none %}
-                    <td></td>
+                    <td>NULL</td>
                 {% else %}
                     <td>{{item[key]}}</td>
                 {% endif %}
