@@ -28,7 +28,7 @@ tfoot {
 
 
 /*
-    # Citation for the following code:
+    # Citation for the following navbar code:
     # Date: 05/21/2023
     # Adapted from
     https://www.w3schools.com/howto/howto_css_dropdown_navbar.asp */
@@ -101,8 +101,7 @@ tfoot {
   .dropdown:hover .dropdown-content {
     display: block;
   }
-/* end of navbar container */
-
+/* end of navbar code */
 
 legend {
     padding: 15px 10px;

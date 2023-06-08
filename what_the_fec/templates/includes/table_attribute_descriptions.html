@@ -1,0 +1,12 @@
+{% if table_information["attributes"] %}
+    <div>
+        <ul>
+            {% for name, description in table_information["attributes"].items() %}
+                <li> 
+                    <em><strong>{{name}}</strong></em>: {{description}}
+
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endif %}

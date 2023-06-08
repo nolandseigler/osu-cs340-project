@@ -7,8 +7,11 @@
 
 {% block body %}
 
+    {% with table_information=table_information %}
+        {% include '/includes/table_description.html' %}
+    {% endwith %}
 
-    <p>
+    <p style="text-align:center;">
     {% for key, metadata in dropdown_items_for_add.items() %}
         <strong><i>{{key}}</i></strong> is an attribute of entity <strong><i>{{metadata["table_name"]}}</i></strong><br>
     {% endfor %}

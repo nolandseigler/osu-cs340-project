@@ -3,6 +3,7 @@ from fastapi import HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
+from what_the_fec.routes.common.tables_information import TABLES_INFORMATION
 
 from what_the_fec.routes.helpers import (
     get_columns_information_dict,
@@ -115,6 +116,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
             ],
             "dropdown_items_for_add": dropdown_items_for_add,
             "columns_information": columns_information,
+            "table_information": TABLES_INFORMATION[TABLE_NAME]
         },
     )
 
@@ -145,7 +147,7 @@ def create_single_func(
     party_type,
     incumbent_challenger_status,
 ):
-    if candidate_email == "none":
+    if candidate_email == "NULL":
         logger.debug("no candidate email provided")
         candidates_id = None
     else:
