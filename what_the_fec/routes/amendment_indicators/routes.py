@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Optional
 
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
@@ -32,7 +32,7 @@ def get_all(request: Request):
 def create_single(
     request: Request,
     code: STR_FORM_FIELD,
-    name: STR_FORM_FIELD,
+    name: Optional[str] = Form(None),
 ):
     return create_single_func(
         conn=next(request.db_conn),

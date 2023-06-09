@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Optional
 
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
@@ -33,10 +33,11 @@ def create_single(
     request: Request,
     cmte_id: STR_FORM_FIELD,
     name: STR_FORM_FIELD,
-    city: STR_FORM_FIELD,
-    state: STR_FORM_FIELD,
-    zip_code: STR_FORM_FIELD,
     committee_type: STR_FORM_FIELD,
+    city: Optional[str] = Form(None),
+    state: Optional[str] = Form(None),
+    zip_code: Optional[str] = Form(None),
+
 ):
     return create_single_func(
         conn=next(request.db_conn),
