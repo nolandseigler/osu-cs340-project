@@ -19,7 +19,7 @@
     
 
     {% with items=items %}
-        {% include '/includes/read_table_only.html' %}
+        {% include '/includes/read_table.html' %}
     {% endwith %}
     <p>&nbsp;</p>
 
@@ -32,13 +32,13 @@
 
     <h3>{{entity_1_table_name}}</h3>
     {% with items=entity_1 %}
-        {% include '/includes/read_table_only.html' %}
+        {% include '/includes/read_table.html' %}
     {% endwith %}
     <p>&nbsp;</p>
 
     <h3>{{entity_2_table_name}}</h3>
     {% with items=entity_2 %}
-        {% include '/includes/read_table_only.html' %}
+        {% include '/includes/read_table.html' %}
     {% endwith %}
     <p>&nbsp;</p>
 
