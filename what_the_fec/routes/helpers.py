@@ -62,7 +62,9 @@ def generic_render_table(
             "columns_information": columns_information,
             "dropdown_keys": dropdown_keys,
             "dropdown_items_for_add": dropdown_items_for_add,
-            "table_information": TABLES_INFORMATION[table_name]
+            "table_information": TABLES_INFORMATION[table_name],
+            "render_edit": False,
+            "render_delete": False,
         },
     )
 

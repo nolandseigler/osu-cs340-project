@@ -108,15 +108,12 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
             "request": request,
             "items": candidate_office_records,
             "table_name": TABLE_NAME,
-            "dropdown_keys": [
-                "office_type",
-                "candidate_email",
-                "party_type",
-                "incumbent_challenger_status",
-            ],
+            "dropdown_keys": dropdown_items_for_add.keys(),
             "dropdown_items_for_add": dropdown_items_for_add,
             "columns_information": columns_information,
-            "table_information": TABLES_INFORMATION[TABLE_NAME]
+            "table_information": TABLES_INFORMATION[TABLE_NAME],
+            "render_edit": True,
+            "render_delete": True
         },
     )
 

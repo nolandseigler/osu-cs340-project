@@ -3,8 +3,12 @@
         <table>
         <thead>
         <tr>
-            <th></th>
-            <th></th>
+            {% if render_edit == true %}
+                <th></th>
+            {% endif %}
+            {% if render_delete == true %}
+                <th></th>
+            {% endif %}
             {% for key in items[0].keys() %}
                 <th>{{ key }}</th>
             {% endfor %}
@@ -13,8 +17,12 @@
 
         {% for item in items %}
         <tr>
-            <td><a href="/{{table_name}}/update/{{item.id}}/"><input class="btn" type="button" value="Edit"></a></td>
-            <td><a href="/{{table_name}}/delete/{{item.id}}/"><input class="btn" type="button" value="Delete"></a></td> 
+            {% if render_edit == true %}
+                <td><a href="/{{table_name}}/update/{{item.id}}/"><input class="btn" type="button" value="Edit"></a></td>
+            {% endif %}
+            {% if render_delete == true %}
+                <td><a href="/{{table_name}}/delete/{{item.id}}/"><input class="btn" type="button" value="Delete"></a></td>
+            {% endif %} 
             {% for key in item.keys() %}
                 {% if item[key] is none %}
                     <td>NULL</td>
