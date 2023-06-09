@@ -1,5 +1,5 @@
 from datetime import date
-from typing import Annotated
+from typing import Annotated, Optional
 
 from fastapi import APIRouter, Form, Request
 from fastapi.responses import HTMLResponse
@@ -39,20 +39,20 @@ def get_all(request: Request):
 @router.post("/")
 def create_single(
     request: Request,
-    transaction_pgi: STR_FORM_FIELD,
-    image_num: STR_FORM_FIELD,
-    transaction_dt: DATE_FORM_FIELD,
-    transaction_amt: FLOAT_FORM_FIELD,
-    trans_id: STR_FORM_FIELD,
-    file_num: INT_FORM_FIELD,
-    memo_cd: STR_FORM_FIELD,
-    memo_text: STR_FORM_FIELD,
-    sub_id: INT_FORM_FIELD,
     cmte_id: STR_FORM_FIELD,
     report_type: STR_FORM_FIELD,
     transaction_type: STR_FORM_FIELD,
     amendment_indicator: STR_FORM_FIELD,
     contributor_type: STR_FORM_FIELD,
+    transaction_pgi: Optional[str] = Form(None),
+    image_num: Optional[str] = Form(None),
+    transaction_dt: Optional[date] = Form(None),
+    transaction_amt: Optional[float] = Form(None),
+    trans_id: Optional[str] = Form(None),
+    file_num: Optional[int] = Form(None),
+    memo_cd: Optional[str] = Form(None),
+    memo_text: Optional[str] = Form(None),
+    sub_id: Optional[int] = Form(None),
 ):
     return create_single_func(
         conn=next(request.db_conn),
