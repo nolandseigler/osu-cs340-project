@@ -20,7 +20,21 @@
                 <select name="candidate_email" id="candidate_email">
                     {% for entries in dropdown_items_for_add["candidate_email"]["data"] %}
                         <option value="{{entries[dropdown_items_for_add['candidate_email']['relevant_column_name']]}}">
-                            {{entries[dropdown_items_for_add['candidate_email']['relevant_column_name']]}}
+
+
+                            {% set candidate_email = entries[dropdown_items_for_add["candidate_email"]['relevant_column_name']] %}
+                            {% if candidate_email is none %}
+                                NULL
+                            {% else %}
+                                {{candidate_email}}
+                            {% endif %}
+
+
+                            {% set candidate_dict_entry = dropdown_items_for_add["candidate_email"]["data_dict"][candidate_email] %}
+                            {% with candidate_dict_entry=candidate_dict_entry %}
+                                {% include '/includes/candidate_email_helper.html' %}
+                            {% endwith %}
+
                         </option>
                     {% endfor %}
                     <option value="NULL">NULL</option>
