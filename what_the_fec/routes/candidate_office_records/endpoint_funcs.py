@@ -13,6 +13,16 @@ from what_the_fec.routes.helpers import (
 logger: structlog.types.FilteringBoundLogger = structlog.get_logger(__name__)
 TABLE_NAME = "candidate_office_records"
 
+def get_candidates_email_dict(candidates):
+    candidates_email_dict = {}
+    for candidate in candidates:
+        candidates_email_dict[candidate["email"]] = {
+            "id": candidate["id"],
+            "first_name": candidate["first_name"],
+            "middle_name": candidate["middle_name"],
+            "last_name": candidate["last_name"],   
+        }
+    return candidates_email_dict
 
 def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates):
     candidate_office_records_query = f"""
@@ -54,7 +64,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
 
     office_types_query = "SELECT id, name FROM office_types"
 
-    candidates_query = "SELECT id, email FROM candidates"
+    candidates_query = "SELECT * FROM candidates"
 
     party_types_query = "SELECT id, short_name FROM party_types"
 
@@ -82,6 +92,15 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         .all()
     )
     columns_information = get_columns_information_dict(columns_information_result)
+    
+    # candidates_email_dict = {}
+    # for candidate in candidates:
+    #     candidates_email_dict[candidate["email"]] = {
+    #         "id": candidate["id"],
+    #         "first_name": candidate["first_name"],
+    #         "middle_name": candidate["middle_name"],
+    #         "last_name": candidate["last_name"],   
+    #     }
 
     dropdown_items_for_add = {
         "office_type": {
@@ -91,6 +110,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         "candidate_email": {
             "data": candidates,
             "relevant_column_name": "email",
+            "data_dict": get_candidates_email_dict(candidates),
         },
         "party_type": {
             "data": party_types,
@@ -327,12 +347,13 @@ def update_single_page_func(
         .all()
     )
 
-    candidates_query = "SELECT id, email FROM candidates"
+    candidates_query = "SELECT * FROM candidates"
     candidates = conn.execute(text(candidates_query)).mappings().all()
     dropdown_items_for_add = {
         "candidate_email": {
             "data": candidates,
             "relevant_column_name": "email",
+            "data_dict": get_candidates_email_dict(candidates),
         },
     }
 
@@ -342,12 +363,7 @@ def update_single_page_func(
             "request": request,
             "items": candidate_office_records,
             "table_name": TABLE_NAME,
-            "dropdown_keys": [
-                "office_type",
-                "candidate_email",
-                "party_type",
-                "incumbent_challenger_status",
-            ],
+            "dropdown_keys": dropdown_items_for_add.keys(),
             "dropdown_items_for_add": dropdown_items_for_add,
         },
     )
