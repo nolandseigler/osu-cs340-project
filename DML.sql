@@ -415,7 +415,7 @@ WHERE
     AND committees_id = (
         SELECT id FROM `committees` 
         WHERE cmte_id = :current_cmte_id
-    )
+    );
 
 UPDATE `candidate_office_records_contributions`
 SET
@@ -435,7 +435,7 @@ WHERE
     AND contributions_id = (
         SELECT id FROM `contributions` 
         WHERE sub_id = :current_sub_id
-    )
+    );
 
 UPDATE `cycles_candidate_office_records`
 SET
@@ -449,7 +449,7 @@ WHERE
     AND candidate_office_records_id = (
         SELECT id FROM `candidate_office_records` 
         WHERE fec_cand_id = :current_fec_cand_id
-    )
+    );
 
 UPDATE `cycles_contributions`
 SET
@@ -463,7 +463,7 @@ WHERE
     AND contributions_id = (
         SELECT id FROM `contributions` 
         WHERE sub_id = :current_sub_id
-    )
+    );
 
 UPDATE `election_years_candidate_office_records`
 SET
@@ -477,7 +477,7 @@ WHERE
     AND candidate_office_records_id = (
         SELECT id FROM `candidate_office_records` 
         WHERE fec_cand_id = :current_fec_cand_id
-    )
+    );
 
 UPDATE `election_years_contributions`
 SET
@@ -491,7 +491,7 @@ WHERE
     AND contributions_id = (
         SELECT id FROM `contributions` 
         WHERE sub_id = :current_sub_id
-    )
+    );
 
 -- DELETE: This cascades all the M:M mappings but does not cascade the other "Mapped Table"
 DELETE FROM `candidate_office_records`
