@@ -408,14 +408,8 @@ SET
         WHERE cmte_id = :updated_cmte_id
     )
 WHERE
-    candidate_office_records_id = (
-        SELECT id FROM `candidate_office_records` 
-        WHERE fec_cand_id = :current_fec_cand_id
-    )
-    AND committees_id = (
-        SELECT id FROM `committees` 
-        WHERE cmte_id = :current_cmte_id
-    );
+    candidate_office_records_id = :candidate_office_records_id
+    AND committees_id = :committees_id;
 
 UPDATE `candidate_office_records_contributions`
 SET
@@ -428,14 +422,8 @@ SET
         WHERE sub_id = :updated_sub_id
     )
 WHERE
-    candidate_office_records_id = (
-        SELECT id FROM `candidate_office_records` 
-        WHERE fec_cand_id = :current_fec_cand_id
-    )
-    AND contributions_id = (
-        SELECT id FROM `contributions` 
-        WHERE sub_id = :current_sub_id
-    );
+    candidate_office_records_id = :candidate_office_records_id
+    AND contributions_id = :contributions_id;
 
 UPDATE `cycles_candidate_office_records`
 SET
@@ -446,10 +434,7 @@ SET
     )
 WHERE
     cycles_year = :current_cycles_year
-    AND candidate_office_records_id = (
-        SELECT id FROM `candidate_office_records` 
-        WHERE fec_cand_id = :current_fec_cand_id
-    );
+    AND candidate_office_records_id = :candidate_office_records_id;
 
 UPDATE `cycles_contributions`
 SET
@@ -460,10 +445,7 @@ SET
     )
 WHERE
     cycles_year = :current_cycles_year
-    AND contributions_id = (
-        SELECT id FROM `contributions` 
-        WHERE sub_id = :current_sub_id
-    );
+    AND contributions_id = :contributions_id;
 
 UPDATE `election_years_candidate_office_records`
 SET
@@ -474,10 +456,7 @@ SET
     )
 WHERE
     election_years_year = :current_election_years_year
-    AND candidate_office_records_id = (
-        SELECT id FROM `candidate_office_records` 
-        WHERE fec_cand_id = :current_fec_cand_id
-    );
+    AND candidate_office_records_id = :candidate_office_records_id;
 
 UPDATE `election_years_contributions`
 SET
@@ -488,10 +467,7 @@ SET
     )
 WHERE
     election_years_year = :current_election_years_year
-    AND contributions_id = (
-        SELECT id FROM `contributions` 
-        WHERE sub_id = :current_sub_id
-    );
+    AND contributions_id = :contributions_id;
 
 -- DELETE: This cascades all the M:M mappings but does not cascade the other "Mapped Table"
 DELETE FROM `candidate_office_records`

@@ -71,27 +71,18 @@ def generic_render_table(
 
 def intersection_render_table(
     conn: Connection,
-    query: str,
+    intersection_items: list[dict],
     request: Request,
     table_name: str,
     templates: Jinja2Templates,
     entity_1_table_name,
-    entity_1_query,
+    entity_1_items: list[dict],
     entity_2_table_name,
-    entity_2_query,
+    entity_2_items: list[dict],
     dropdown_keys=[],
     dropdown_items_for_add={},
 ):
-    # had to dig this one up. its been a bit and this is never intuitive.
-    # Citation for the following code:
-    # Date: 05/20/2023
-    # Copied from /OR/ Adapted from /OR/ Based on:
-    # https://stackoverflow.com/a/58660606
-    items = conn.execute(text(query)).mappings().all()
-
-    entity_1 = conn.execute(text(entity_1_query)).mappings().all()
-    entity_2 = conn.execute(text(entity_2_query)).mappings().all()
-
+   
     columns_information_result = (
         conn.execute(text(get_columns_information_query(table_name=table_name)))
         .mappings()
@@ -103,15 +94,15 @@ def intersection_render_table(
         "intersection_tables.j2",
         {
             "request": request,
-            "items": items,
+            "items": intersection_items,
             "table_name": table_name,
             "columns_information": columns_information,
             "dropdown_keys": dropdown_keys,
             "dropdown_items_for_add": dropdown_items_for_add,
             "entity_1_table_name": entity_1_table_name,
-            "entity_1": entity_1,
+            "entity_1": entity_1_items,
             "entity_2_table_name": entity_2_table_name,
-            "entity_2": entity_2,
+            "entity_2": entity_2_items,
             "table_information": TABLES_INFORMATION[table_name]
         },
     )
