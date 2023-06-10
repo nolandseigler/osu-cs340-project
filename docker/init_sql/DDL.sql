@@ -503,13 +503,13 @@ VALUES
 
 INSERT INTO `cs340_seiglern`.`contributor_types` (code, name)
 VALUES
-    ('CAN', 'DummyData1'),
-    ('CCM', 'DummyData2'),
-    ('COM', 'DummyData3'),
-    ('IND', 'DummyData4'),
-    ('ORG', 'DummyData5'),
-    ('PAC', 'DummyData6'),
-    ('PTY', 'DummyData7');
+    ('CAN', 'Candidate'),
+    ('CCM', 'Candidate Committee'),
+    ('COM', 'Committee'),
+    ('IND', 'Individual (a person)'),
+    ('ORG', 'Organization (not a committee and not a person)'),
+    ('PAC', 'Political Action Committee'),
+    ('PTY', 'Party Organization');
 
 INSERT INTO `cs340_seiglern`.`report_types` (code, name)
 VALUES
@@ -535,7 +535,7 @@ VALUES
     ('M5', 'a20'),
     ('M6', 'a21'),
     ('M7', 'a22'),
-    ('M8', 'a22oopsiewasduplicate'),
+    ('M8', 'a22b'),
     ('M9', 'a23'),
     ('MY', 'a24'),
     ('Q1', 'a25'),
@@ -891,22 +891,22 @@ INSERT INTO `cs340_seiglern`.`candidate_office_records` (
 
 INSERT INTO `cs340_seiglern`.`committee_types` (code, name, explanation)
 VALUES
-    ('C', 'C', 'really long explanation or maybe it is short just depends. cna also be null'),
-    ('D', 'D', 'long explanation'),
-    ('E', 'E', 'long explanation'),
-    ('H', 'H', 'long explanation'),
-    ('I', 'I', 'long explanation'),
-    ('N', 'N', 'long explanation'),
-    ('O', 'O', 'long explanation'),
-    ('P', 'P', 'long explanation'),
-    ('Q', 'Q', 'long explanation'),
-    ('S', 'S', 'long explanation'),
-    ('U', 'U', 'long explanation'),
-    ('V', 'V', 'long explanation'),
-    ('W', 'W', 'long explanation'),
-    ('X', 'X', 'long explanation'),
-    ('Y', 'Y', 'long explanation'),
-    ('Z', 'Z', 'long explanation');
+    ('C', 'Communication cost', 'Organizations like corporations or unions may prepare communications for their employees or members that advocate the election of specific candidates and they must disclose them under certain circumstances. These are usually paid with direct corporate or union funds rather than from PACs.'),
+    ('D', 'Delegate committee', 'Delegate committees are organized for the purpose of influencing the selection of delegates to Presidential nominating conventions. The term includes a group of delegates, a group of individuals seeking to become delegates, and a group of individuals supporting delegates.'),
+    ('E', 'Electioneering communication', 'Groups (other than PACs) making electioneering communications'),
+    ('H', 'House', 'Campaign committees for candidates for the U.S. House of Representatives'),
+    ('I', 'Independent expenditor (person or group)', 'Individuals or groups (other than PACs) making independent expenditures over $250 in a year must disclose those expenditures'),
+    ('N', 'PAC - nonqualified', '	PACs that have not yet been in existence for six months and received contributions from 50 people and made contributions to five federal candidates. These committees have lower limits for their contributions to candidates.'),
+    ('O', 'Independent expenditure-only (Super PACs)', 'Political Committee that has filed a statement consistent with AO 2010-09(https://www.fec.gov/data/legal/advisory-opinions/2010-09/) or AO 2010-11(https://www.fec.gov/data/legal/advisory-opinions/2010-11/).'),
+    ('P', '	Presidential', 'Campaign committee for candidate for U.S. President'),
+    ('Q', 'PAC - qualified', 'PACs that have been in existence for six months and received contributions from 50 people and made contributions to five federal candidates'),
+    ('S', 'Senate', 'Campaign committee for candidate for Senate'),
+    ('U', 'Single-candidate independent expenditure', NULL),
+    ('V', 'Hybrid PAC (with Non-Contribution Account) - Nonqualified', 'Political committees with non-contribution accounts(https://www.fec.gov/help-candidates-and-committees/registering-pac/bank-accounts-nonconnected-pacs/)'),
+    ('W', 'Hybrid PAC (with Non-Contribution Account) - Qualified', 'Political committees with non-contribution accounts(https://www.fec.gov/help-candidates-and-committees/registering-pac/bank-accounts-nonconnected-pacs/)'),
+    ('X', 'Party - nonqualified', 'Party committees that have not yet been in existence for six months and received contributions from 50 people, unless they are affiliated with another party committee that has met these requirements.'),
+    ('Y', '	Party - qualified', 'Party committees that have existed for at least six months and received contributions from 50 people or are affiliated with another party committee that meets these requirements.'),
+    ('Z', '	National party nonfederal account', 'National party nonfederal accounts. Not permitted after enactment of Bipartisan Campaign Reform Act of 2002.');
 
 
 
