@@ -6,12 +6,16 @@
             {% if render_edit == true %}
                 <th></th>
             {% endif %}
+            {% if render_edit_intersection == true %}
+                <th></th>
+            {% endif %}
             {% if render_delete == true %}
                 <th></th>
             {% endif %}
             {% for key in items[0].keys() %}
                 {% if key == "candidate_email" %}
                     <th>{{ key }} (<a href="/candidates"><em>candidates</em></a> information in parentheses)</th>
+                {% elif key == "left_id" or key == "right_id" %}
                 {% else %}
                     <th>{{ key }}</th>
                 {% endif %}
@@ -22,10 +26,13 @@
         {% for item in items %}
         <tr>
             {% if render_edit == true %}
-                <td><a href="/{{table_name}}/update/{{item.id}}/"><input class="btn" type="button" value="Edit"></a></td>
+                <td><a href="/{{table_name}}/update/{{item.id}}"><input class="btn" type="button" value="Edit"></a></td>
+            {% endif %}
+            {% if render_edit_intersection == true %}
+                <td><a href="/{{table_name}}/update/{{item.left_id}}_{{item.right_id}}"><input class="btn" type="button" value="Edit"></a></td>
             {% endif %}
             {% if render_delete == true %}
-                <td><a href="/{{table_name}}/delete/{{item.id}}/"><input class="btn" type="button" value="Delete"></a></td>
+                <td><a href="/{{table_name}}/delete/{{item.id}}"><input class="btn" type="button" value="Delete"></a></td>
             {% endif %} 
             {% for key in item.keys() %}
                 {% if item[key] is none %}
@@ -39,6 +46,7 @@
                                 {% include '/includes/candidate_email_helper.html' %}
                             {% endwith %}
                         </td>
+                    {% elif key == "left_id" or key == "right_id" %}
                     {% else %}
                         <td>{{item[key]}}</td>
                     {% endif %}

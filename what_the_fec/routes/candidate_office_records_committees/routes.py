@@ -36,12 +36,12 @@ def create_single(
     cmte_id: STR_FORM_FIELD,
     fec_cand_id: STR_FORM_FIELD,
 ):
-    print("request=", request)
     return create_single_func(
         conn=next(request.db_conn),
         cmte_id=cmte_id,
         fec_cand_id=fec_cand_id,
     )
+
 
 @router.get("/update/{record_id}", response_class=HTMLResponse)
 def update_single_page(
@@ -62,14 +62,14 @@ def update_single_page(
 def update_single(
     request: Request,
     record_id: str,
-    updated_fec_cand_id: STR_FORM_FIELD,
-    updated_cmte_id: STR_FORM_FIELD,
+    fec_cand_id: STR_FORM_FIELD,
+    cmte_id: STR_FORM_FIELD,
 ):
     candidate_office_records_id, committees_id = record_id.split("_")
     return update_single_func(
         conn=next(request.db_conn),
         candidate_office_records_id=int(candidate_office_records_id),
         committees_id=int(committees_id),
-        updated_fec_cand_id=updated_fec_cand_id,
-        updated_cmte_id=updated_cmte_id,
+        updated_fec_cand_id=fec_cand_id,
+        updated_cmte_id=cmte_id,
     )

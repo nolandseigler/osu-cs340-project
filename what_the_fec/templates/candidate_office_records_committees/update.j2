@@ -1,0 +1,45 @@
+{% extends '/base.j2' %}
+
+
+{% block head %}
+    <h1>{{table_name}}</h1>
+{% endblock %}
+
+{% block body %}
+
+    {% with table_information=table_information %}
+        {% include '/includes/table_description.html' %}
+    {% endwith %}
+
+    <p style="text-align:center;">
+    {% for key, metadata in dropdown_items_for_add.items() %}
+        <strong><i>{{key}}</i></strong> is an attribute of entity <strong><i>{{metadata["table_name"]}}</i></strong><br>
+    {% endfor %}
+    </p>
+    
+
+    {% with items=items %}
+        {% include '/includes/read_table.html' %}
+    {% endwith %}
+    <p>&nbsp;</p>
+
+    {% with table_name=table_name, items=items, columns_information=columns_information, dropdown_keys=dropdown_keys, dropdown_items_for_add=dropdown_items_for_add, left_id=left_id, right_id=right_id %}
+        {% include '/includes/update_intersection_fieldset.html' %}
+    {% endwith %}
+    <p>&nbsp;</p>
+
+    <h2 style="text-align: center;">Intersected Entities</h2>
+
+    <h3>{{entity_1_table_name}}</h3>
+    {% with items=entity_1 %}
+        {% include '/includes/read_table.html' %}
+    {% endwith %}
+    <p>&nbsp;</p>
+
+    <h3>{{entity_2_table_name}}</h3>
+    {% with items=entity_2 %}
+        {% include '/includes/read_table.html' %}
+    {% endwith %}
+    <p>&nbsp;</p>
+
+{% endblock %}

@@ -71,16 +71,16 @@ TABLES_INFORMATION = {
             "office_type": "the office type the candidate ran for in the election or occupies during the cycle",
             "candidate_email": "email associated with Candidate (entity)",
             "party_type": "associated party code",
-            "incumbent_challenger_status": "incumbent challenger status"
-        }
+            "incumbent_challenger_status": "incumbent challenger status",
+        },
     },
     "committees": {
         "type": "entity",
         "description": "A committee is defined by the Federal Register as “any group of persons that receives more than $1,000 in contributions or makes more than $1,000 in expenditures during a calendar year. Refer to https://www.fec.gov/campaign-finance-data/contributions-individuals-file-description/ and https://www.fec.gov/campaign-finance-data/ contributions-committees-candidates-file-description/",
         "attributes": {
             "cmte_id": "A 9-character alpha-numeric code assigned to a committee by the Federal Election Commission. Committee IDs are unique and an ID for a specific committee always remains the same.",
-            "committee_type": "Represents the specific type of committee"
-        }
+            "committee_type": "Represents the specific type of committee",
+        },
     },
     "contributions": {
         "type": "entity",
@@ -99,8 +99,8 @@ TABLES_INFORMATION = {
             "report_type": "represents the report code applicable to each committee or individual contribution",
             "transaction_type": "represents the transaction type used in data uploads to the system",
             "amendment_indicator": "indicates the type of report (as part of a contribution transaction) being filed",
-            "contributor_type": "represents the specific type of contributor",                                                        
-        }
+            "contributor_type": "represents the specific type of contributor",
+        },
     },
     "candidate_office_records_committees": {
         "type": "intersection",

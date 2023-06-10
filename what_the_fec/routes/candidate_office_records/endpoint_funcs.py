@@ -3,8 +3,8 @@ from fastapi import HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
-from what_the_fec.routes.common.tables_information import TABLES_INFORMATION
 
+from what_the_fec.routes.common.tables_information import TABLES_INFORMATION
 from what_the_fec.routes.helpers import (
     get_columns_information_dict,
     get_columns_information_query,
@@ -13,6 +13,7 @@ from what_the_fec.routes.helpers import (
 logger: structlog.types.FilteringBoundLogger = structlog.get_logger(__name__)
 TABLE_NAME = "candidate_office_records"
 
+
 def get_candidates_email_dict(candidates):
     candidates_email_dict = {}
     for candidate in candidates:
@@ -20,9 +21,10 @@ def get_candidates_email_dict(candidates):
             "id": candidate["id"],
             "first_name": candidate["first_name"],
             "middle_name": candidate["middle_name"],
-            "last_name": candidate["last_name"],   
+            "last_name": candidate["last_name"],
         }
     return candidates_email_dict
+
 
 def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates):
     candidate_office_records_query = f"""
@@ -92,14 +94,14 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         .all()
     )
     columns_information = get_columns_information_dict(columns_information_result)
-    
+
     # candidates_email_dict = {}
     # for candidate in candidates:
     #     candidates_email_dict[candidate["email"]] = {
     #         "id": candidate["id"],
     #         "first_name": candidate["first_name"],
     #         "middle_name": candidate["middle_name"],
-    #         "last_name": candidate["last_name"],   
+    #         "last_name": candidate["last_name"],
     #     }
 
     dropdown_items_for_add = {
@@ -133,7 +135,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
             "columns_information": columns_information,
             "table_information": TABLES_INFORMATION[TABLE_NAME],
             "render_edit": True,
-            "render_delete": True
+            "render_delete": True,
         },
     )
 
