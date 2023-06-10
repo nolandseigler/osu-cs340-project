@@ -54,7 +54,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
 
     office_types_query = "SELECT id, name FROM office_types"
 
-    candidates_query = "SELECT id, email FROM candidates"
+    candidates_query = "SELECT * FROM candidates"
 
     party_types_query = "SELECT id, short_name FROM party_types"
 
@@ -82,6 +82,15 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         .all()
     )
     columns_information = get_columns_information_dict(columns_information_result)
+    
+    candidates_email_dict = {}
+    for candidate in candidates:
+        candidates_email_dict[candidate["email"]] = {
+            "id": candidate["id"],
+            "first_name": candidate["first_name"],
+            "middle_name": candidate["middle_name"],
+            "last_name": candidate["last_name"],   
+        }
 
     dropdown_items_for_add = {
         "office_type": {
@@ -91,6 +100,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         "candidate_email": {
             "data": candidates,
             "relevant_column_name": "email",
+            "data_dict": candidates_email_dict,
         },
         "party_type": {
             "data": party_types,

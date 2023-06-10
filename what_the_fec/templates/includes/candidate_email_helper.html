@@ -1,0 +1,21 @@
+{% set candidate_id = candidate_dict_entry["id"] %} 
+{% set candidate_last_name = candidate_dict_entry["last_name"] %}
+{% set candidate_first_name = candidate_dict_entry["first_name"] %} 
+{% set candidate_middle_name = candidate_dict_entry["middle_name"] %}
+ (candidates ID {{candidate_dict_entry["id"]}}: 
+{% if candidate_last_name is none %}
+    NULL
+{% else %}
+    {{candidate_last_name}}
+{% endif %}
+, 
+{% if candidate_first_name is none %}
+    NULL
+{% else %}
+    {{candidate_first_name}}
+{% endif %}
+{% if candidate_middle_name is none %}
+    NULL
+{% else %}
+    {{candidate_middle_name}}
+{% endif %})

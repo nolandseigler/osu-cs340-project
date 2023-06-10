@@ -64,9 +64,29 @@
                     <label> {{key}} </label>
                     <select name="{{key}}" id="{{key}}">
                         {% for entries in dropdown_items_for_add[key]["data"] %}
-                            <option value="{{entries[dropdown_items_for_add[key]['relevant_column_name']]}}">
-                                {{entries[dropdown_items_for_add[key]['relevant_column_name']]}}
-                            </option>
+                            {% if key == "candidate_email"%}
+                                <option value="{{entries[dropdown_items_for_add[key]['relevant_column_name']]}}">
+
+                                    {% set candidate_email = entries[dropdown_items_for_add[key]['relevant_column_name']] %}
+                                    {% if candidate_email is none %}
+                                        NULL
+                                    {% else %}
+                                        {{candidate_email}}
+                                    {% endif %}
+
+
+                                    {% set candidate_dict_entry = dropdown_items_for_add["candidate_email"]["data_dict"][entries[dropdown_items_for_add[key]['relevant_column_name']]] %}
+                                    {% with candidate_dict_entry=candidate_dict_entry %}
+                                        {% include '/includes/candidate_email_helper.html' %}
+                                    {% endwith %}
+
+
+                                </option>
+                            {% else %}
+                                <option value="{{entries[dropdown_items_for_add[key]['relevant_column_name']]}}">
+                                    {{entries[dropdown_items_for_add[key]['relevant_column_name']]}}
+                                </option>
+                            {% endif %}
                         {% endfor %}
                             {% if key == "candidate_email"%}
                                 <option value="NULL">NULL</option>

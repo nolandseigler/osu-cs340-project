@@ -10,7 +10,11 @@
                 <th></th>
             {% endif %}
             {% for key in items[0].keys() %}
-                <th>{{ key }}</th>
+                {% if key == "candidate_email" %}
+                    <th>{{ key }} (<a href="/candidates"><em>candidates</em></a> information in parentheses)</th>
+                {% else %}
+                    <th>{{ key }}</th>
+                {% endif %}
             {% endfor %}
         </tr>
         <tbody>
@@ -27,7 +31,17 @@
                 {% if item[key] is none %}
                     <td>NULL</td>
                 {% else %}
-                    <td>{{item[key]}}</td>
+                    {% if key == "candidate_email" %}
+                        <td>
+                            {{item[key]}} 
+                            {% set candidate_dict_entry = dropdown_items_for_add["candidate_email"]["data_dict"][item[key]] %}
+                            {% with candidate_dict_entry=candidate_dict_entry %}
+                                {% include '/includes/candidate_email_helper.html' %}
+                            {% endwith %}
+                        </td>
+                    {% else %}
+                        <td>{{item[key]}}</td>
+                    {% endif %}
                 {% endif %}
             {% endfor %}
 
