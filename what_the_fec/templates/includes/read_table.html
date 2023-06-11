@@ -13,7 +13,7 @@
                 <th></th>
             {% endif %}
             {% for key in items[0].keys() %}
-                {% if key == "candidate_email" %}
+                {% if table_name == "candidate_office_records" and key == "candidate_email" %}
                     <th>{{ key }} (<a href="/candidates"><em>candidates</em></a> information in parentheses)</th>
                 {% elif key == "left_id" or key == "right_id" %}
                 {% else %}
@@ -38,7 +38,7 @@
                 {% if item[key] is none %}
                     <td>NULL</td>
                 {% else %}
-                    {% if key == "candidate_email" %}
+                    {% if table_name == "candidate_office_records" and key == "candidate_email" %}
                         <td>
                             {{item[key]}} 
                             {% set candidate_dict_entry = dropdown_items_for_add["candidate_email"]["data_dict"][item[key]] %}
