@@ -157,10 +157,10 @@ DROP TABLE IF EXISTS `cs340_seiglern`.`candidates` ;
 
 CREATE TABLE IF NOT EXISTS `cs340_seiglern`.`candidates` (
   `id` INT NOT NULL AUTO_INCREMENT,
-  `first_name` VARCHAR(255) NULL,
-  `last_name` VARCHAR(255) NULL,
+  `first_name` VARCHAR(255) NOT NULL,
+  `last_name` VARCHAR(255) NOT NULL,
   `middle_name` VARCHAR(255) NULL,
-  `email` VARCHAR(320) NULL,
+  `email` VARCHAR(320) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE)
