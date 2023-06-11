@@ -3,9 +3,18 @@
             <fieldset>
                 <legend><strong>Add item to {{table_name}}</strong></legend>
 
+                <p><small>Fields with * indicate required fields.</small></p>
+
                 {% for col_name in items[0].keys() %}
                     {% if col_name != 'id' and col_name != "left_id" and col_name != "right_id" and col_name not in dropdown_keys %}
-                        <label>{{col_name}}</label>
+
+                        {% if columns_information[col_name]["IS_NULLABLE"] == "YES" %}
+                            <label>{{col_name}}</label>
+                        {% else %}
+                            <label>{{col_name}}* </label>
+                        {% endif %}
+
+
                         {% if columns_information[col_name]["COLUMN_DEFAULT"] is not none %}
                             {% set input_default = columns_information[col_name]["COLUMN_DEFAULT"] %}
                         {% else %}
@@ -61,7 +70,7 @@
                 {% endfor %}
 
                 {% for key in dropdown_keys %}
-                    <label> {{key}} </label>
+                    <label> {{key}}* </label>
                     <select name="{{key}}" id="{{key}}">
                         {% for entries in dropdown_items_for_add[key]["data"] %}
                             {% if key == "candidate_email"%}
