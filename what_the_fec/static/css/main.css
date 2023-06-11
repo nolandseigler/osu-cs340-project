@@ -67,7 +67,7 @@ tfoot {
     margin: 0; /* Important for vertical align on mobile phones */
   }
   
-  /* Add a red background color to navbar links on hover */
+  /* Add a background color to navbar links on hover */
   .navbar a:hover, .dropdown:hover .dropbtn {
     background-color: rgb(0, 89, 255);
   }
@@ -92,7 +92,7 @@ tfoot {
     text-align: left;
   }
   
-  /* Add a grey background color to dropdown links on hover */
+  /* Add a background color to dropdown links on hover */
   .dropdown-content a:hover {
     background-color: #ddd;
   }
