@@ -397,6 +397,20 @@ SET candidates_id = NULL | (
 )
 WHERE name = :name_input_from_drop_down;
 
+UPDATE `candidate_office_records_committees`
+SET
+    candidate_office_records_id = (
+        SELECT id FROM `candidate_office_records` 
+        WHERE fec_cand_id = :updated_fec_cand_id
+    ),
+    committees_id = (
+        SELECT id FROM `committees` 
+        WHERE cmte_id = :updated_cmte_id
+    )
+WHERE
+    candidate_office_records_id = :candidate_office_records_id
+    AND committees_id = :committees_id;
+
 -- DELETE: This cascades all the M:M mappings but does not cascade the other "Mapped Table"
 DELETE FROM `candidate_office_records`
 WHERE name = :name_input_from_drop_down;

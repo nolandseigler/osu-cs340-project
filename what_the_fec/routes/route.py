@@ -22,11 +22,11 @@ class BaseRoute(APIRoute):
             try:
                 response: Response = await original_route_handler(request)
             except HTTPException as h:
-                logger.aexception("an error occurred")
+                await logger.aexception("an error occurred")
                 return Response(str(h), status_code=h.status_code)
             # catch the bare exception if nothing else did.
             except Exception as e:
-                logger.aexception("an error occurred")
+                await logger.aexception("an error occurred")
                 return Response(str(e), status_code=500)
             return response
 

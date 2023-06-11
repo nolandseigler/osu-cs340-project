@@ -11,7 +11,7 @@ TABLE_NAME = "election_years_contributions"
 def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates):
     entity_1_table_name = "election_years"
     entity_1_attribute = "year"
-    
+
     entity_2_table_name = "contributions"
     entity_2_attribute = "sub_id"
 
@@ -61,21 +61,27 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
     """
 
     entity_1_dropdown_selections_query = f"SELECT * FROM `{entity_1_table_name}`"
-    entity_2_dropdown_selections_query = f"SELECT {entity_2_attribute} FROM `{entity_2_table_name}`"
+    entity_2_dropdown_selections_query = (
+        f"SELECT {entity_2_attribute} FROM `{entity_2_table_name}`"
+    )
 
-    entity_1_dropdown_selections = conn.execute(text(entity_1_dropdown_selections_query)).mappings().all()
-    entity_2_dropdown_selections = conn.execute(text(entity_2_dropdown_selections_query)).mappings().all()
+    entity_1_dropdown_selections = (
+        conn.execute(text(entity_1_dropdown_selections_query)).mappings().all()
+    )
+    entity_2_dropdown_selections = (
+        conn.execute(text(entity_2_dropdown_selections_query)).mappings().all()
+    )
 
     dropdown_items_for_add = {
         f"{entity_1_table_name}_{entity_1_attribute}": {
             "data": entity_1_dropdown_selections,
             "relevant_column_name": entity_1_attribute,
-            "table_name": entity_1_table_name
+            "table_name": entity_1_table_name,
         },
         entity_2_attribute: {
             "data": entity_2_dropdown_selections,
             "relevant_column_name": entity_2_attribute,
-            "table_name": entity_2_table_name
+            "table_name": entity_2_table_name,
         },
     }
 
@@ -90,7 +96,7 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
         entity_2_table_name=entity_2_table_name,
         entity_2_query=entity_2_query,
         dropdown_keys=dropdown_items_for_add.keys(),
-        dropdown_items_for_add = dropdown_items_for_add
+        dropdown_items_for_add=dropdown_items_for_add,
     )
 
 

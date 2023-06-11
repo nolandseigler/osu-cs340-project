@@ -1,5 +1,6 @@
 from fastapi import Request
 from fastapi.templating import Jinja2Templates
+
 from what_the_fec.routes.common.tables_information import TABLES_INFORMATION
 
 

@@ -37,7 +37,6 @@ def create_single(
     city: Optional[str] = Form(None),
     state: Optional[str] = Form(None),
     zip_code: Optional[str] = Form(None),
-
 ):
     return create_single_func(
         conn=next(request.db_conn),
