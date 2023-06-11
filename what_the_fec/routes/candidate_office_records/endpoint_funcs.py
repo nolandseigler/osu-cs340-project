@@ -95,15 +95,6 @@ def get_all_func(conn: Connection, request: Request, templates: Jinja2Templates)
     )
     columns_information = get_columns_information_dict(columns_information_result)
 
-    # candidates_email_dict = {}
-    # for candidate in candidates:
-    #     candidates_email_dict[candidate["email"]] = {
-    #         "id": candidate["id"],
-    #         "first_name": candidate["first_name"],
-    #         "middle_name": candidate["middle_name"],
-    #         "last_name": candidate["last_name"],
-    #     }
-
     dropdown_items_for_add = {
         "office_type": {
             "data": office_types,
