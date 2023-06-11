@@ -85,6 +85,7 @@ def create_app() -> FastAPI:
 
     logger.debug("including routers")
     app.include_router(home_router)
+
     app.include_router(amendment_indicators_router)
     app.include_router(candidates_router)
     app.include_router(candidate_office_records_router)
