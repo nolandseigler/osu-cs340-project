@@ -2,19 +2,22 @@
 
 
 {% block head %}
-    <h1>Error</h1>
+    <h1>Error: Status Code {{status_code}}</h1>
 {% endblock %}
 
 {% block body %}
-    <p>
-        STATUS CODE: {{status_code}}
-    </p>
-    <p>
-        <b>ERROR MESSAGE: {{error_message}}</b>
-    </p>
-    <p>
-        {{traceback}}
-    </p>
+
+    <fieldset>
+        <legend><h2>Error Message </h2></legend>
+        <em>{{error_message}}</em>
+    </fieldset>
+
+    <fieldset>
+        <legend><h2>Traceback</h2></legend>
+        <em>{{traceback}}</em>
+    </fieldset>
+
+    <p></p>
 
     <div class="text-center" style="text-align: center;">
         <button onclick="history.back()">Go Back</button>
