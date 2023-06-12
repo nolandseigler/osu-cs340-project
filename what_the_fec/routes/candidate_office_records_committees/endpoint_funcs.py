@@ -1,4 +1,4 @@
-from fastapi import Request, status
+from fastapi import HTTPException, Request, status
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy import Connection, text
@@ -212,6 +212,11 @@ def update_single_page_func(
         .mappings()
         .all()
     )
+    if not intersection_items:
+        raise HTTPException(
+            status_code=404,
+            detail=f"no {TABLE_NAME} record for provided record id: {candidate_office_records_id}_{committees_id}",
+        )
 
     entity_1_query = f"""
         SELECT 

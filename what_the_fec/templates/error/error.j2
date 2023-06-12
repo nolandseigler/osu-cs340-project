@@ -6,9 +6,14 @@
 {% endblock %}
 
 {% block body %}
-
     <p>
-        {{error_message}}
+        STATUS CODE: {{status_code}}
+    </p>
+    <p>
+        <b>ERROR MESSAGE: {{error_message}}</b>
+    </p>
+    <p>
+        {{traceback}}
     </p>
 
     <div class="text-center" style="text-align: center;">

@@ -1,4 +1,4 @@
-import time
+from traceback import format_exc
 from typing import Callable
 
 import structlog
@@ -10,6 +10,7 @@ logger: structlog.types.FilteringBoundLogger = structlog.get_logger(__name__)
 # Date: 05/21/2023
 # Copied from /OR/ Adapted from /OR/ Based on:
 # https://fastapi.tiangolo.com/advanced/custom-request-and-route/#custom-apiroute-class-in-a-router
+# https://docs.python.org/3.9/library/traceback.html#traceback.format_exception
 
 
 # NOTE: This is just a very rough start so the errors will make it to the web browser.
@@ -23,11 +24,29 @@ class BaseRoute(APIRoute):
                 response: Response = await original_route_handler(request)
             except HTTPException as h:
                 await logger.aexception("an error occurred")
-                return Response(str(h), status_code=h.status_code)
+                return request.templates.TemplateResponse(
+                    "error/error.j2",
+                    {
+                        "request": request,
+                        "error_message": h.detail,
+                        "traceback": format_exc(),
+                        "status_code": h.status_code,
+                    },
+                    status_code=h.status_code,
+                )
             # catch the bare exception if nothing else did.
             except Exception as e:
-                await logger.aexception("an error occurred")
-                return Response(str(e), status_code=500)
+                await logger.aexception("a non http exception occurred")
+                return request.templates.TemplateResponse(
+                    "error/error.j2",
+                    {
+                        "request": request,
+                        "error_message": str(e),
+                        "traceback": format_exc(),
+                        "status_code": 500,
+                    },
+                    status_code=500,
+                )
             return response
 
         return custom_route_handler
